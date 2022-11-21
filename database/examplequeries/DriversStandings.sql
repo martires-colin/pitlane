@@ -1,4 +1,4 @@
-SELECT drivers.surname, driver_standings.POSITION, driver_standings.POINTS
+SELECT driver_standings.position, drivers.surname, driver_standings.points
 FROM driver_standings
 INNER JOIN drivers ON drivers.driverId = driver_standings.driverId
 WHERE raceId IN (SELECT raceId 
