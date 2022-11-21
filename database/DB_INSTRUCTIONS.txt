@@ -17,7 +17,9 @@ postgres# CREATE DATABASE F1_DB;
 Use a GUI to run the command:
 CREATE DATABASE F1_DB;
 
+*Step 2*
 Once you intialize the PostgreSQL DB, insert the file containing all ERGAST information using the following command:
 psql F1_DB < F1_DB.pgsql
+
 
 Once again if you have any issues let me know and I can help out.
