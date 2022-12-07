@@ -8,6 +8,9 @@ const routes = [
     path: "/pitlane",
     name: "Pitlane",
     component: Pitlane,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/login",
@@ -18,6 +21,9 @@ const routes = [
     path: "/results",
     name: "Results",
     component: Results,
+    meta: {
+      requiresAuth: true,
+    },
   },
 ];
 
