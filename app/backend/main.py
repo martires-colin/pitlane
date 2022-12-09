@@ -10,6 +10,9 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import json
+import psycopg2
+import pandas as pd
 
 
 app = Flask(__name__)
@@ -162,6 +165,27 @@ def pitlane():
     if request.method == 'GET':    
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
+
+def standings():
+    conn = dbconnect()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT driver_standings.position, drivers.surname, driver_standings.points
+                    FROM driver_standings
+                    INNER JOIN drivers ON drivers.driverId = driver_standings.driverId
+                    WHERE raceId IN (SELECT raceId 
+                        FROM races
+                        WHERE date <= CURRENT_DATE
+                        ORDER BY date DESC LIMIT 1)
+                    ORDER BY POSITION;''')
+    jsondmp = json.dumps(cursor.fetchall()) 
+    conn.close
+    return(jsondmp)
+
+
+def dbconnect():
+    conn = psycopg2.connect("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
+    conn.autocommit = True
+    return (conn)
 
 if __name__ == '__main__':
     app.run(debug=True)
