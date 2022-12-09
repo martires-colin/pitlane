@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Pitlane from "../components/Pitlane.vue";
 import Login from "../views/Login.vue";
 import Results from "../views/Results.vue";
+import Pitlane from "../views/Pitlane.vue";
+
 
 const routes = [
   {
