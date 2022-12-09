@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
-import Results from "../views/Results.vue";
+import Standings from "../views/Standings.vue";
 import Pitlane from "../views/Pitlane.vue";
-
 
 const routes = [
   {
@@ -19,9 +18,9 @@ const routes = [
     component: Login,
   },
   {
-    path: "/results",
-    name: "Results",
-    component: Results,
+    path: "/standings",
+    name: "Standings",
+    component: Standings,
     meta: {
       requiresAuth: true,
     },

@@ -36,7 +36,7 @@ export default {
       </span>
     </h1>
 
-    <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
+    <SidebarLink to="/" icon="fas fa-home"> Home </SidebarLink>
     <SidebarLink to="/pitlane" icon="fa-solid fa-square-poll-vertical">
       Pitlane
     </SidebarLink>
@@ -44,9 +44,14 @@ export default {
       Standings
     </SidebarLink>
     <SidebarLink to="/fantasy" icon="fa-solid fa-flag-checkered"
-      >Fantasy Zone</SidebarLink
-    >
-    <SidebarLink to="/settings" icon="fa-solid fa-gears">Settings</SidebarLink>
+      >Fantasy Zone
+    </SidebarLink>
+    <SidebarLink to="/settings" icon="fa-solid fa-gears">
+      Settings
+    </SidebarLink>
+    <SidebarLink to="/login" icon="fa-solid fa-right-to-bracket">
+      Login
+    </SidebarLink>
 
     <span
       class="collapse-icon"
