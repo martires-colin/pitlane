@@ -52,6 +52,9 @@ export default {
     <SidebarLink to="/login" icon="fa-solid fa-right-to-bracket">
       Login
     </SidebarLink>
+    <!-- <SidebarLink to="/create-account" icon="fa-solid fa-right-to-bracket">
+      Create Account
+    </SidebarLink> -->
 
     <span
       class="collapse-icon"
