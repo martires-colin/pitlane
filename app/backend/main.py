@@ -166,6 +166,8 @@ def pitlane():
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
 
+# Function for reteiving current drivers' championship standings.
+# Noah Howren
 def standings():
     conn = dbconnect()
     cursor = conn.cursor()
@@ -181,7 +183,8 @@ def standings():
     conn.close
     return(jsondmp)
 
-
+# Function for creating database connection and returning connection variable.
+# Noah Howren
 def dbconnect():
     conn = psycopg2.connect("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
     conn.autocommit = True
