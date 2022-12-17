@@ -1,3 +1,6 @@
+<!-- The code in this file was developed by Colin Martires and followed a template -->
+<!-- outlined in the mdbootstrap documentation for styling.                        -->
+
 <template>
   <!-- <main>
     <h1>Create Account</h1>
@@ -61,7 +64,7 @@
                   </div>
 
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                    <button class="btn btn-dark btn-lg btn-block" type="submit">Create Account</button>
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->

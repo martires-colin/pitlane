@@ -1,3 +1,6 @@
+//the code in this file was taken from a Firebase Vue Integration Tutorial
+//https://www.youtube.com/watch?v=Kc-FbPSdezg
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 

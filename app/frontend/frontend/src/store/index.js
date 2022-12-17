@@ -1,3 +1,6 @@
+//the code in this file was taken fron a Firebase Vue Integration Tutorial
+//https://www.youtube.com/watch?v=Kc-FbPSdezg
+
 import { createStore } from "vuex";
 import router from "../router";
 import { auth } from "../firebase";

@@ -1,3 +1,6 @@
+<!-- The code in this file was developed by Colin Martires and followed a template -->
+<!-- outlined in the mdbootstrap documentation for styling.                        -->
+
 <template>
   <!-- <main>
     <h1>Login Page</h1>
