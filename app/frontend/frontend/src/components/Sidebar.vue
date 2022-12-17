@@ -12,6 +12,7 @@ export default {
 </script>
 
 <template>
+  <!-- Jose flores all of sidebar and sidebarLink-->
   <div class="sidebar" :style="{ width: sidebarWidth }">
     <h1>
       <span v-if="collapsed">

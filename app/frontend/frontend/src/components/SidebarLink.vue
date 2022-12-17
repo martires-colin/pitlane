@@ -17,6 +17,7 @@ export default {
 </script>
 
 <template>
+  <!-- Jose flores all of sidebar and sidebarLink-->
   <router-link :to="to" class="link" :class="{ active: isActive }">
     <i class="icon" :class="icon"></i>
     <Transition name="fade"
