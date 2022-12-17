@@ -30,6 +30,7 @@ def pitlane():
         post_data = request.get_json()
         print(request.get_json())
         if post_data['method'] == 'headtohead':
+            # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'driver1': post_data.get('driver1'),
@@ -62,6 +63,7 @@ def pitlane():
             ax.set_ylabel("Lap Time")
             ax.legend(handles=[line1, line2])
             
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
@@ -69,6 +71,7 @@ def pitlane():
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
         if post_data['method'] == 'gearshift':
+            # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'track': post_data.get('track'),
@@ -113,6 +116,7 @@ def pitlane():
             cbar.set_ticks(np.arange(1.5, 9.5))
             cbar.set_ticklabels(np.arange(1, 9))
 
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
@@ -120,6 +124,7 @@ def pitlane():
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
         if post_data['method'] == 'speedvisual':
+            # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'driver': post_data.get('driver'),
@@ -158,7 +163,8 @@ def pitlane():
             cbaxes = fig.add_axes([0.25, 0.05, 0.5, 0.05])
             normlegend = mpl.colors.Normalize(vmin=color.min(), vmax=color.max())
             legend = mpl.colorbar.ColorbarBase(cbaxes, norm=normlegend, cmap=colormap, orientation="horizontal")
-
+            
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
