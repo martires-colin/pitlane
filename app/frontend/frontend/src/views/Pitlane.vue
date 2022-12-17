@@ -1,3 +1,5 @@
+<!-- Data Visualization Page Implemented by Anthony Ganci -->
+
 <template>
   <div class="button-group">
     <button type="button" class="fastf1-button" @click="(show = 1), (src = '')">
@@ -108,19 +110,16 @@
 <style lang="scss">
 $charade: #282a37;
 $bluebell: #979fd0;
-$troll: #133337;
-
+$darkish: #133337;
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #353839;
 }
-
 .button-group {
   padding: 20px;
 }
-
 .fastf1-button {
   font-family: "Roboto Mono";
   font-size: 28px;
@@ -131,26 +130,21 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
-
 .fastf1-button:hover {
   background-color: #03396c;
 }
-
 .fastf1 {
   font-family: "Roboto Mono";
   font-size: 20px;
-  color: #fffff4;
+  color: $darkish;
 }
-
 .fastf1 input[type="text"],
 select {
   font-size: 18px;
 }
-
 .fastf1 label {
   text-align: right;
 }
-
 .fastf1 input[type="submit"] {
   background-color: #ff2800;
   font-family: "Roboto Mono";
@@ -159,11 +153,9 @@ select {
   border-width: 1px;
   margin-top: 8px;
 }
-
 .loading {
   display: flex;
   justify-content: center;
-
   div {
     width: 1rem;
     height: 1rem;
@@ -171,17 +163,14 @@ select {
     background: #b3cde0;
     border-radius: 50%;
     animation: 0.9s bounce infinite alternate;
-
     &:nth-child(2) {
       animation-delay: 0.3s;
     }
-
     &:nth-child(3) {
       animation-delay: 0.6s;
     }
   }
 }
-
 @keyframes bounce {
   to {
     opacity: 0.3;
@@ -236,7 +225,6 @@ export default {
           console.error(err);
         });
     },
-
     sendForm(payload) {
       const path = "http://localhost:5000/pitlane";
       axios
@@ -249,7 +237,6 @@ export default {
           console.error(err);
         });
     },
-
     initialFormH2H() {
       (this.form.driver1 = ""),
         (this.form.driver2 = ""),
@@ -257,20 +244,17 @@ export default {
         (this.form.session = "R"),
         (this.form.year = "");
     },
-
     initialFormGear() {
       (this.gearForm.track = ""),
         (this.gearForm.session = "R"),
         (this.gearForm.year = "");
     },
-
     initialFormSpeedVisual() {
       (this.speedForm.track = ""),
         (this.speedForm.driver = ""),
         (this.speedForm.session = "R"),
         (this.speedForm.year = "");
     },
-
     onSubmitH2H(e) {
       this.src = "";
       e.preventDefault();
@@ -286,7 +270,6 @@ export default {
       this.load = true;
       this.initialFormH2H();
     },
-
     onSubmitGear(e) {
       this.src = "";
       e.preventDefault();
@@ -300,7 +283,6 @@ export default {
       this.load = true;
       this.initialFormGear();
     },
-
     onSubmitSpeedVisual(e) {
       this.src = "";
       e.preventDefault();
@@ -313,7 +295,7 @@ export default {
       };
       this.sendForm(payload);
       this.load = true;
-      this.initialFormGear();
+      this.initialFormSpeedVisual();
     },
   },
   created() {
