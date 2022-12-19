@@ -1,3 +1,11 @@
+<template>
+  <div>
+    <Sidebar />
+    <div :style="{ 'margin-left': sidebarWidth }"></div>
+    <router-view />
+  </div>
+</template>
+
 <script>
 import Sidebar from "./components/Sidebar";
 import { sidebarWidth } from "./components/state";
@@ -8,13 +16,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <Sidebar />
-  <div :style="{ 'margin-left': sidebarWidth }">
-    <router-view />
-  </div>
-</template>
 
 <style>
 #app {
