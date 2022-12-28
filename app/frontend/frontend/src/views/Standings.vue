@@ -2,22 +2,24 @@
 
 <template>
   <h1>Standings</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Standing</th>
-        <th>Name</th>
-        <th>Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(driver, index) in drivers" :key="index">
-        <td>{{driver[0]}}</td>
-        <td>{{driver[1]}}</td>
-        <td>{{driver[2]}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div v-cloak>
+    <table>
+      <thead>
+        <tr>
+          <th>Standing</th>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(driver, index) in drivers" :key="index">
+          <td>{{driver[0]}}</td>
+          <td>{{driver[1]}}</td>
+          <td>{{driver[2]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -31,7 +33,7 @@ export default {
   },
   methods: {
     getStandingsData() {
-      const path = "http://localhost:5000/standings";
+      const path = "http://127.0.0.1:5000/standings";
       axios
         .get(path)
         .then((res) => {
@@ -49,4 +51,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>

@@ -14,7 +14,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import json
 import psycopg2
 import pandas as pd
+import warnings
+
 mpl.use('agg')
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -210,4 +213,4 @@ def dbconnect():
     return (conn)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
