@@ -14,6 +14,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import json
 import psycopg2
 import pandas as pd
+mpl.use('agg')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -22,6 +23,12 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 @app.route("/", methods=['GET'])
 def index():
     return ('Hello! Welcome to the Pitlane 🏎️')
+
+@app.route("/standings", methods=['GET', 'POST'])
+def standings():
+    if request.method == 'GET':
+        standings = getStandings()
+        return(jsonify({'status': 'success', 'drivers': standings}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
@@ -178,7 +185,7 @@ def pitlane():
 
 # Function for reteiving current drivers' championship standings.
 # Noah Howren
-def standings():
+def getStandings():
     conn = dbconnect()
     cursor = conn.cursor()
     cursor.execute('''SELECT driver_standings.position, drivers.surname, driver_standings.points
@@ -189,9 +196,11 @@ def standings():
                         WHERE date <= CURRENT_DATE
                         ORDER BY date DESC LIMIT 1)
                     ORDER BY POSITION;''')
-    jsondmp = json.dumps(cursor.fetchall()) 
+    # jsondump = json.dumps(cursor.fetchall())
+    jsondump = cursor.fetchall() 
     conn.close
-    return(jsondmp)
+    # print(f'DEBUGING: {jsondump[1]}')
+    return(jsondump)
 
 # Function for creating database connection and returning connection variable.
 # Noah Howren
