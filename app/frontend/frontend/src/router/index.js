@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import CreateAccount from "../views/CreateAccount.vue";
 import Standings from "../views/Standings.vue";
+import Schedule from "../views/Schedule.vue";
 import Pitlane from "../views/Pitlane.vue";
 import Home from "../views/Home.vue";
 import Fantasy from "../views/Fantasy.vue";
@@ -30,6 +31,14 @@ const routes = [
     path: "/standings",
     name: "Standings",
     component: Standings,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/schedule",
+    name: "Schedule",
+    component: Schedule,
     meta: {
       requiresAuth: true,
     },
