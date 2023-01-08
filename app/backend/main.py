@@ -14,16 +14,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import json
 import psycopg2
 import pandas as pd
-<<<<<<< Updated upstream
 import warnings
-
-mpl.use('agg')
-warnings.simplefilter(action='ignore', category=FutureWarning)
-=======
 import requests
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
 mpl.use('agg')
->>>>>>> Stashed changes
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -33,8 +29,6 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 def index():
     return ('Hello! Welcome to the Pitlane 🏎️')
 
-<<<<<<< Updated upstream
-=======
 @app.route('/schedule', methods=['GET', 'POST'])
 def schedule():
     if request.method == 'POST':
@@ -56,17 +50,11 @@ def schedule():
         for i in range(0, int(jsondump['MRData']['total'])):
             schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
-
->>>>>>> Stashed changes
 @app.route("/standings", methods=['GET', 'POST'])
 def standings():
     if request.method == 'GET':
         standings = getStandings()
-<<<<<<< Updated upstream
-        return(jsonify({'status': 'success', 'drivers': standings}))
-=======
         return(jsonify({'status': 200, 'drivers': standings}))
->>>>>>> Stashed changes
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
