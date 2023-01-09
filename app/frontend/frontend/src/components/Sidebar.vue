@@ -43,6 +43,9 @@ export default {
     <SidebarLink to="/standings" icon="fa-solid fa-ranking-star">
       Standings
     </SidebarLink>
+    <SidebarLink to="/schedule" icon="fa-solid fa-calendar-days">
+      Schedule
+    </SidebarLink>
     <SidebarLink to="/fantasy" icon="fa-solid fa-flag-checkered"
       >Fantasy Zone
     </SidebarLink>

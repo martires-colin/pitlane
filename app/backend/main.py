@@ -17,7 +17,6 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from datetime import date
 import json
 import pandas as pd
-from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -26,6 +25,33 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 @app.route("/", methods=['GET'])
 def index():
     return ('Hello! Welcome to the Pitlane 🏎️')
+
+@app.route('/schedule', methods=['GET', 'POST'])
+def schedule():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        year = post_data.get('season')
+        path = f'https://ergast.com/api/f1/{year}.json'
+        response = requests.get(path)
+        jsondump = response.json()
+        schedule = []
+        for i in range(0, int(jsondump['MRData']['total'])):
+            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
+        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
+    if request.method == 'GET':
+        year = 2023
+        path = f'https://ergast.com/api/f1/{year}.json'
+        response = requests.get(path)
+        jsondump = response.json()
+        schedule = []
+        for i in range(0, int(jsondump['MRData']['total'])):
+            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
+        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
+@app.route("/standings", methods=['GET', 'POST'])
+def standings():
+    if request.method == 'GET':
+        standings = getStandings()
+        return(jsonify({'status': 200, 'drivers': standings}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
@@ -183,31 +209,19 @@ def pitlane():
 # Function for reteiving current drivers' championship standings.
 # Noah Howren
 def standings():
-    session = get_session()
-    recentrace = get_recent_race(session)
-    standings = {}
-    for s in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == recentrace.raceid).order_by(Driver_Standings.position) :
-        x = {'driver':(s.Driver.forename + ' ' + s.Driver.surname), 'points':s.Driver_Standings.points}
-        standings[s.Driver_Standings.position] = x
-    return json.dumps(standings)
-
-# Function for reteiving current constructors' championship standings.
-# Noah Howren
-def con_standings():
-    session = get_session()
-    recentrace = get_recent_race(session)
-    standings = {}
-    for s in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == recentrace.raceid).order_by(Constructor_Standings.position) :
-        x = {'constructor':s.Constructor.name, 'points':s.Constructor_Standings.points}
-        standings[s.Constructor_Standings.position] = x
-    return json.dumps(standings)
-
-# Function for creating the session object to connect to the PostgreSQL Database
-# Noah Howren
-def get_session():
-    engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
-    Session = sessionmaker(bind = engine)
-    return Session()
+    conn = dbconnect()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT driver_standings.position, drivers.surname, driver_standings.points
+                    FROM driver_standings
+                    INNER JOIN drivers ON drivers.driverId = driver_standings.driverId
+                    WHERE raceId IN (SELECT raceId 
+                        FROM races
+                        WHERE date <= CURRENT_DATE
+                        ORDER BY date DESC LIMIT 1)
+                    ORDER BY POSITION;''')
+    jsondmp = json.dumps(cursor.fetchall()) 
+    conn.close
+    return(jsondmp)
 
 # Function for returning the most recent Race object in relation to todays date
 # Noah Howren
@@ -215,4 +229,4 @@ def get_recent_race(session):
     return session.query(Race).filter(Race.date <= date.today()).order_by(desc(Race.date)).first()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
