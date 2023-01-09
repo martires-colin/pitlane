@@ -79,6 +79,16 @@ class Constructor_Standings(Base):
     positiontext = Column(String)
     wins = Column(Integer)
 
+class Driver_Standings(Base):
+    __tablename__ = "driver_standings"
+    driverstandingsid = Column(Integer, primary_key = True)
+    raceid = Column(Integer, ForeignKey(Race.raceid))
+    driverid = Column(Integer, ForeignKey(Driver.driverid))
+    points = Column(Integer)
+    position = Column(Integer)
+    positiontext = Column(String)
+    wins = Column(Integer)
+
 class Lap_Time(Base):
     __tablename__ = "lap_times"
     raceid = Column(Integer, ForeignKey(Race.raceid))
