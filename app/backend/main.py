@@ -14,6 +14,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import json
 import psycopg2
 import pandas as pd
+import warnings
+import requests
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
+# non-interactive matplotlib backend
+mpl.use('agg')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -23,6 +29,33 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 def index():
     return ('Hello! Welcome to the Pitlane 🏎️')
 
+@app.route('/schedule', methods=['GET', 'POST'])
+def schedule():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        year = post_data.get('season')
+        path = f'https://ergast.com/api/f1/{year}.json'
+        response = requests.get(path)
+        jsondump = response.json()
+        schedule = []
+        for i in range(0, int(jsondump['MRData']['total'])):
+            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
+        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
+    if request.method == 'GET':
+        year = 2023
+        path = f'https://ergast.com/api/f1/{year}.json'
+        response = requests.get(path)
+        jsondump = response.json()
+        schedule = []
+        for i in range(0, int(jsondump['MRData']['total'])):
+            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
+        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
+@app.route("/standings", methods=['GET', 'POST'])
+def standings():
+    if request.method == 'GET':
+        standings = getStandings()
+        return(jsonify({'status': 200, 'drivers': standings}))
+
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
     fastf1.Cache.enable_cache('cache/')
@@ -30,6 +63,7 @@ def pitlane():
         post_data = request.get_json()
         print(request.get_json())
         if post_data['method'] == 'headtohead':
+            # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'driver1': post_data.get('driver1'),
@@ -62,6 +96,7 @@ def pitlane():
             ax.set_ylabel("Lap Time")
             ax.legend(handles=[line1, line2])
             
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
@@ -69,6 +104,7 @@ def pitlane():
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
         if post_data['method'] == 'gearshift':
+            # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'track': post_data.get('track'),
@@ -113,6 +149,7 @@ def pitlane():
             cbar.set_ticks(np.arange(1.5, 9.5))
             cbar.set_ticklabels(np.arange(1, 9))
 
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
@@ -120,6 +157,7 @@ def pitlane():
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
         if post_data['method'] == 'speedvisual':
+            # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
                 'driver': post_data.get('driver'),
@@ -158,7 +196,8 @@ def pitlane():
             cbaxes = fig.add_axes([0.25, 0.05, 0.5, 0.05])
             normlegend = mpl.colors.Normalize(vmin=color.min(), vmax=color.max())
             legend = mpl.colorbar.ColorbarBase(cbaxes, norm=normlegend, cmap=colormap, orientation="horizontal")
-
+            
+            # converting matplotlib image to base64 so i can display it easy
             pngImage = io.BytesIO()
             FigureCanvas(fig).print_png(pngImage)
 
@@ -172,7 +211,7 @@ def pitlane():
 
 # Function for reteiving current drivers' championship standings.
 # Noah Howren
-def standings():
+def getStandings():
     conn = dbconnect()
     cursor = conn.cursor()
     cursor.execute('''SELECT driver_standings.position, drivers.surname, driver_standings.points
@@ -183,9 +222,11 @@ def standings():
                         WHERE date <= CURRENT_DATE
                         ORDER BY date DESC LIMIT 1)
                     ORDER BY POSITION;''')
-    jsondmp = json.dumps(cursor.fetchall()) 
+    # jsondump = json.dumps(cursor.fetchall())
+    jsondump = cursor.fetchall() 
     conn.close
-    return(jsondmp)
+    # print(f'DEBUGING: {jsondump[1]}')
+    return(jsondump)
 
 # Function for creating database connection and returning connection variable.
 # Noah Howren
@@ -195,4 +236,4 @@ def dbconnect():
     return (conn)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
