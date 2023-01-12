@@ -106,9 +106,12 @@ export default {
   <h2 id="title">Schedule for {{ season }} Formula One Season</h2>
   <div class="schedule">
     <div class="years">
-      <select @change="onSubmitYear($event)">
+      <!-- <select @change="onSubmitYear($event)">
         <option v-for="n in 74" :value="2024 - n" :key="2024 - n">{{ 2024 - n }}</option>
-      </select>
+      </select> -->
+      <BDropdown id="dropdown-1" text="Dropdown Button">
+        <BDropdownItem v-for="n in 74" :value="2024 - n" :key="2024 - n">{{ 2024 - n }}</BDropdownItem>
+      </BDropdown>
     </div>
     <div class="table">
       <table>

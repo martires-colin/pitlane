@@ -83,11 +83,12 @@ export default {
 
   float: left;
   position: fixed;
-  z-index: 1;
   top: 0;
   left: 0;
   bottom: 0;
   padding: 0.5em;
+
+  height: 100%;
 
   transition: 0.3s ease;
 
@@ -96,9 +97,10 @@ export default {
 }
 
 .collapse-icon {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute; */
+  bottom: 0%;
   padding: 0.75em;
+  position: fixed;
 
   color: #ffffff;
   transition: 0.2s linear;

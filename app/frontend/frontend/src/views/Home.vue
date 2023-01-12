@@ -57,13 +57,8 @@ export default {
       <Standings/>
     </div>
   </div>
-  <BDropdown id="dropdown-1" text="Dropdown Button">
-    <BDropdownItem>First Action</BDropdownItem>
-    <BDropdownItem>Second Action</BDropdownItem>
-    <BDropdownItem>Third Action</BDropdownItem>
-    <BDropdownDivider></BDropdownDivider>
-    <BDropdownItem active>Active action</BDropdownItem>
-    <BDropdownItem disabled>Disabled action</BDropdownItem>
-  </BDropdown>
+  <!-- <BDropdown id="dropdown-1" text="Dropdown Button">
+    <BDropdownItem>{{  }}</BDropdownItem>
+  </BDropdown> -->
   <BButton variant="primary">Test</BButton>
 </template>
