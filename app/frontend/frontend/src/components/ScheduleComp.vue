@@ -49,9 +49,10 @@ export default {
   flex-direction: row;
   align-items: flex-start;
 }
-// .table {
-  
-// }
+.table {
+  max-height: 300px;
+  overflow: auto;
+}
 .years {
   margin-right: 1rem;
 }
@@ -96,26 +97,33 @@ export default {
   padding-left: 20px;
   text-align: left;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 </style>
 
 <template>
   <h2 id="title">Schedule for {{ season }} Formula One Season</h2>
   <div class="schedule">
-    <select class="years" @change="onSubmitYear($event)">
+    <div class="years">
+      <select @change="onSubmitYear($event)">
         <option v-for="n in 74" :value="2024 - n" :key="2024 - n">{{ 2024 - n }}</option>
-    </select>
-    <table class="table">
-      <tr id="header">
-        <th id="race-name">Name</th>
-        <th id="race-date">Date</th>
-        <th id="race-time">Time</th>
-      </tr>
-      <tr v-for="(race, index) in schedule" :key="index">
-        <td>{{race[0]}}</td>
-        <td>{{race[1]}}</td>
-        <td>{{race[2]}}</td>
-      </tr>
-    </table>
+      </select>
+    </div>
+    <div class="table">
+      <table>
+        <tr id="header">
+          <th id="race-name">Name</th>
+          <th id="race-date">Date</th>
+          <th id="race-time">Time</th>
+        </tr>
+        <tr v-for="(race, index) in schedule" :key="index">
+          <td>{{race[0]}}</td>
+          <td>{{race[1]}}</td>
+          <td>{{race[2]}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
   <!-- Not sure if I want to keep loading animation in. need to find better way maybe -->
   <div class="loading" v-if="load">
@@ -123,7 +131,4 @@ export default {
     <div></div>
     <div></div>
   </div>
-  <b-dropdown>
-    <b-dropdown-item>Hello</b-dropdown-item>
-  </b-dropdown>
 </template>

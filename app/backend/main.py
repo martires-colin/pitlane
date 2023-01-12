@@ -31,7 +31,7 @@ app.config.from_object(__name__)
 CORS(app, resources={r"/*":{'origins':"*"}})
 @app.route("/", methods=['GET'])
 def index():
-    return ('Hello! Welcome to the Pitlane 🏎️')
+    return (jsonify({'status': 200, 'message' :'Welcome to the Pitlane 🏎️'}))
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def schedule():
