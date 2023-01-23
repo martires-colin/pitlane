@@ -37,7 +37,7 @@ def index():
 def schedule():
     if request.method == 'POST':
         post_data = request.get_json()
-        year = post_data.get('season')
+        year = post_data.get('year')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()
@@ -46,7 +46,9 @@ def schedule():
             schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
     if request.method == 'GET':
-        year = 2023
+        # year = request.headers['year']
+        body = request.get_json()
+        year = body.get('year')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()
@@ -54,6 +56,25 @@ def schedule():
         for i in range(0, int(jsondump['MRData']['total'])):
             schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season']}))
+
+@app.route('/schedule/nextprev', methods=['POST'])
+def nextprev():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        isOffseason = post_data.get('Offseason')
+        if isOffseason:
+            response = requests.get('https://ergast.com/api/f1/current.json')
+            total = int(response.json()['MRData']['total'])-1
+            prevRace = response.json()['MRData']['RaceTable']['Races'][total]['raceName']
+            prevRaceDate = response.json()['MRData']['RaceTable']['Races'][total]['date']
+            prevRaceID = f"/track/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['circuitId']}"
+            nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
+            nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
+            nextRace = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['raceName']
+            nextRaceDate = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['date']
+            nextRaceID = f"/track/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['circuitId']}"
+            print(nextRaceID, prevRaceID)
+            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevRaceID], 'nextRace': [nextRace, nextRaceDate, nextRaceID]}))
 
 @app.route("/standings", methods=['GET', 'POST'])
 def standings():
@@ -63,15 +84,15 @@ def standings():
     if request.method == 'POST':
         post_data = request.get_json()
         standings = getStandings(int(post_data.get('year')))
-        return(jsonify({'status': 200, 'drivers': standings}))
+        return(jsonify({'status': 200, 'standings': standings}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
     fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
-        post_data = request.get_json()
+        post_data = request.get_json()['form']
         print(request.get_json())
-        if post_data['method'] == 'headtohead':
+        if post_data['method'] == 'h2h':
             # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -112,7 +133,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'gearshift':
+        if post_data['method'] == 'gear':
             # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -165,7 +186,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'speedvisual':
+        if post_data['method'] == 'speed':
             # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -264,4 +285,4 @@ def getRaceForYear(session, year):
     return race
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='localhost', port=3001)
