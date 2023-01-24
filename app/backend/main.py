@@ -37,7 +37,7 @@ def index():
 def schedule():
     if request.method == 'POST':
         post_data = request.get_json()
-        year = post_data.get('year')
+        year = post_data.get('season')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()
@@ -48,7 +48,7 @@ def schedule():
     if request.method == 'GET':
         # year = request.headers['year']
         body = request.get_json()
-        year = body.get('year')
+        year = body.get('season')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()

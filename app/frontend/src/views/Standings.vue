@@ -9,19 +9,20 @@ export default {
   },
   methods: {
     getStandings() {
-      const path = "http://127.0.0.1:5000/standings";
+      const path = "http://127.0.0.1:3001/standings";
       axios.get(path).then((response) => {
         console.log(response);
         if (response.status == 200) {
-          this.standings = response.data.drivers;
+          this.standings = response.data.standings;
         }
       });
     },
     sendYear(payload) {
-        const path = "http://127.0.0.1:5000/standings";
+        const path = "http://127.0.0.1:3001/standings";
         axios.post(path, payload).then((response) => {
             // this.load = false;
-            this.standings = response.data.drivers;
+            console.log(response.data.standings)
+            this.standings = response.data.standings;
         });
     },
     onSubmitYear(event) {
