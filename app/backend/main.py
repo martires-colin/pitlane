@@ -11,9 +11,13 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import sqlalchemy
+from sqlalchemy import create_engine, Column, Integer, String, Float, desc, ForeignKey
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from datetime import date
 import json
-import psycopg2
 import pandas as pd
+from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults
 import warnings
 import requests
 
@@ -27,42 +31,68 @@ app.config.from_object(__name__)
 CORS(app, resources={r"/*":{'origins':"*"}})
 @app.route("/", methods=['GET'])
 def index():
-    return ('Hello! Welcome to the Pitlane 🏎️')
+    return (jsonify({'status': 200, 'message' :'Welcome to the Pitlane 🏎️'}))
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def schedule():
     if request.method == 'POST':
         post_data = request.get_json()
-        year = post_data.get('season')
+        year = post_data.get('year')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()
         schedule = []
         for i in range(0, int(jsondump['MRData']['total'])):
-            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
+            schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
     if request.method == 'GET':
-        year = 2023
+        # year = request.headers['year']
+        body = request.get_json()
+        year = body.get('year')
         path = f'https://ergast.com/api/f1/{year}.json'
         response = requests.get(path)
         jsondump = response.json()
         schedule = []
         for i in range(0, int(jsondump['MRData']['total'])):
-            schedule.append(jsondump['MRData']['RaceTable']['Races'][i]['raceName'])
-        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
+            schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
+        return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season']}))
+
+@app.route('/schedule/nextprev', methods=['POST'])
+def nextprev():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        isOffseason = post_data.get('Offseason')
+        if isOffseason:
+            response = requests.get('https://ergast.com/api/f1/current.json')
+            total = int(response.json()['MRData']['total'])-1
+            prevRace = response.json()['MRData']['RaceTable']['Races'][total]['raceName']
+            prevRaceDate = response.json()['MRData']['RaceTable']['Races'][total]['date']
+            prevRaceID = f"/track/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['circuitId']}"
+            nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
+            nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
+            nextRace = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['raceName']
+            nextRaceDate = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['date']
+            nextRaceID = f"/track/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['circuitId']}"
+            print(nextRaceID, prevRaceID)
+            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevRaceID], 'nextRace': [nextRace, nextRaceDate, nextRaceID]}))
+
 @app.route("/standings", methods=['GET', 'POST'])
 def standings():
     if request.method == 'GET':
-        standings = getStandings()
+        standings = getStandings(0)
         return(jsonify({'status': 200, 'drivers': standings}))
+    if request.method == 'POST':
+        post_data = request.get_json()
+        standings = getStandings(int(post_data.get('year')))
+        return(jsonify({'status': 200, 'standings': standings}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
     fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
-        post_data = request.get_json()
+        post_data = request.get_json()['form']
         print(request.get_json())
-        if post_data['method'] == 'headtohead':
+        if post_data['method'] == 'h2h':
             # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -103,7 +133,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'gearshift':
+        if post_data['method'] == 'gear':
             # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -156,7 +186,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'speedvisual':
+        if post_data['method'] == 'speed':
             # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -211,29 +241,48 @@ def pitlane():
 
 # Function for reteiving current drivers' championship standings.
 # Noah Howren
-def getStandings():
-    conn = dbconnect()
-    cursor = conn.cursor()
-    cursor.execute('''SELECT driver_standings.position, drivers.surname, driver_standings.points
-                    FROM driver_standings
-                    INNER JOIN drivers ON drivers.driverId = driver_standings.driverId
-                    WHERE raceId IN (SELECT raceId 
-                        FROM races
-                        WHERE date <= CURRENT_DATE
-                        ORDER BY date DESC LIMIT 1)
-                    ORDER BY POSITION;''')
-    # jsondump = json.dumps(cursor.fetchall())
-    jsondump = cursor.fetchall() 
-    conn.close
-    # print(f'DEBUGING: {jsondump[1]}')
-    return(jsondump)
+def getStandings(year):
+    session = get_session()
+    if year == 0:
+        recentrace = get_recent_race(session)
+    else:
+        recentrace = getRaceForYear(session, year)
+    standings = []
+    for s in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == recentrace.raceid).order_by(Driver_Standings.position) :
+        # x = {'driver':(s.Driver.forename + ' ' + s.Driver.surname), 'points':s.Driver_Standings.points}
+        # standings[s.Driver_Standings.position] = x
+        standings.append((s.Driver_Standings.position, s.Driver.forename + ' ' + s.Driver.surname, s.Driver_Standings.points))
+    return standings
 
-# Function for creating database connection and returning connection variable.
+# Function for reteiving current constructors' championship standings.
 # Noah Howren
-def dbconnect():
-    conn = psycopg2.connect("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
-    conn.autocommit = True
-    return (conn)
+def con_standings():
+    session = get_session()
+    recentrace = get_recent_race(session)
+    standings = {}
+    for s in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == recentrace.raceid).order_by(Constructor_Standings.position) :
+        x = {'constructor':s.Constructor.name, 'points':s.Constructor_Standings.points}
+        standings[s.Constructor_Standings.position] = x
+    return standings
+
+# Function for creating the session object to connect to the PostgreSQL Database
+# Noah Howren
+def get_session():
+    engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
+    Session = sessionmaker(bind = engine)
+    return Session()
+
+# Function for returning the most recent Race object in relation to todays date
+# Noah Howren
+def get_recent_race(session):
+    Date = date.today()
+    race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
+    return race
+
+def getRaceForYear(session, year):
+    Date = date((year+1),1,1)
+    race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
+    return race
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='localhost', port=3001)
