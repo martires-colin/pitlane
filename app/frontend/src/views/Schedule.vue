@@ -10,7 +10,7 @@ export default {
   },
   methods: {
     getSchedule() {
-      const path = "http://127.0.0.1:5000/schedule";
+      const path = "http://127.0.0.1:3001/schedule";
       axios.get(path).then((response) => {
         console.log(response);
         if (response.status == 200) {
@@ -20,7 +20,7 @@ export default {
       });
     },
     sendYear(payload) {
-        const path = "http://127.0.0.1:5000/schedule";
+        const path = "http://127.0.0.1:3001/schedule";
         axios.post(path, payload).then((response) => {
             this.load = false;
             this.schedule = response.data.schedule;
