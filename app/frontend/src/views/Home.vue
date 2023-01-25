@@ -50,6 +50,9 @@ onMounted(() => {
 </style>
 
 <template>
+  <Suspense>
+    
+  </Suspense>
   <div class="flex flex-col justify-center">
     <div class="pitlane-landing">
       <h1 class="py-2 text-4xl font-[500]">Pitlane</h1>
@@ -57,13 +60,19 @@ onMounted(() => {
     </div>
     <div class="py-2 flex flex-row justify-evenly">
       <div class="previous-race">
-        <p class="text-red-500 text-xl">Previous Race</p>
-        <p>{{ $store.state.prevRace[0] }} </p>
+        <p class="text-red-500 text-xl pb-2">Previous Race</p>
+        <div class="flex flex-row">
+          <img v-if="$store.state.prevRace != null" :src="$store.state.prevRace[2]" alt="" height="40" width="40"/>
+          <p class="pl-4">{{ $store.state.prevRace[0] }} </p>
+        </div>
         <p>{{ $store.state.prevRace[1] }} </p>
       </div>
       <div class="upcoming-race">
-        <p class="text-green-500 text-xl">Upcoming Race</p>
-        <p> {{ $store.state.nextRace[0] }}</p>
+        <p class="text-green-500 text-xl pb-2">Upcoming Race</p>
+        <div class="flex flex-row">
+          <img :src="$store.state.nextRace[2]" alt="" height="40" width="40"/>
+          <p class="pl-4"> {{ $store.state.nextRace[0] }}</p>
+        </div>
         <p> {{ $store.state.nextRace[1] }}</p>
       </div>
     </div>

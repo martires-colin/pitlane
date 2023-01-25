@@ -15,7 +15,7 @@ export default createStore({
   state: {
     user: null,
     nextRace: [],
-    prevRace: [],
+    prevRace: null,
   },
   mutations: {
     SET_USER(state, user) {
