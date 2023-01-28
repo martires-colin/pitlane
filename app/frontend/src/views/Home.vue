@@ -1,3 +1,4 @@
+<!-- By Anthony Ganci -->
 <script>
 // import Schedule from "../components/ScheduleComp";
 // import Standings from "../components/StandingsComp";

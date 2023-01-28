@@ -13,7 +13,9 @@ import axios from "axios";
 
 export default createStore({
   state: {
-    user: null,
+    // user: null,
+    // for testing purposes of fantasy while firebase is still being done
+    user: ["Anthony"],
     nextRace: [],
     prevRace: null,
   },

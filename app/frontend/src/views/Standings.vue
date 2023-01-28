@@ -1,3 +1,4 @@
+<!-- By Anthony Ganci -->
 <script>
 import router from "@/router";
 import axios from "axios";
