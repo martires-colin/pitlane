@@ -1,4 +1,5 @@
 <script>
+import router from '@/router';
 import axios from 'axios';
 export default {
   data() {
@@ -10,33 +11,31 @@ export default {
   },
   methods: {
     getSchedule() {
-      const path = "http://127.0.0.1:3001/schedule";
+      const path = "http://localhost:3001/schedule/2023";
       axios.get(path).then((response) => {
         console.log(response);
-        if (response.status == 200) {
-          this.schedule = response.data.schedule;
-          this.season = response.data.season;
-        }
+        this.schedule = response.data.schedule;
       });
     },
-    sendYear(payload) {
-        const path = "http://127.0.0.1:3001/schedule";
-        axios.post(path, payload).then((response) => {
-            this.load = false;
-            this.schedule = response.data.schedule;
-        });
-    },
+    // sendYear(payload) {
+    //     const path = "http://127.0.0.1:3001/schedule";
+    //     axios.post(path, payload).then((response) => {
+    //         this.load = false;
+    //         this.schedule = response.data.schedule;
+    //     });
+    // },
     onSubmitYear(event) {
         // this.schedule = [];
         this.season = parseInt(event.target.value);
-        const payload = {
-            season: this.season,
-        };
-        this.sendYear(payload);
-        this.load = true;
+        router.push({ path: `/schedule/${this.season}`})
+        // const payload = {
+        //     season: this.season,
+        // };
+        // this.sendYear(payload);
+        // this.load = true;
     },
   },
-  created() {
+  mounted() {
     this.getSchedule();
   },
 };
@@ -93,11 +92,5 @@ export default {
         <td>{{race[2]}}</td>
       </tr>
     </table>
-  </div>
-  <!-- Not sure if I want to keep loading animation in. need to find better way maybe -->
-  <div class="loading" v-if="load">
-    <div></div>
-    <div></div>
-    <div></div>
   </div>
 </template>

@@ -7,6 +7,12 @@ import Pitlane from "../views/Pitlane.vue";
 import Home from "../views/Home.vue";
 import Fantasy from "../views/Fantasy.vue";
 import Settings from "../views/Settings.vue";
+import ScheduleYear from "../views/ScheduleYear.vue"
+import StandingsYear from "../views/StandingsYear.vue"
+
+// const Year = {
+//   template: '<div> YEAR: {{ $route.params.year }}</div>'
+// }
 
 const routes = [
   {
@@ -36,12 +42,20 @@ const routes = [
     },
   },
   {
+    path: "/standings/:year",
+    component: StandingsYear,
+  },
+  {
     path: "/schedule",
     name: "Schedule",
     component: Schedule,
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    path: "/schedule/:year",
+    component: ScheduleYear,
   },
   {
     path: "/",
