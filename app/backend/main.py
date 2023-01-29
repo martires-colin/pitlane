@@ -86,12 +86,14 @@ def nextprev():
             nextRaceDate = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['date']
             # nextRaceID = f"/track/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['circuitId']}"
             # print(nextRaceID, prevRaceID)
-            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['Location']['country']}?fields=flags")
-            prevFlag = prevCountry.json()[0]['flags']['png']
-            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
-            nextFlag = nextCountry.json()[0]['flags']['png']
-            # prevFlag = ""
-            # print(prevCountry.json()[0]['flags']['png'])
+            
+            # api for flags is down for some reason
+            # prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['Location']['country']}?fields=flags")
+            # prevFlag = prevCountry.json()[0]['flags']['png']
+            # nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
+            # nextFlag = nextCountry.json()[0]['flags']['png']
+            prevFlag = ""
+            nextFlag = ""
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag], 'nextRace': [nextRace, nextRaceDate, nextFlag]}))
 
 @app.route("/standings/<int:Year>")
