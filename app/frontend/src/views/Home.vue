@@ -26,38 +26,42 @@ onMounted(() => {
 })
 </script> -->
 
-<style scoped lang="scss">
-  // h1 {
-  //   padding-top: 1rem;
-  // }
-  // .landing {
-  //   display: flex;
-  //   flex-direction: row;
-  //   font-family: "Roboto Mono";
-  // }
-  .pitlane-landing {
-  height: 400px;
-  background-image: url('../assets/pitwall-main.png');  
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position-y: -55px;
-}  
-  // #landing-1 {
-  //   padding-right: 5rem;
-  //   // max-height: 300px;
-  //   // overflow: auto;
-  // }
+<style scoped >
+  @media(min-width: 1025px){
+    .pitlane-landing {
+      height: 500px;
+      background-image: url('../assets/PITLANE.jpg');  
+      /* // background-attachment: fixed; */
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center 0px;
+    }
+  } 
+  @media(min-width: 481px ) and (max-width: 1024px) {
+    .pitlane-landing {
+      height: 300px;
+      background-image: url('../assets/PITLANE.png');  
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+  @media (max-width: 480px) {
+    .pitlane-landing {
+      height: 200px;
+      background-image: url('../assets/PITLANE.png');  
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
   
 </style>
 
 <template>
-  <Suspense>
-    
-  </Suspense>
   <div class="flex flex-col justify-center">
-    <div class="pitlane-landing">
-      <h1 class="py-2 text-4xl font-[500]">Pitlane</h1>
-      <h2 class="opacity-50 font-[300] text-xl">Formula1 made simple.</h2>
+    <div class="pitlane-landing flex justify-center">
+      <!-- <img src='../assets/PITWALL.png' class="landing-img"/> -->
+      <!-- <h1 class="py-2 text-4xl font-[500]" >Pitlane</h1>
+      <h2 class="opacity-50 font-[300] text-xl">Formula1 made simple.</h2> -->
     </div>
     <div class="py-2 flex flex-row justify-evenly">
       <div class="previous-race">

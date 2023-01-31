@@ -1,7 +1,7 @@
 <!-- Started by Anthony Ganci -->
 
 <template>
-  <div class="flex flex-col h-screen">
+  <div v-if="ready" class="flex flex-col h-screen">
     <div class="flex flex-row justify-between p-4">
       <h1>{{ $store.state.user[0]}}'s Fantasy League</h1>
       <h1>Total points: 0</h1>
@@ -24,83 +24,10 @@
       <div class="bg-dark-300 flex flex-col justify-evenly">
         <div class="flex flex-row justify-evenly">
           <div class="driver-item">
-            <p class="py-2">Add Driver</p>
-            <!-- Button trigger modal -->
-            <button type="button" class="px-6
-                  py-2
-                  mt-16
-                  text-white
-                  font-medium
-                  text-xl
-                  leading-tight
-                  rounded
-                  hover:bg-slate-400 hover:shadow-lg
-                  active:bg-slate-400 active:shadow-lg
-                  transition
-                  duration-150
-                  ease-in-out" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              +
-            </button>
-            <!-- Modal -->
-            <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-              id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog relative w-auto pointer-events-none">
-                <div
-                  class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-slate-700 bg-clip-padding rounded-md outline-none text-current">
-                  <div
-                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-slate-900 rounded-t-md">
-                    <h5 class="text-xl font-medium leading-normal" id="exampleModalLabel">Choose a driver:</h5>
-                    <button type="button"
-                      class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                      data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body relative p-4">
-                    <div class="flex flex-col items-start text-xl">
-                      <div v-for="(driver, index) in drivers" :key="index">
-                        <input type="checkbox" :name="driver" :value="driver">
-                        <label class="pl-2" :for="driver">{{ driver }}</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-slate-900 rounded-b-md">
-                    <button type="button" class="px-6
-                      py-2.5
-                      bg-purple-600
-                      text-white
-                      font-medium
-                      text-xs
-                      leading-tight
-                      uppercase
-                      rounded
-                      shadow-md
-                      hover:bg-purple-700 hover:shadow-lg
-                      focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
-                      active:bg-purple-800 active:shadow-lg
-                      transition
-                      duration-150
-                      ease-in-out" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="px-6
-                      py-2.5
-                      bg-blue-600
-                      text-white
-                      font-medium
-                      text-xs
-                      leading-tight
-                      uppercase
-                      rounded
-                      shadow-md
-                      hover:bg-blue-700 hover:shadow-lg
-                      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-                      active:bg-blue-800 active:shadow-lg
-                      transition
-                      duration-150
-                      ease-in-out
-                      ml-1">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p v-if="driver1 === ''" class="py-2">Add Driver</p>
+            <FantasyModal buttonTitle="+" :allDrivers="allDrivers" @set-Driver1="setDriver1" v-if="driver1 === ''" />
+            <p class="pt-28 text-xl" v-if="driver1 !== ''">{{ driver1 }}</p>
+            <FantasyModal buttonTitle="Edit" :allDrivers="allDrivers" @set-Driver1="setDriver1" v-if="driver1 !== ''" />
           </div>
           <div class="driver-item">
             <p class="py-2">Add Driver</p>
@@ -114,20 +41,11 @@
           </div>
         </div>
       </div>
-      <div class="bg-sky-900">
-        <div class="team-grid py-16">
-          <div class="grid-item">Drivers</div>
-          <div class="grid-item">Constructors</div>
-          <div class="grid-item col-span-2">1</div>
-          <div class="grid-item col-span-2">2</div>
-          <div class="grid-item col-span-2">3</div>
-          <div class="grid-item col-span-2">4</div>
-          <div class="grid-item col-span-2">5</div>
-          <div class="grid-item col-span-2">6</div>
-          <div class="grid-item col-span-2">7</div>
-          <div class="grid-item col-span-2">8</div>
-          <div class="grid-item col-span-2">9</div>
-          <div class="grid-item col-span-2">10</div>
+      <div class="bg-dark-300">
+        <div class="bg-clip-content team-grid bg-jelly-bean-500">
+          <div class="grid-item bg-jelly-bean-900 border-x-2 border-t-2 border-jelly-bean-600">Drivers</div>
+          <div class="grid-item bg-jelly-bean-800 border-t-2 border-r-2 border-jelly-bean-600">Constructors</div>
+          <div class="grid-item col-span-2 border-x-2 border-t-2 border-jelly-bean-600" v-for="(constructor, index) in allConstructors" :key="index">{{ constructor }}</div>
         </div>
       </div>
     </div>
@@ -135,11 +53,46 @@
 </template>
 
 <script>
+import FantasyModal from "../components/FantasyModal.vue";
+
 export default {
+  components: {
+    FantasyModal
+  },
   data() {
     return {
-      drivers: ["Lewis Hamilton", "Charles Leclerc", "Max Verstappen", "George Russell"]
+      allDrivers: null,
+      allConstructors: null,
+      ready: false,
+      driver1: "",
+      driver2: "",
     }
+  },
+  methods: {
+    setDriver1(str) {
+      console.log(str)
+      this.driver1 = str;
+      // console.log(this.allDrivers)
+      // this.allDrivers.splice(this.allDrivers.indexOf(str), 1);
+      // console.log(this.allDrivers)
+    },
+    async fetchDrivers() {
+      const res = await fetch(`http://localhost:3001/fantasy/drivers`);
+      const data = await res.json();
+      console.log(data)
+      this.allDrivers = data.drivers;
+    },
+    async fetchConstructors() {
+      const res = await fetch(`http://localhost:3001/fantasy/constructors`);
+      const data = await res.json();
+      console.log(data)
+      this.allConstructors = data.constructors;
+    }
+  },
+  async mounted() {
+    await this.fetchDrivers();
+    await this.fetchConstructors();
+    this.ready = true;
   }
 };
 </script>

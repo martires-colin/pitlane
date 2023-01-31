@@ -18,6 +18,7 @@ from datetime import date
 import json
 import pandas as pd
 from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults
+from fantasy import *
 import warnings
 import requests
 
@@ -45,30 +46,6 @@ def schedule(Year):
                 schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
             return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
 
-# @app.route('/schedule', methods=['GET', 'POST'])
-# def schedule():
-#     if request.method == 'POST':
-#         post_data = request.get_json()
-#         year = post_data.get('season')
-#         path = f'https://ergast.com/api/f1/{year}.json'
-#         response = requests.get(path)
-#         jsondump = response.json()
-#         schedule = []
-#         for i in range(0, int(jsondump['MRData']['total'])):
-#             schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
-#         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
-#     if request.method == 'GET':
-#         # year = request.headers['year']
-#         body = request.get_json()
-#         year = body.get('season')
-#         path = f'https://ergast.com/api/f1/{year}.json'
-#         response = requests.get(path)
-#         jsondump = response.json()
-#         schedule = []
-#         for i in range(0, int(jsondump['MRData']['total'])):
-#             schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
-#         return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season']}))
-
 @app.route('/schedule/nextprev', methods=['POST'])
 def nextprev():
     if request.method == 'POST':
@@ -79,21 +56,17 @@ def nextprev():
             total = int(response.json()['MRData']['total'])-1
             prevRace = response.json()['MRData']['RaceTable']['Races'][total]['raceName']
             prevRaceDate = response.json()['MRData']['RaceTable']['Races'][total]['date']
-            # prevRaceID = f"/track/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['circuitId']}"
             nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
             nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
             nextRace = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['raceName']
             nextRaceDate = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['date']
-            # nextRaceID = f"/track/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['circuitId']}"
-            # print(nextRaceID, prevRaceID)
             
             # api for flags is down for some reason
-            # prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['Location']['country']}?fields=flags")
-            # prevFlag = prevCountry.json()[0]['flags']['png']
-            # nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
-            # nextFlag = nextCountry.json()[0]['flags']['png']
-            prevFlag = ""
-            nextFlag = ""
+            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['Location']['country']}?fields=flags")
+            prevFlag = prevCountry.json()[0]['flags']['png']
+            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
+            nextFlag = nextCountry.json()[0]['flags']['png']
+
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag], 'nextRace': [nextRace, nextRaceDate, nextFlag]}))
 
 @app.route("/standings/<int:Year>")
@@ -102,16 +75,6 @@ def standings(Year):
         if Year in range(1950, 2023):
             standings = getStandings(Year)
             return(jsonify({'standings': standings}))
-
-# @app.route("/standings", methods=['GET', 'POST'])
-# def standings():
-#     if request.method == 'GET':
-#         standings = getStandings(0)
-#         return(jsonify({'status': 200, 'drivers': standings}))
-#     if request.method == 'POST':
-#         post_data = request.get_json()
-#         standings = getStandings(int(post_data.get('year')))
-#         return(jsonify({'status': 200, 'standings': standings}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
@@ -265,6 +228,16 @@ def pitlane():
     if request.method == 'GET':    
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
+
+@app.route("/fantasy/drivers")
+def fantasyDrivers():
+    drivers = getFantasyDrivers()
+    return jsonify({'drivers': drivers})
+
+@app.route("/fantasy/constructors")
+def fantasyConstructors():
+    constructors = getFantasyConstructors()
+    return jsonify({'constructors': constructors})
 
 # Function for reteiving current drivers' championship standings.
 # Noah Howren
