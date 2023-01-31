@@ -25,7 +25,6 @@
     <a href="/create-account">Create an Account</a>
   </main> -->
 
-<section class="vh-100 vw-100" style="background-color: #060326;">
   <div class="container  h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-12">
@@ -53,16 +52,26 @@
 
                   <div class="form-outline mb-4">
                     <label class="form-label">Email address</label>
-                    <input type="email" placeholder="Email" class="form-control form-control-lg" v-model="login_form.email"/>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      class="form-control form-control-lg"
+                      v-model="login_form.email"
+                      required/>
                   </div>
 
                   <div class="form-outline mb-4">
                     <label class="form-label">Password</label>
-                    <input type="password" placeholder="Password" class="form-control form-control-lg" v-model="login_form.password"/>
+                    <input
+                    type="password"
+                    placeholder="Password"
+                    class="form-control form-control-lg"
+                    v-model="login_form.password"
+                    required/>
                   </div>
 
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                    <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Login</button>
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
@@ -79,7 +88,6 @@
       </div>
     </div>
   </div>
-</section>
 
 </template>
 
@@ -105,4 +113,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#login-btn {
+  background-color: #005b96;
+}
+
+#login-btn:hover {
+  background-color: #03396c;
+}
+
+</style>

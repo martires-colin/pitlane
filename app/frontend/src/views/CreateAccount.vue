@@ -1,5 +1,4 @@
-<!-- The code in this file was developed by Colin Martires and followed a template -->
-<!-- outlined in the mdbootstrap documentation for styling.                        -->
+<!-- By Colin Martires -->
 
 <template>
   <!-- <main>
@@ -27,7 +26,6 @@
 
 
 
-<section class="vh-100 vw-100" style="background-color: #060326;">
   <div class="container  h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-12">
@@ -54,17 +52,47 @@
                   <h5 class="fw-normal mb-0 pb-3" style="letter-spacing: 1px;">Create an account</h5>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label">Email address</label>
-                    <input type="email" placeholder="Email" class="form-control form-control-lg" v-model="register_form.email"/>
+                    <!-- <label class="form-label">Name</label> -->
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      class="form-control form-control-lg"
+                      v-model="name"
+                      required/>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label">Password</label>
-                    <input type="password" placeholder="Password" class="form-control form-control-lg" v-model="register_form.password"/>
+                    <!-- <label class="form-label">Email address</label> -->
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      class="form-control form-control-lg"
+                      v-model="email"
+                      required/>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <!-- <label class="form-label">Password</label> -->
+                    <input
+                    type="password"
+                    placeholder="Password"
+                    class="form-control form-control-lg"
+                    v-model="password"
+                    required/>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <!-- <label class="form-label">Password</label> -->
+                    <input
+                    type="password"
+                    placeholder="Reenter Password"
+                    class="form-control form-control-lg"
+                    v-model="passsword2"
+                    required/>
                   </div>
 
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Create Account</button>
+                    <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
@@ -81,31 +109,78 @@
       </div>
     </div>
   </div>
-</section>
+
 
 
 </template>
 
 <script>
-import { ref } from "vue";
-import { useStore } from "vuex";
+// import { ref } from "vue";
+// import { useStore } from "vuex";
+
+// export default {
+//   name: "CreateAccount",
+//   setup() {
+//     const register_form = ref({});
+//     const store = useStore();
+
+//     const register = () => {
+//       store.dispatch("register", register_form.value);
+//     };
+
+//     return {
+//       register_form,
+//       register,
+//     };
+//   },
+// };
+
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   name: "CreateAccount",
   setup() {
-    const register_form = ref({});
-    const store = useStore();
+    const name = ref('')
+    const email = ref('')
+    const password = ref('')
+    const error = ref(null)
 
-    const register = () => {
-      store.dispatch("register", register_form.value);
-    };
+    const store = useStore()
+    const router = useRouter()
 
-    return {
-      register_form,
-      register,
-    };
-  },
+    const register = async () => {
+      try {
+        await store.dispatch('register', {
+          email: email.value,
+          password: password.value,
+          name: name.value
+        })
+        console.log("Registered User")
+        router.push("/")
+      }
+      catch (err) {
+        error.value = err.message
+        console.log(err)
+      }
+    }
+
+    return { register, name, email, password, error }
+
+  }
 };
+
 </script>
 
-<style></style>
+<style>
+
+#createAcc-btn {
+  background-color: #005b96;
+}
+
+#createAcc-btn:hover {
+  background-color: #03396c;
+}
+
+</style>
