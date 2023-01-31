@@ -1,5 +1,10 @@
 // By Anthony Ganci and Colin Martires
 
+/*References 
+  https://www.youtube.com/watch?v=Kc-FbPSdezg
+  https://blog.logrocket.com/authentication-vue-3-firebase/
+*/
+
 import { createStore } from "vuex";
 // import router from "../router";
 import axios from "axios";
@@ -100,7 +105,6 @@ export default createStore({
       if (response) {
         console.log(response)
         commit('SET_USER', response.user)
-        // response.user.updateProfile({displayName: name})
         updateProfile(response.user, {
           displayName: name
         })
