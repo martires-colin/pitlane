@@ -19,19 +19,13 @@ import {
 export default createStore({
   state: {
     user: {
-      loggedIn: false,  // tell whether user is logged in or not
-      data: null  // data holds information about user
+      loggedIn: false,
+      data: null
     },
     nextRace: [],
     prevRace: [],
   },
   mutations: {
-    // SET_USER(state, user) {
-    //   state.user = user;
-    // },
-    // CLEAR_USER(state) {
-    //   state.user = null;
-    // },
     SET_LOGGED_IN(state, value) {
       state.user.loggedIn = value
     },
@@ -44,66 +38,9 @@ export default createStore({
     }
   },
   actions: {
-    // async login({ commit }, details) {
-    //   const { email, password } = details;
-
-    //   try {
-    //     await signInWithEmailAndPassword(auth, email, password);
-    //   } catch (error) {
-    //     switch (error.code) {
-    //       case "auth/user-not-found":
-    //         alert("User not found");
-    //         break;
-    //       case "auth/wrong-password":
-    //         alert("Wrong password");
-    //         break;
-    //       default:
-    //         alert(error.message);
-    //     }
-    //     return;
-    //   }
-
-    //   commit("SET_USER", auth.currentUser);
-    //   router.push("/pitlane");
-    // },
-    // async register({ commit }, details) {
-    //   const { email, password } = details;
-
-    //   try {
-    //     await createUserWithEmailAndPassword(auth, email, password);
-    //   } catch (error) {
-    //     switch (error.code) {
-    //       case "auth/email-already-in-use":
-    //         alert("Email already in use");
-    //         break;
-    //       case "auth/invalid-email":
-    //         alert("Invalid email");
-    //         break;
-    //       case "auth/operation-not-allowed":
-    //         alert("Operation not allowed");
-    //         break;
-    //       case "auth/weak-password":
-    //         alert("Weak password");
-    //         break;
-    //       default:
-    //         alert("Something went wrong");
-    //     }
-    //     return;
-    //   }
-
-    //   commit("SET_USER", auth.currentUser);
-    //   router.push("/pitlane");
-    // },
-    // async logout({ commit }) {
-    //   await signOut(auth);
-    //   commit("CLEAR_USER");
-    //   router.push("/login");
-    // },
-
     async register({ commit }, { email, password, name}) {
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
-        console.log(response)
         commit('SET_USER', response.user)
         updateProfile(response.user, {
           displayName: name
@@ -112,36 +49,10 @@ export default createStore({
       } else {
         throw new Error("Unable to register user")
       }
-
-      // try {
-      //   const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      // } catch (error) {
-      //   switch (error.code) {
-      //     case "auth/email-already-in-use":
-      //       alert("Email already in use");
-      //       break;
-      //     case "auth/invalid-email":
-      //       alert("Invalid email");
-      //       break;
-      //     case "auth/operation-not-allowed":
-      //       alert("Operation not allowed");
-      //       break;
-      //     case "auth/weak-password":
-      //       alert("Weak password");
-      //       break;
-      //     default:
-      //       alert("Something went wrong");
-      //   }
-      //   return;
-      // }
-
-      // commit('SET_USER', user)
-      // await updateProfile(user, {
-      //   displayName: name
-      // })
     },
     async login({ commit }, { email, password }) {
       const response = await signInWithEmailAndPassword(auth, email, password)
+      console.log(response)
       if (response) {
         commit('SET_USER', response.user)
       } else {
@@ -163,7 +74,6 @@ export default createStore({
         commit('SET_USER', null)
       }
     },
-
     async fetchUpcoming({ commit }) {
       try {
         const payload = {

@@ -1,30 +1,6 @@
 <!-- By Colin Martires -->
 
 <template>
-  <!-- <main>
-    <h1>Create Account</h1>
-
-    <section class="forms">
-      <form class="register" @submit.prevent="register">
-        <h2>Register</h2>
-        <input
-          type="email"
-          placeholder="Email Address"
-          v-model="register_form.email"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          v-model="register_form.password"
-        />
-        <input type="submit" value="Register" />
-      </form>
-    <a href="/login">Already have an account?</a>
-
-    </section>
-  </main> -->
-
-
 
   <div class="container  h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -87,7 +63,7 @@
                     type="password"
                     placeholder="Reenter Password"
                     class="form-control form-control-lg"
-                    v-model="passsword2"
+                    v-model="password2"
                     required/>
                   </div>
 
@@ -115,26 +91,6 @@
 </template>
 
 <script>
-// import { ref } from "vue";
-// import { useStore } from "vuex";
-
-// export default {
-//   name: "CreateAccount",
-//   setup() {
-//     const register_form = ref({});
-//     const store = useStore();
-
-//     const register = () => {
-//       store.dispatch("register", register_form.value);
-//     };
-
-//     return {
-//       register_form,
-//       register,
-//     };
-//   },
-// };
-
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -145,12 +101,22 @@ export default {
     const name = ref('')
     const email = ref('')
     const password = ref('')
+    const password2 = ref('')
     const error = ref(null)
 
     const store = useStore()
     const router = useRouter()
 
     const register = async () => {
+
+      console.log(password.value)
+      console.log(password2.value)
+
+      if (password.value !== password2.value) {
+        alert("Passwords do not match")
+        return
+      }
+
       try {
         await store.dispatch('register', {
           email: email.value,
@@ -161,12 +127,28 @@ export default {
         router.push("/")
       }
       catch (err) {
-        error.value = err.message
         console.log(err)
+        switch (err.code) {
+          case "auth/email-already-in-use":
+            alert("Email already in use");
+            break;
+          case "auth/invalid-email":
+            alert("Invalid email");
+            break;
+          case "auth/operation-not-allowed":
+            alert("Operation not allowed");
+            break;
+          case "auth/weak-password":
+            alert("Weak password");
+            break;
+          default:
+            alert("Something went wrong");
+        }
+        return;
       }
     }
 
-    return { register, name, email, password, error }
+    return { register, name, email, password, password2, error }
 
   }
 };
