@@ -1,31 +1,7 @@
-<!-- The code in this file was developed by Colin Martires and followed a template -->
-<!-- outlined in the mdbootstrap documentation for styling.                        -->
+<!-- By Colin Martires -->
 
 <template>
-  <!-- <main>
-    <h1>Login Page</h1>
 
-    <section class="forms">
-      <form class="login" @submit.prevent="login">
-        <h2>Login</h2>
-        <input
-          type="email"
-          placeholder="Email Address"
-          v-model="login_form.email"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          v-model="login_form.password"
-        />
-        <input type="submit" value="Login" />
-      </form>
-    </section>
-
-    <a href="/create-account">Create an Account</a>
-  </main> -->
-
-<section class="vh-100 vw-100" style="background-color: #060326;">
   <div class="container  h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-12">
@@ -53,16 +29,26 @@
 
                   <div class="form-outline mb-4">
                     <label class="form-label">Email address</label>
-                    <input type="email" placeholder="Email" class="form-control form-control-lg" v-model="login_form.email"/>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      class="form-control form-control-lg"
+                      v-model="email"
+                      required/>
                   </div>
 
                   <div class="form-outline mb-4">
                     <label class="form-label">Password</label>
-                    <input type="password" placeholder="Password" class="form-control form-control-lg" v-model="login_form.password"/>
+                    <input
+                    type="password"
+                    placeholder="Password"
+                    class="form-control form-control-lg"
+                    v-model="password"
+                    required/>
                   </div>
 
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                    <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Login</button>
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
@@ -79,30 +65,64 @@
       </div>
     </div>
   </div>
-</section>
 
 </template>
 
 <script>
-import { ref } from "vue";
-import { useStore } from "vuex";
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   name: "Login",
   setup() {
-    const login_form = ref({});
-    const store = useStore();
+    const email = ref('')
+    const password = ref('')
+    const error = ref(null)
 
-    const login = () => {
-      store.dispatch("login", login_form.value);
-    };
+    const store = useStore()
+    const router = useRouter()
 
-    return {
-      login_form,
-      login,
-    };
-  },
-};
+    const login = async () => {
+      try {
+        let response = await store.dispatch('login', {
+          email: email.value,
+          password: password.value
+        })
+        console.log(response)
+        // console.log(`Successfully logged in ${response.user.displayName}`)
+        router.push('/')
+      }
+      catch (err) {
+        console.log(err)
+        switch (err.code) {
+          case "auth/wrong-password":
+            alert("Incorrect Password");
+            break;
+          case "auth/user-not-found":
+            alert("User not found");
+            break;
+          default:
+            alert("Something went wrong");
+        }
+        return;
+      }
+    }
+
+    return { login, email, password, error }
+
+  }
+}
+
 </script>
 
-<style></style>
+<style>
+#login-btn {
+  background-color: #005b96;
+}
+
+#login-btn:hover {
+  background-color: #03396c;
+}
+
+</style>
