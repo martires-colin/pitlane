@@ -23,7 +23,7 @@ export default createStore({
       data: null
     },
     nextRace: [],
-    prevRace: [],
+    prevRace: null,
   },
   mutations: {
     SET_LOGGED_IN(state, value) {

@@ -1,4 +1,6 @@
+<!-- By Anthony Ganci -->
 <script>
+import router from "@/router";
 import axios from "axios";
 export default {
   data() {
@@ -9,39 +11,25 @@ export default {
   },
   methods: {
     getStandings() {
-      const path = "http://127.0.0.1:3001/standings";
+      const path = "http://localhost:3001/standings/2022";
       axios.get(path).then((response) => {
         console.log(response);
-        if (response.status == 200) {
-          this.standings = response.data.standings;
-        }
+        this.standings = response.data.standings;
       });
-    },
-    sendYear(payload) {
-        const path = "http://127.0.0.1:3001/standings";
-        axios.post(path, payload).then((response) => {
-            // this.load = false;
-            console.log(response.data.standings)
-            this.standings = response.data.standings;
-        });
     },
     onSubmitYear(event) {
         // this.standings = [];
         this.season = parseInt(event.target.value);
-        const payload = {
-            year: this.season,
-        };
-        this.sendYear(payload);
-        // this.load = true;
+        router.push({ path: `/standings/${this.season}`})
     },
   },
-  created() {
+  mounted() {
     this.getStandings();
   },
 };
 </script>
 
-<style lang="scss">
+<style>
 .standings {
 
 }
