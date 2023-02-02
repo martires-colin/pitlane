@@ -23,13 +23,16 @@
           <SidebarLink to="/schedule" icon="fa-solid fa-calendar-days">
             Schedule
           </SidebarLink>
-          <SidebarLink to="/fantasy" icon="fa-solid fa-flag-checkered"
+          <SidebarLink v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered"
             >Fantasy
           </SidebarLink>
-          <SidebarLink to="/settings" icon="fa-solid fa-gears">
+          <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
             Settings
           </SidebarLink>
-          <SidebarLink to="/login" icon="fa-solid fa-right-to-bracket">
+          <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/" icon="fa-solid fa-right-to-bracket">
+            Logout
+          </SidebarLink>
+          <SidebarLink v-else  to="/login" icon="fa-solid fa-right-to-bracket">
             Login
           </SidebarLink>
         </div>
@@ -48,6 +51,8 @@
 // import Sidebar from "./components/Sidebar";
 import SidebarLink from "./components/SidebarLink.vue";
 
+
+
 // import { sidebarWidth } from "./components/state";
 export default {
   components: { SidebarLink },
@@ -60,10 +65,21 @@ export default {
 <script setup>
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { computed } from "vue";
+
 const store = useStore();
 onMounted(() => {
   store.dispatch("fetchUpcoming");
 })
+
+const user = computed(() => {
+  return store.getters.user
+})
+
+const signOut = async () => {
+  await store.dispatch("logout")
+}
+
 </script>
 
 <style>

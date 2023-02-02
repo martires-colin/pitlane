@@ -1,5 +1,4 @@
-//the code in this file was taken from a Firebase Vue Integration Tutorial
-//https://www.youtube.com/watch?v=Kc-FbPSdezg
+// By Colin Martires
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -16,6 +15,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Auth
 const auth = getAuth(app);
 
-export { auth };
+export { app, auth };
