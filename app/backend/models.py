@@ -1,6 +1,6 @@
 # Models for the different database tables to connect to the PITLANE app
 # Noah Howren
-from sqlalchemy import create_engine, Column, Integer, String, Date, Time, Float, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Date, Time, Float, ForeignKey, Boolean
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")

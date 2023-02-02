@@ -14,7 +14,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import pandas as pd
 import warnings
 import requests
-from database.py import *
+from database import *
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
