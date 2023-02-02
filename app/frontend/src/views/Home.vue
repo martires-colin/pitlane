@@ -40,7 +40,7 @@ onMounted(() => {
   @media(min-width: 481px ) and (max-width: 1024px) {
     .pitlane-landing {
       height: 300px;
-      background-image: url('../assets/PITLANE.png');  
+      background-image: url('../assets/PITLANE.jpg');  
       background-repeat: no-repeat;
       background-size: cover;
     }
@@ -48,7 +48,7 @@ onMounted(() => {
   @media (max-width: 480px) {
     .pitlane-landing {
       height: 200px;
-      background-image: url('../assets/PITLANE.png');  
+      background-image: url('../assets/PITLANE.jpg');  
       background-repeat: no-repeat;
       background-size: cover;
     }

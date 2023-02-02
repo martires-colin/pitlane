@@ -52,19 +52,19 @@ def nextprev():
         post_data = request.get_json()
         isOffseason = post_data.get('Offseason')
         if isOffseason:
-            response = requests.get('https://ergast.com/api/f1/current.json')
-            total = int(response.json()['MRData']['total'])-1
-            prevRace = response.json()['MRData']['RaceTable']['Races'][total]['raceName']
-            prevRaceDate = response.json()['MRData']['RaceTable']['Races'][total]['date']
-            nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
-            nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
-            nextRace = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['raceName']
-            nextRaceDate = nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['date']
+            lastResponse = requests.get('https://ergast.com/api/f1/current/last.json')
+            prevRace = lastResponse.json()['MRData']['RaceTable']['Races'][0]['raceName']
+            prevRaceDate = lastResponse.json()['MRData']['RaceTable']['Races'][0]['date']
+            # nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
+            # nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
+            nextResponse = requests.get('https://ergast.com/api/f1/current/next.json')
+            nextRace = nextResponse.json()['MRData']['RaceTable']['Races'][0]['raceName']
+            nextRaceDate = nextResponse.json()['MRData']['RaceTable']['Races'][0]['date']
             
             # api for flags is down for some reason
-            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{response.json()['MRData']['RaceTable']['Races'][total]['Circuit']['Location']['country']}?fields=flags")
+            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{lastResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
             prevFlag = prevCountry.json()[0]['flags']['png']
-            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextSeasonTable.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
+            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
             nextFlag = nextCountry.json()[0]['flags']['png']
 
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag], 'nextRace': [nextRace, nextRaceDate, nextFlag]}))
@@ -232,11 +232,13 @@ def pitlane():
 @app.route("/fantasy/drivers")
 def fantasyDrivers():
     drivers = getFantasyDrivers()
+    print(drivers)
     return jsonify({'drivers': drivers})
 
 @app.route("/fantasy/constructors")
 def fantasyConstructors():
     constructors = getFantasyConstructors()
+    print(constructors)
     return jsonify({'constructors': constructors})
 
 # Function for reteiving current drivers' championship standings.
