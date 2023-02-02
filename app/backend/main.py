@@ -11,15 +11,10 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String, Float, desc, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-from datetime import date
-import json
 import pandas as pd
-from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults
 import warnings
 import requests
+from database.py import *
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
@@ -239,50 +234,7 @@ def pitlane():
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
 
-# Function for reteiving current drivers' championship standings.
-# Noah Howren
-def getStandings(year):
-    session = get_session()
-    if year == 0:
-        recentrace = get_recent_race(session)
-    else:
-        recentrace = getRaceForYear(session, year)
-    standings = []
-    for s in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == recentrace.raceid).order_by(Driver_Standings.position) :
-        # x = {'driver':(s.Driver.forename + ' ' + s.Driver.surname), 'points':s.Driver_Standings.points}
-        # standings[s.Driver_Standings.position] = x
-        standings.append((s.Driver_Standings.position, s.Driver.forename + ' ' + s.Driver.surname, s.Driver_Standings.points))
-    return standings
-
-# Function for reteiving current constructors' championship standings.
-# Noah Howren
-def con_standings():
-    session = get_session()
-    recentrace = get_recent_race(session)
-    standings = {}
-    for s in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == recentrace.raceid).order_by(Constructor_Standings.position) :
-        x = {'constructor':s.Constructor.name, 'points':s.Constructor_Standings.points}
-        standings[s.Constructor_Standings.position] = x
-    return standings
-
-# Function for creating the session object to connect to the PostgreSQL Database
-# Noah Howren
-def get_session():
-    engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
-    Session = sessionmaker(bind = engine)
-    return Session()
-
-# Function for returning the most recent Race object in relation to todays date
-# Noah Howren
-def get_recent_race(session):
-    Date = date.today()
-    race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
-    return race
-
-def getRaceForYear(session, year):
-    Date = date((year+1),1,1)
-    race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
-    return race
+# MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3001)

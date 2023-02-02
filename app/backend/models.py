@@ -1,14 +1,12 @@
 # Models for the different database tables to connect to the PITLANE app
 # Noah Howren
-import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String, Date, Time, Float, desc, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy import create_engine, Column, Integer, String, Date, Time, Float, ForeignKey
+from sqlalchemy.orm import sessionmaker, declarative_base
 
 engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
 Session = sessionmaker(bind = engine)
 session = Session()
 Base = declarative_base()
-engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")
 
 class Race(Base):
     __tablename__ = "races"
@@ -168,3 +166,20 @@ class SprintResults(Base):
     fastestlap = Column(Integer)
     fastestlaptime = Column(String)
     statusid = Column(Integer, ForeignKey(Status.statusid))
+
+class League(Base):
+    __tablename__ = 'leagues'
+    leagueid = Column(Integer, primary_key = True) 
+    creatorid  = Column(String)
+    name = Column(String)
+    invitecode = Column(String)
+    members = Column(Integer)
+
+class Team(Base):
+    __tablename__ = 'teams'
+    userid = Column(String, primary_key = True) 
+    leagueid = Column(Integer, ForeignKey(League.leagueid))
+    driver1id = Column(Integer, ForeignKey(Driver.driverid))
+    driver2id = Column(Integer, ForeignKey(Driver.driverid))
+    constructorname = Column(String)
+    notifcationflag = Column(Boolean)
