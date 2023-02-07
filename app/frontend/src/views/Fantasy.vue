@@ -3,7 +3,7 @@
 <template>
   <div v-if="ready" class="flex flex-col h-screen">
     <div class="flex flex-row justify-between p-4">
-      <h1>{{ $store.state.user[0]}}'s Fantasy League</h1>
+      <h1>{{ $store.state.user.data.displayName}}'s Fantasy League</h1>
       <h1>Total points: 0</h1>
     </div>
     <div class="flex flex-row justify-evenly px-10 pb-2">

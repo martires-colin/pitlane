@@ -41,11 +41,13 @@ export default createStore({
     async register({ commit }, { email, password, name}) {
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
-        commit('SET_USER', response.user)
         updateProfile(response.user, {
-          displayName: name
+          displayName: name,
+          photoURL: "profile-pic-url",
+          phoneNumber: null
         })
-        console.log(response)
+        commit('SET_USER', response.user)
+        console.log(response.user)
       } else {
         throw new Error("Unable to register user")
       }
@@ -68,7 +70,9 @@ export default createStore({
       if (user) {
         commit('SET_USER', {
           displayName: user.displayName,
-          email: user.email
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          photoURL: user.photoURL
         })
       } else {
         commit('SET_USER', null)

@@ -91,6 +91,7 @@
 </template>
 
 <script>
+// import router from '@/router';
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -124,6 +125,8 @@ export default {
           name: name.value
         })
         console.log("Registered User")
+
+        // await store.getters.user
         router.push("/")
       }
       catch (err) {
@@ -151,6 +154,8 @@ export default {
     return { register, name, email, password, password2, error }
 
   }
+
+
 };
 
 </script>

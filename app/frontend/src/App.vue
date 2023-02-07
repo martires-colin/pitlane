@@ -66,6 +66,15 @@ export default {
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { computed } from "vue";
+// import { auth } from './firebase'
+
+
+
+// auth.onAuthStateChanged(user => {
+//   // console.log("onAuthState")
+//   // console.log(user)
+//   store.dispatch("fetchUser", user)
+// })
 
 const store = useStore();
 onMounted(() => {

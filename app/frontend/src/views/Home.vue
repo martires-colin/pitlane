@@ -13,7 +13,10 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+
     auth.onAuthStateChanged(user => {
+      // console.log("onAuthState")
+      // console.log(user)
       store.dispatch("fetchUser", user)
     })
     const user = computed(() => {
@@ -88,6 +91,7 @@ onMounted(() => {
 
     <div v-if="user.loggedIn">
       <p class="pt-3">Welcome, {{user.data.displayName}}</p>
+      <!-- <p class="pt-3">Welcome, {{ $store.state.user.data.displayName }}</p> -->
     </div>
 
     <div class="py-2 flex flex-row justify-evenly">
