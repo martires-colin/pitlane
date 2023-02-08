@@ -3,8 +3,30 @@
 // import Schedule from "../components/ScheduleComp";
 // import Standings from "../components/StandingsComp";
 // import axios from 'axios';
+import { useStore} from "vuex";
+import { useRouter } from "vue-router";
+import {computed} from "vue";
+import { auth } from '../firebase'
 export default {
   // components: {Schedule, Standings},
+  name: "Home",
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    auth.onAuthStateChanged(user => {
+      store.dispatch("fetchUser", user)
+    })
+    const user = computed(() => {
+      return store.getters.user
+    })
+    const signOut = async () => {
+      await store.dispatch("logout")
+      router.push('/')
+    }
+    return { user, signOut }
+  },
+// components: {Schedule, Standings},
+
   data() {
     return {
     }
@@ -63,6 +85,11 @@ onMounted(() => {
       <!-- <h1 class="py-2 text-4xl font-[500]" >Pitlane</h1>
       <h2 class="opacity-50 font-[300] text-xl">Formula1 made simple.</h2> -->
     </div>
+
+    <div v-if="user.loggedIn">
+      <p class="pt-3">Welcome, {{user.data.displayName}}</p>
+    </div>
+
     <div class="py-2 flex flex-row justify-evenly">
       <div class="previous-race">
         <p class="text-red-500 text-xl pb-2">Previous Race</p>
