@@ -1,0 +1,41 @@
+{
+    "Constructors": {
+        "total": "10",
+        "weightTable": {
+            "Ferrari": "25000000", 
+            "Mercedes": "20000000",
+            "Red_Bull_Racing": "35000000",
+            "McLaren": "10000000",
+            "Aston_Martin": "7000000",
+            "Alpine": "10000000",
+            "AlphaTauri": "5000000",
+            "Williams": "1000000",
+            "Alfa_Romeo": "7000000",
+            "Haas": "5000000"
+        }
+    },
+    "Drivers": {
+        "Alexander_Albon": "5",
+        "Fernando_Alonso": "10",
+        "Valtteri_Bottas": "10",
+        "Nyck_de_Vries": "NULL",
+        "Pierre_Gasly": "10",
+        "Lewis_Hamilton": "25",
+        "Nico_Hülkenberg": "NULL",
+        "Nicholas_Latifi": "5",
+        "Charles_Leclerc": "30",
+        "Kevin_Magnussen": "10",
+        "Lando_Norris": "10",
+        "Esteban_Ocon": "10",
+        "Sergio Pérez": "30",
+        "Daniel_Ricciardo": "10",
+        "George Russell": "25",
+        "Carlos_Sainz": "25",
+        "Mick_Schumacher": "5",
+        "Lance_Stroll": "10",
+        "Yuki_Tsunoda": "5",
+        "Max_Verstappen": "45",
+        "Sebastian_Vettel": "10",
+        "Guanyu_Zhou": "5"
+    }
+}

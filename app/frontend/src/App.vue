@@ -117,6 +117,8 @@ nav a.router-link-exact-active {
   max-width: none;
 }
 .sidebar {
+  min-height: 100%;
+  max-height: none;
   width: 60px;
   transition: 0.4s ease;
 }

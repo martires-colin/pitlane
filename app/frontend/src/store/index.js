@@ -20,7 +20,9 @@ export default createStore({
   state: {
     user: {
       loggedIn: false,
-      data: null
+      data: {
+        username: "Anthony"
+      }
     },
     nextRace: [],
     prevRace: null,
