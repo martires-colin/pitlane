@@ -76,12 +76,14 @@ def create_league(creator, l_name):
 
 # Function for creating a league and inserting into db.
 # Takes userid, invite code, driver1 id, driver2 id, constructor name, and notification flag
-def create_team(u_id, i_code, d1, d2, c_name, n_f):
+def create_team(u_id, i_code, d1, d2, c_id, t_name, n_f):
+    session = get_session()
     l_id = (session.query(League.leagueid).filter(League.invitecode == i_code).first())
     if l_id == None:
         return False
     l_id = l_id[0]
-    team = Team(userid = u_id, leagueid = l_id, driver1id = d1, driver2id = d2, constructorname = c_name, notifcationflag = n_f)
+    team = Team(userid = u_id, leagueid = l_id, driver1id = d1, driver2id = d2, constructorid = c_id, teamname = t_name, notifcationflag = n_f)
     session.add(team)
     session.commit()
+    session.close()
     return True

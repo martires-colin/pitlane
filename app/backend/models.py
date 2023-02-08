@@ -181,5 +181,6 @@ class Team(Base):
     leagueid = Column(Integer, ForeignKey(League.leagueid))
     driver1id = Column(Integer, ForeignKey(Driver.driverid))
     driver2id = Column(Integer, ForeignKey(Driver.driverid))
-    constructorname = Column(String)
+    constructorid = Column(Integer, ForeignKey(Constructor.constructorid))
+    teamname = Column(String)
     notifcationflag = Column(Boolean)
