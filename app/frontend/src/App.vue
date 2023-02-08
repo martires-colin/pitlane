@@ -50,10 +50,8 @@
 <script>
 // import Sidebar from "./components/Sidebar";
 import SidebarLink from "./components/SidebarLink.vue";
-
-
-
 // import { sidebarWidth } from "./components/state";
+
 export default {
   components: { SidebarLink },
   // setup() {

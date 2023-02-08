@@ -6,7 +6,7 @@
 */
 
 import { createStore } from "vuex";
-// import router from "../router";
+import VuexPersistence from "vuex-persist";
 import axios from "axios";
 import { auth } from "../firebase";
 import {
@@ -15,6 +15,11 @@ import {
   signOut,
   updateProfile
 } from "firebase/auth";
+// import router from "../router";
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 export default createStore({
   state: {
@@ -98,5 +103,6 @@ export default createStore({
       return state.user
     },
     getUpcoming: (state) => {state.nextRace, state.prevRace }
-  }
+  },
+  plugins: [vuexLocal.plugin]
 });
