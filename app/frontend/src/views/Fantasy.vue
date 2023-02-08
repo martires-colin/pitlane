@@ -3,19 +3,19 @@
 <template>
   <div v-if="ready" class="flex flex-col h-screen">
     <div class="flex flex-row justify-between p-4">
-      <h1>{{ $store.state.user[0]}}'s Fantasy League</h1>
+      <h1>{{ $store.state.user.data.username}}'s Fantasy League</h1>
       <h1>Total points: 0</h1>
     </div>
-    <div class="flex flex-row justify-evenly px-10 pb-2">
+    <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-t border-gray-500">
       <div class="flex flex-row">
           <p class="text-red-500 pr-4">Previous Race</p>
-          <img :src="$store.state.prevRace[2]" alt="" height="40" width="40"/>
+          <img :src="$store.state.prevRace[2]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
           <p class="px-4">{{ $store.state.prevRace[0] }} </p>
           <p>{{ $store.state.prevRace[1] }} </p>
       </div>
       <div class="flex flex-row">
           <p class="text-green-500 pr-4">Next Race</p>
-          <img :src="$store.state.nextRace[2]" alt="" height="40" width="40"/>
+          <img :src="$store.state.nextRace[2]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
           <p class="px-4"> {{ $store.state.nextRace[0] }}</p>
           <p>{{ $store.state.nextRace[1] }} </p>
       </div>

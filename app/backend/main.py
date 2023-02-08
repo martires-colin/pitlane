@@ -56,13 +56,15 @@ def nextprev():
             nextRace = nextResponse.json()['MRData']['RaceTable']['Races'][0]['raceName']
             nextRaceDate = nextResponse.json()['MRData']['RaceTable']['Races'][0]['date']
             
+            prevCountryName = lastResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']
+            nextCountryName = nextResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']
             # api for flags is down for some reason
-            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{lastResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
+            prevCountry = requests.get(f"https://restcountries.com/v3.1/name/{prevCountryName}?fields=flags")
             prevFlag = prevCountry.json()[0]['flags']['png']
-            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextResponse.json()['MRData']['RaceTable']['Races'][0]['Circuit']['Location']['country']}?fields=flags")
+            nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextCountryName}?fields=flags")
             nextFlag = nextCountry.json()[0]['flags']['png']
 
-            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag], 'nextRace': [nextRace, nextRaceDate, nextFlag]}))
+            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
 
 @app.route("/standings/<int:Year>")
 def standings(Year):
