@@ -16,9 +16,7 @@
           <div class="card-body border border-danger">
 
               <div class="row text-center">
-                <!-- img should retrieve photo from user object -->
-                <!-- <img class="rounded-circle" src={{ $store.state.user.data }}" alt="Maxwell Admin"> -->
-                <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Maxwell Admin">
+                <img class="profile-pic" :src="user.data.photoURL" alt="Profile Picture">
               </div>
               
 
@@ -61,6 +59,9 @@ export default {
     
     return { user }
   },
+  props: {
+    test: String
+  }
 
 };
 </script>
@@ -75,5 +76,17 @@ export default {
 .user-email {
   color: black;
 }
+
+.profile-pic {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
 
 </style>

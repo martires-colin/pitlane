@@ -48,7 +48,8 @@ export default createStore({
       if (response) {
         updateProfile(response.user, {
           displayName: name,
-          photoURL: "profile-pic-url",
+          // temporary initial profile pic of Danny Ric
+          photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
           phoneNumber: null
         })
         commit('SET_USER', response.user)
