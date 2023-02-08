@@ -55,15 +55,17 @@ def getRaceForYear(session, year):
     return race
 
 # Function for generating an invite code.
+# Generates a unique alphanumeric 5 character string for invite code.
 def get_invite_code(session):
     code = (''.join(random.choices(string.ascii_uppercase + string.digits, k=5)))
     for x in (session.query(League.invitecode).all()):
         if (x == code):
             return get_invite_code()
         #print(code)
-        return code
+    return code
 
 # Function for creating a league and inserting into db.
+# Takes userid of the league creator, and league name. Generates invite code and sets members to onoe.
 def create_league(creator, l_name):
     session = get_session()
     league = League(creatorid = creator, name = l_name, invitecode = get_invite_code(session), members = 1)
@@ -73,13 +75,14 @@ def create_league(creator, l_name):
     return
 
 # Function for creating a league and inserting into db.
-def create_team(u_id, i_code, d1, d2, c_name, n_f):
+# Takes userid, invite code, driver1 id, driver2 id, constructor name, and notification flag
+def create_team(u_id, i_code, d1, d2, c_id, t_name, n_f):
     session = get_session()
     l_id = (session.query(League.leagueid).filter(League.invitecode == i_code).first())
-    l_id = l_id[0]
     if l_id == None:
         return False
-    team = Team(userid = u_id, leagueid = l_id, driver1id = d1, driver2id = d2, constructorname = c_name, notifcationflag = n_f)
+    l_id = l_id[0]
+    team = Team(userid = u_id, leagueid = l_id, driver1id = d1, driver2id = d2, constructorid = c_id, teamname = t_name, notifcationflag = n_f)
     session.add(team)
     session.commit()
     session.close()
