@@ -15,7 +15,6 @@ import {
   signOut,
   updateProfile
 } from "firebase/auth";
-// import router from "../router";
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage
@@ -25,7 +24,10 @@ export default createStore({
   state: {
     user: {
       loggedIn: false,
-      data: null
+      displayName: null,
+      email: null,
+      phoneNumber: null,
+      photoURL: null
     },
     nextRace: [],
     prevRace: null,
@@ -35,7 +37,9 @@ export default createStore({
       state.user.loggedIn = value
     },
     SET_USER(state, data) {
-      state.user.data = data
+      state.user.displayName = data.displayName
+      state.user.email = data.email
+      state.user.photoURL = data.photoURL
     },
     SET_UPCOMING(state, upcoming) {
       state.nextRace = upcoming.nextRace
@@ -50,7 +54,6 @@ export default createStore({
           displayName: name,
           // temporary initial profile pic of Danny Ric
           photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
-          phoneNumber: null
         })
         commit('SET_USER', response.user)
         console.log(response.user)

@@ -90,7 +90,8 @@ onMounted(() => {
     </div>
 
     <div v-if="user.loggedIn">
-      <p class="pt-3">Welcome, {{user.data.displayName}}</p>
+      <!-- <p class="pt-3">Welcome, {{user.data.displayName}}</p> -->
+      <p class="pt-3">Welcome, {{user.displayName}}</p>
       <!-- <p class="pt-3">Welcome, {{ $store.state.user.data.displayName }}</p> -->
     </div>
 

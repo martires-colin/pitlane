@@ -31,7 +31,7 @@
                     <!-- <label class="form-label">Name</label> -->
                     <input
                       type="text"
-                      placeholder="Full Name"
+                      placeholder="Username"
                       class="form-control form-control-lg"
                       v-model="name"
                       required/>
@@ -154,7 +154,6 @@ export default {
     return { register, name, email, password, password2, error }
 
   }
-
 
 };
 
