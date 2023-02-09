@@ -10,37 +10,23 @@
     </div>
 
     <div class="row border border-success">
-
       <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">        
         <div class="card h-100">
           <div class="card-body border border-danger">
-
               <div class="row text-center">
-                <img class="profile-pic" :src="user.data.photoURL" alt="Profile Picture">
+                <div>
+                  <img class="profile-pic" :src="user.data.photoURL" alt="Profile Picture">
+                </div>
               </div>
-              
-
-            <h5 class="user-name border border-danger">{{ $store.state.user.data.displayName }}</h5>
+            <h5 class="user-name border border-danger">{{ user.data.displayName }}</h5>
           </div>
         </div>
       </div>
-
       <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-
         <div class="p-5 border">User Info</div>
-
       </div>
-
-
-
     </div>
-  
-  
   </div>
-
-
-
-
 </template>
 
 <script>
@@ -82,11 +68,12 @@ export default {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  border: 1px solid #555;
 
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  object-fit: cover;
 }
-
 
 </style>
