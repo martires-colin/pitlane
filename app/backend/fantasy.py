@@ -1,5 +1,7 @@
 import requests
 import json
+from database import get_recent_quali, get_session
+from models import League, Team
 
 def getFantasyDrivers():
     response = requests.get("http://ergast.com/api/f1/current/drivers.json")
@@ -19,6 +21,12 @@ def getFantasyConstructors():
     # print(drivers)
     return constructors
 
+def getDriverListforWeekend():
+    session = get_session()
+    quali = get_recent_quali(session)
+    print(quali)
+    # print(quali.racedid)
+
 def createPointSheet():
     resultsJson = json.load(open("fantasycache/current.json",))
     pointSheet = {"constructors": {}, "drivers": {}}
@@ -31,13 +39,29 @@ def createPointSheet():
             pointSheet['constructors'][constructorName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
         driverName = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['Driver']['driverId'] 
         pointSheet['drivers'][driverName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
-    json.dump(pointSheet, open("fantasycache/raceResults.json", "w"), indent=4)
+    json.dump(pointSheet, open("fantasycache/pointSheet.json", "w"), indent=4)
 
 def giveScoreForUser(User):
-    pointSheet = json.load(open("fantasycache/raceResults.json",))
+    pointSheet = json.load(open("fantasycache/pointSheet.json",))
     newPoints = int(pointSheet['drivers'].get(User['drivers']['driver1'])) + int(pointSheet['drivers'].get(User['drivers']['driver2'])) + int(pointSheet['constructors'].get(User['constructor'])) + User['totalPoints']
     User['totalPoints'] = newPoints
-    print(User['totalPoints'])
+    return User['totalPoints']
+
+def getUserTeams(User):
+    session = get_session()
+    teams = session.query(Team).filter(Team.userid == User["userid"])
+    session.close()
+    return(teams)
+
+def getLeague(leagueID):
+    session = get_session()
+    teams = []
+    leagueName = session.query(League).filter(League.leagueid == leagueID).first()
+    for s in session.query(Team).filter(Team.leagueid == leagueID):
+        teams.append(s)
+    session.close()
+    return leagueName, teams
+
 if __name__ == '__main__':
     # createPointSheet()
     User = {
@@ -47,6 +71,13 @@ if __name__ == '__main__':
             "driver2": "leclerc"
         },
         "constructor": "mercedes",
-        "totalPoints": 0
+        "totalPoints": 0,
+        "userid": "12345678910",
+        "data": {}
     }
-    giveScoreForUser(User=User)
+    newTotalPoints = giveScoreForUser(User=User)
+    User['totalPoints'] = newTotalPoints
+    userTeams = getUserTeams(User=User)
+    # print(userTeams[0].teamname)
+    # print(userTeams[0].leagueid)
+    teamLeagues = getLeague(userTeams[0].leagueid)
