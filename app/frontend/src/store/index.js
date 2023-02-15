@@ -1,10 +1,5 @@
 // By Anthony Ganci and Colin Martires
 
-/*References 
-  https://www.youtube.com/watch?v=Kc-FbPSdezg
-  https://blog.logrocket.com/authentication-vue-3-firebase/
-*/
-
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
@@ -23,7 +18,6 @@ import {
   getDoc,
   updateDoc
 } from "firebase/firestore";
-// import { useRouter } from 'vue-router'
 
 
 const vuexLocal = new VuexPersistence({
@@ -61,7 +55,6 @@ export default createStore({
   },
   actions: {
     async register({ commit }, { email, password, name}) {
-      // const router = useRouter()
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
         updateProfile(response.user, {
@@ -70,10 +63,6 @@ export default createStore({
           photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
         })
         commit('SET_USER', response.user)
-        // db.collection('users').doc(response.user.uid).set({
-        //   phoneNumber: "",
-        //   username: name
-        // })
         try {
           await setDoc(doc(db, "users", response.user.uid), {
             username: name,
@@ -86,7 +75,6 @@ export default createStore({
           console.error("Error adding document: ", e);
         }
         console.log(response.user)
-        // router.push("/")
       } else {
         throw new Error("Unable to register user")
       }
@@ -104,7 +92,6 @@ export default createStore({
           console.log("No such document")
         }
         commit('SET_USER', response.user)
-        // commit('SET_USER', { phoneNumber: user.phoneNumber})
       } else {
         throw new Error('Login Failed')
       }
@@ -123,9 +110,9 @@ export default createStore({
         loggedIn: false,
         displayName: null,
         email: null,
-        phoneNumber: null,
         photoURL: null
       })
+      commit('SET_USER_PHONENUMBER', null)
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
@@ -133,17 +120,17 @@ export default createStore({
         commit('SET_USER', {
           displayName: user.displayName,
           email: user.email,
-          phoneNumber: user.phoneNumber,
           photoURL: user.photoURL
         })
+        commit('SET_USER_PHONENUMBER', user.phoneNumber)
       } else {
         commit('SET_USER', {
           loggedIn: false,
           displayName: null,
           email: null,
-          phoneNumber: null,
           photoURL: null
         })
+        commit('SET_USER_PHONENUMBER', null)
       }
     },
     async fetchUpcoming({ commit }) {

@@ -1,21 +1,12 @@
 <!-- By Colin Martires -->
 
 <template>
-
-  <!-- what background color? -->
-  <!-- <div class="bg-dark-300 h-100"> -->
   <div class="bg-black h-100">
-    <!-- <div class="container"> -->
-      <!-- <h1>{{ $store.state.user }}</h1> -->
-      <!-- <h1>{{ user }}</h1> -->
 
     <section class="py-5 my-5">
       <div class="container">
-        
         <h1 class="p-5">Account Settings</h1>
-
         <div class="rounded-lg d-block bg-dark-300">
-
           <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
             <b-tab title="Account" :title-link-class="'btab'" active>
               <div class="container tab-content">
@@ -206,7 +197,6 @@ export default {
     return { user, update, phoneNumber }
   },
   methods: {
-
   }
 };
 </script>
