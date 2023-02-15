@@ -70,6 +70,7 @@ export default createStore({
             phoneNumber: ""
           });
           console.log("Document written with ID: ", response.user.uid);
+          await new Promise(r => setTimeout(r, 500));
         } catch (e) {
           console.error("Error adding document: ", e);
         }
