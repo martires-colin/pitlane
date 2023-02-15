@@ -45,8 +45,8 @@ export default createStore({
       state.user.email = data.email
       state.user.photoURL = data.photoURL
     },
-    SET_USER_PHONENUMBER(state, data) {
-      state.user.phoneNumber = data
+    SET_USER_PHONENUMBER(state, value) {
+      state.user.phoneNumber = value
     },
     SET_UPCOMING(state, upcoming) {
       state.nextRace = upcoming.nextRace
@@ -62,7 +62,6 @@ export default createStore({
           // temporary initial profile pic of Danny Ric
           photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
         })
-        commit('SET_USER', response.user)
         try {
           await setDoc(doc(db, "users", response.user.uid), {
             username: name,
@@ -74,6 +73,7 @@ export default createStore({
         } catch (e) {
           console.error("Error adding document: ", e);
         }
+        commit('SET_USER', response.user)
         console.log(response.user)
       } else {
         throw new Error("Unable to register user")
@@ -122,7 +122,14 @@ export default createStore({
           email: user.email,
           photoURL: user.photoURL
         })
-        commit('SET_USER_PHONENUMBER', user.phoneNumber)
+        const docRef = doc(db, "users", user.uid)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
+        } else {
+          console.log("No such document")
+        }
       } else {
         commit('SET_USER', {
           loggedIn: false,
