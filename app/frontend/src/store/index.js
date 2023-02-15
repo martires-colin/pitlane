@@ -6,21 +6,31 @@
 */
 
 import { createStore } from "vuex";
-// import router from "../router";
+import VuexPersistence from "vuex-persist";
 import axios from "axios";
 import { auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  // updateEmail,
   updateProfile
 } from "firebase/auth";
+// import { useRouter } from 'vue-router'
+
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 export default createStore({
   state: {
     user: {
       loggedIn: false,
-      data: null
+      displayName: null,
+      email: null,
+      phoneNumber: null,
+      photoURL: null
     },
     nextRace: [],
     prevRace: null,
@@ -30,7 +40,12 @@ export default createStore({
       state.user.loggedIn = value
     },
     SET_USER(state, data) {
-      state.user.data = data
+      state.user.displayName = data.displayName
+      state.user.email = data.email
+      state.user.photoURL = data.photoURL
+    },
+    SET_USER_PHONENUMBER(state, data) {
+      state.user.phoneNumber = data
     },
     SET_UPCOMING(state, upcoming) {
       state.nextRace = upcoming.nextRace
@@ -39,13 +54,17 @@ export default createStore({
   },
   actions: {
     async register({ commit }, { email, password, name}) {
+      // const router = useRouter()
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
-        commit('SET_USER', response.user)
         updateProfile(response.user, {
-          displayName: name
+          displayName: name,
+          // temporary initial profile pic of Danny Ric
+          photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
         })
-        console.log(response)
+        commit('SET_USER', response.user)
+        console.log(response.user)
+        // router.push("/")
       } else {
         throw new Error("Unable to register user")
       }
@@ -59,19 +78,36 @@ export default createStore({
         throw new Error('Login Failed')
       }
     },
+    async updatePhoneNumber({ commit }, { phoneNumber }) {
+      commit('SET_USER_PHONENUMBER', phoneNumber)
+    },
     async logout({ commit }) {
       await signOut(auth)
-      commit('SET_USER', null)
+      commit('SET_USER', {
+        loggedIn: false,
+        displayName: null,
+        email: null,
+        phoneNumber: null,
+        photoURL: null
+      })
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
       if (user) {
         commit('SET_USER', {
           displayName: user.displayName,
-          email: user.email
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          photoURL: user.photoURL
         })
       } else {
-        commit('SET_USER', null)
+        commit('SET_USER', {
+          loggedIn: false,
+          displayName: null,
+          email: null,
+          phoneNumber: null,
+          photoURL: null
+        })
       }
     },
     async fetchUpcoming({ commit }) {
@@ -94,5 +130,6 @@ export default createStore({
       return state.user
     },
     getUpcoming: (state) => {state.nextRace, state.prevRace }
-  }
+  },
+  plugins: [vuexLocal.plugin]
 });
