@@ -1,4 +1,4 @@
-<!-- By Anthony Ganci -->
+<!-- By Anthony Ganci and Colin Martires -->
 <script>
 // import Schedule from "../components/ScheduleComp";
 // import Standings from "../components/StandingsComp";
@@ -28,16 +28,29 @@ export default {
     }
     return { user, signOut }
   },
-// components: {Schedule, Standings},
-
   data() {
     return {
+      username: ""
     }
   },
   methods: {
   },
-  created() {
-  }
+  //lifecycle hooks
+  beforeUpdate() {
+    const store = useStore()
+    auth.onAuthStateChanged(user => {
+      store.dispatch("fetchUser", user)
+    })
+    const user = computed(() => {
+      return store.getters.user.displayName
+    })
+
+    this.username = user
+
+    return { user }
+  },
+  
+
 };
 </script>
 
@@ -91,7 +104,7 @@ onMounted(() => {
 
     <div v-if="user.loggedIn">
       <!-- <p class="pt-3">Welcome, {{user.data.displayName}}</p> -->
-      <p class="pt-3">Welcome, {{user.displayName}}</p>
+      <p class="pt-3">Welcome, {{ user.displayName }}</p>
       <!-- <p class="pt-3">Welcome, {{ $store.state.user.data.displayName }}</p> -->
     </div>
 

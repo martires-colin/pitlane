@@ -19,6 +19,7 @@
     "firebase": "^9.14.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue-tel-input": "^6.0.5",
     "vuex": "^4.0.2",
     "vuex-persist": "^3.1.3"
   },

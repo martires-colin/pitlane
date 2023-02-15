@@ -13,8 +13,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  // updateEmail,
   updateProfile
 } from "firebase/auth";
+// import { useRouter } from 'vue-router'
+
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage
@@ -41,6 +44,9 @@ export default createStore({
       state.user.email = data.email
       state.user.photoURL = data.photoURL
     },
+    SET_USER_PHONENUMBER(state, data) {
+      state.user.phoneNumber = data
+    },
     SET_UPCOMING(state, upcoming) {
       state.nextRace = upcoming.nextRace
       state.prevRace = upcoming.prevRace
@@ -48,6 +54,7 @@ export default createStore({
   },
   actions: {
     async register({ commit }, { email, password, name}) {
+      // const router = useRouter()
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
         updateProfile(response.user, {
@@ -57,6 +64,7 @@ export default createStore({
         })
         commit('SET_USER', response.user)
         console.log(response.user)
+        // router.push("/")
       } else {
         throw new Error("Unable to register user")
       }
@@ -70,9 +78,18 @@ export default createStore({
         throw new Error('Login Failed')
       }
     },
+    async updatePhoneNumber({ commit }, { phoneNumber }) {
+      commit('SET_USER_PHONENUMBER', phoneNumber)
+    },
     async logout({ commit }) {
       await signOut(auth)
-      commit('SET_USER', null)
+      commit('SET_USER', {
+        loggedIn: false,
+        displayName: null,
+        email: null,
+        phoneNumber: null,
+        photoURL: null
+      })
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
@@ -84,7 +101,13 @@ export default createStore({
           photoURL: user.photoURL
         })
       } else {
-        commit('SET_USER', null)
+        commit('SET_USER', {
+          loggedIn: false,
+          displayName: null,
+          email: null,
+          phoneNumber: null,
+          photoURL: null
+        })
       }
     },
     async fetchUpcoming({ commit }) {

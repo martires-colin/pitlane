@@ -69,6 +69,7 @@
 
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
+                    <!-- <a href="/" class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</a> -->
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
@@ -91,7 +92,6 @@
 </template>
 
 <script>
-// import router from '@/router';
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -126,7 +126,7 @@ export default {
         })
         console.log("Registered User")
 
-        // await store.getters.user
+        // await store.dispatch('fetchUser')
         router.push("/")
       }
       catch (err) {
