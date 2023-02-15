@@ -8,6 +8,7 @@
         <h1 class="p-5">Account Settings</h1>
         <div class="rounded-lg d-block bg-dark-300">
           <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
+
             <b-tab title="Account" :title-link-class="'btab'" active>
               <div class="container tab-content">
                 <div class="row py-2">
@@ -18,101 +19,12 @@
                           <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
                         </div>
                       </div>
-                    <h5 class="user-name">{{ user.displayName }}</h5>
+                      <h5 class="user-name">{{ user.displayName }}</h5>
+                    </div>
                   </div>
-                  </div>
+
                   <div class="col-8">
-
-                    <form @submit.prevent="update">
-                      <div class="row py-2">
-                        <div class="form-group">
-                          <label class="pb-1">Username</label>
-                          <input type="text" class="form-control" :value="user.displayName" :disabled="true">
-                        </div>
-                      </div>
-                      <div class="row py-2">
-                        <div class="form-group">
-                          <label class="pb-1">Email</label>
-                          <input type="text" class="form-control" :value="user.email" :disabled="true">
-                        </div>
-                      </div>
-                      <div v-if="user.phoneNumber">
-                        <div class="row py-2">
-                          <div class="form-group">
-                            <div class="container">
-                              <div class="row">
-                                <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
-                              </div>
-                              <div class="row">
-
-                                <!-- <input
-                                class="form-control form-rounded"
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                :placeholder="user.phoneNumber"
-                                v-model="phoneNumber"
-                                required> -->
-
-                                <cleave
-                                type="tel"
-                                v-model="phoneNumber"
-                                :options="phoneOptions"
-                                class="form-control"
-                                :placeholder="user.phoneNumber"
-                                >
-                                </cleave>
-   
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div v-else>
-                        <div class="row py-2">
-                          <div class="form-group">
-                            <div class="container">
-                              <div class="row">
-                                <label class="pb-1" for="phone">Phone Number</label>
-                              </div>
-                              <div class="row">
-
-                                <!-- <input
-                                class="form-control form-rounded"
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                placeholder="123-456-7890"
-                                v-model="phoneNumber"
-                                required> -->
-
-                                <cleave
-                                type="tel"
-                                v-model="phoneNumber"
-                                :options="phoneOptions"
-                                class="form-control"
-                                :placeholder="12312345678">
-                                </cleave>
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div v-if="user.phoneNumber">
-                        <div class="my-2">
-                          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Phone Number</button>
-                        </div>
-                      </div>
-                      <div v-else>
-                        <div class="my-2">
-                          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Add Phone Number</button>
-                        </div>
-                      </div>
-                    </form>
+                    <UserSettings />
                   </div>
                 </div>
               </div>
@@ -128,28 +40,11 @@
                           <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
                         </div>
                       </div>
-                    <h5 class="user-name">{{ user.displayName }}</h5>
-                  </div>
+                      <h5 class="user-name">{{ user.displayName }}</h5>
+                    </div>
                   </div>
                   <div class="col-8">
-                    <div class="row py-2">
-                      <div class="form-group">
-                        <label class="pb-1">Old Password</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="row py-2">
-                      <div class="form-group">
-                        <label class="pb-1">New Password</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="row py-2">
-                      <div class="form-group">
-                        <label class="pb-1">Retype Password</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
+                    <PasswordSettings />
                   </div>
                 </div>
               </div>
@@ -169,9 +64,7 @@
                   </div>
                   </div>
                   <div class="col-8">
-                    <div class="row py-2">
-                      <p>Subscribe to notifications</p>
-                    </div>
+                    <NotificationSettings />
                   </div>
                 </div>
               </div>
@@ -188,49 +81,28 @@
 <script>
 import { useStore} from "vuex";
 import {computed} from "vue";
-import { ref } from 'vue'
-import Cleave from "vue-cleave-component"
-import 'cleave.js/dist/addons/cleave-phone.us'
-
+import NotificationSettings from "@/components/NotificationSettings.vue"
+import PasswordSettings from "@/components/PasswordSettings.vue"
+import UserSettings from "@/components/UserSettings.vue"
 
 export default {
   name: "Settings",
   components: {
-    Cleave
+    NotificationSettings,
+    PasswordSettings,
+    UserSettings,
   },
   setup() {
     const store = useStore()
 
-    const phoneNumber = ref('')
-    
     const user = computed(() => {
       console.log(store.getters.user)
       return store.getters.user
     })
-    
-    const update = async () => {
-      console.log(phoneNumber.value)
-      try {
-        store.dispatch('updatePhoneNumber', {
-          phoneNumber: phoneNumber.value
-        })
-        console.log("Updated Phone Number")
-      }
-      catch (err) {
-        console.log(err)
-        return;
-      }
-    }
-    return { user, update, phoneNumber }
+    return { user }
   },
   data() {
-    return {
-      phoneOptions: {
-        phone: true,
-        phoneRegionCode: 'US',
-        prefix: "+1"
-      }
-    }
+
   },
   methods: {
   }
