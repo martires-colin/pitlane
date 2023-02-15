@@ -16,6 +16,13 @@ import {
   // updateEmail,
   updateProfile
 } from "firebase/auth";
+import { db } from "../firebase"
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc
+} from "firebase/firestore";
 // import { useRouter } from 'vue-router'
 
 
@@ -63,6 +70,21 @@ export default createStore({
           photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
         })
         commit('SET_USER', response.user)
+        // db.collection('users').doc(response.user.uid).set({
+        //   phoneNumber: "",
+        //   username: name
+        // })
+        try {
+          await setDoc(doc(db, "users", response.user.uid), {
+            username: name,
+            email: email,
+            password: password,
+            phoneNumber: ""
+          });
+          console.log("Document written with ID: ", response.user.uid);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
         console.log(response.user)
         // router.push("/")
       } else {
@@ -73,12 +95,26 @@ export default createStore({
       const response = await signInWithEmailAndPassword(auth, email, password)
       console.log(response)
       if (response) {
+        const docRef = doc(db, "users", response.user.uid)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
+        } else {
+          console.log("No such document")
+        }
         commit('SET_USER', response.user)
+        // commit('SET_USER', { phoneNumber: user.phoneNumber})
       } else {
         throw new Error('Login Failed')
       }
     },
     async updatePhoneNumber({ commit }, { phoneNumber }) {
+      const user = auth.currentUser;
+      const docRef = doc(db, "users", user.uid)
+      await updateDoc(docRef, {
+        phoneNumber: phoneNumber
+      })
       commit('SET_USER_PHONENUMBER', phoneNumber)
     },
     async logout({ commit }) {
