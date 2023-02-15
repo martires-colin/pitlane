@@ -109,10 +109,6 @@ export default {
     const router = useRouter()
 
     const register = async () => {
-
-      console.log(password.value)
-      console.log(password2.value)
-
       if (password.value !== password2.value) {
         alert("Passwords do not match")
         return

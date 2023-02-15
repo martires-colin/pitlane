@@ -1,10 +1,5 @@
 // By Anthony Ganci and Colin Martires
 
-/*References 
-  https://www.youtube.com/watch?v=Kc-FbPSdezg
-  https://blog.logrocket.com/authentication-vue-3-firebase/
-*/
-
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
@@ -16,7 +11,13 @@ import {
   // updateEmail,
   updateProfile
 } from "firebase/auth";
-// import { useRouter } from 'vue-router'
+import { db } from "../firebase"
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc
+} from "firebase/firestore";
 
 
 const vuexLocal = new VuexPersistence({
@@ -54,7 +55,6 @@ export default createStore({
   },
   actions: {
     async register({ commit }, { email, password, name}) {
-      // const router = useRouter()
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
         updateProfile(response.user, {
@@ -63,8 +63,18 @@ export default createStore({
           photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
         })
         commit('SET_USER', response.user)
+        try {
+          await setDoc(doc(db, "users", response.user.uid), {
+            username: name,
+            email: email,
+            password: password,
+            phoneNumber: ""
+          });
+          console.log("Document written with ID: ", response.user.uid);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
         console.log(response.user)
-        // router.push("/")
       } else {
         throw new Error("Unable to register user")
       }
@@ -73,12 +83,25 @@ export default createStore({
       const response = await signInWithEmailAndPassword(auth, email, password)
       console.log(response)
       if (response) {
+        const docRef = doc(db, "users", response.user.uid)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
+        } else {
+          console.log("No such document")
+        }
         commit('SET_USER', response.user)
       } else {
         throw new Error('Login Failed')
       }
     },
     async updatePhoneNumber({ commit }, { phoneNumber }) {
+      const user = auth.currentUser;
+      const docRef = doc(db, "users", user.uid)
+      await updateDoc(docRef, {
+        phoneNumber: phoneNumber
+      })
       commit('SET_USER_PHONENUMBER', phoneNumber)
     },
     async logout({ commit }) {
@@ -87,9 +110,9 @@ export default createStore({
         loggedIn: false,
         displayName: null,
         email: null,
-        phoneNumber: null,
         photoURL: null
       })
+      commit('SET_USER_PHONENUMBER', null)
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
@@ -97,17 +120,17 @@ export default createStore({
         commit('SET_USER', {
           displayName: user.displayName,
           email: user.email,
-          phoneNumber: user.phoneNumber,
           photoURL: user.photoURL
         })
+        commit('SET_USER_PHONENUMBER', user.phoneNumber)
       } else {
         commit('SET_USER', {
           loggedIn: false,
           displayName: null,
           email: null,
-          phoneNumber: null,
           photoURL: null
         })
+        commit('SET_USER_PHONENUMBER', null)
       }
     },
     async fetchUpcoming({ commit }) {
