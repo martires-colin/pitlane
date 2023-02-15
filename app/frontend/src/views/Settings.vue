@@ -41,10 +41,11 @@
                           <div class="form-group">
                             <div class="container">
                               <div class="row">
-                                <label class="pb-1" for="phone">Phone Number</label>
+                                <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
                               </div>
                               <div class="row">
-                                <input
+
+                                <!-- <input
                                 class="form-control form-rounded"
                                 type="tel"
                                 id="phone"
@@ -52,7 +53,18 @@
                                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                 :placeholder="user.phoneNumber"
                                 v-model="phoneNumber"
-                                required>
+                                required> -->
+
+                                <cleave
+                                type="tel"
+                                v-model="phoneNumber"
+                                :options="phoneOptions"
+                                class="form-control"
+                                :placeholder="user.phoneNumber"
+                                >
+                                </cleave>
+   
+
                               </div>
                             </div>
                           </div>
@@ -66,15 +78,25 @@
                                 <label class="pb-1" for="phone">Phone Number</label>
                               </div>
                               <div class="row">
-                                <input
+
+                                <!-- <input
                                 class="form-control form-rounded"
                                 type="tel"
                                 id="phone"
                                 name="phone"
                                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                placeholder="702-877-1500"
+                                placeholder="123-456-7890"
                                 v-model="phoneNumber"
-                                required>
+                                required> -->
+
+                                <cleave
+                                type="tel"
+                                v-model="phoneNumber"
+                                :options="phoneOptions"
+                                class="form-control"
+                                :placeholder="12312345678">
+                                </cleave>
+
                               </div>
                             </div>
                           </div>
@@ -167,10 +189,15 @@
 import { useStore} from "vuex";
 import {computed} from "vue";
 import { ref } from 'vue'
+import Cleave from "vue-cleave-component"
+import 'cleave.js/dist/addons/cleave-phone.us'
 
 
 export default {
   name: "Settings",
+  components: {
+    Cleave
+  },
   setup() {
     const store = useStore()
 
@@ -195,6 +222,15 @@ export default {
       }
     }
     return { user, update, phoneNumber }
+  },
+  data() {
+    return {
+      phoneOptions: {
+        phone: true,
+        phoneRegionCode: 'US',
+        prefix: "+1"
+      }
+    }
   },
   methods: {
   }
