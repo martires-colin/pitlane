@@ -142,11 +142,8 @@ export default createStore({
     },
     async fetchUpcoming({ commit }) {
       try {
-        const payload = {
-          Offseason: 'true',
-        }
         const path = "http://localhost:3001/schedule/nextprev";
-        await axios.post(path ,payload).then((response) => {
+        await axios.get(path).then((response) => {
           commit('SET_UPCOMING', response.data);
         })
       } catch (error) {
