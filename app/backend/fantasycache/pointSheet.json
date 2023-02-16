@@ -1,0 +1,36 @@
+{
+    "constructors": {
+        "red_bull": 40,
+        "ferrari": 30,
+        "mercedes": 10,
+        "mclaren": 11,
+        "alpine": 6,
+        "aston_martin": 5,
+        "alphatauri": 0,
+        "alfa": 0,
+        "williams": 0,
+        "haas": 0
+    },
+    "drivers": {
+        "max_verstappen": "25",
+        "leclerc": "18",
+        "perez": "15",
+        "sainz": "12",
+        "russell": "10",
+        "norris": "9",
+        "ocon": "6",
+        "stroll": "4",
+        "ricciardo": "2",
+        "vettel": "1",
+        "tsunoda": "0",
+        "zhou": "0",
+        "albon": "0",
+        "gasly": "0",
+        "bottas": "0",
+        "mick_schumacher": "0",
+        "kevin_magnussen": "0",
+        "hamilton": "0",
+        "latifi": "0",
+        "alonso": "0"
+    }
+}

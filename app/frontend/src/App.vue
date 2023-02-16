@@ -13,7 +13,9 @@
           <h1 class="py-2 pl-[12px] text-2xl fw400">Pitlane</h1>
         </div>
         <div class="pt-4 flex flex-col">
-          <SidebarLink to="/" icon="fas fa-home"> Home </SidebarLink>
+          <SidebarLink to="/" icon="fas fa-home">
+            Home
+          </SidebarLink>
           <SidebarLink to="/pitlane" icon="fa-solid fa-square-poll-vertical">
             Pitlane
           </SidebarLink>
@@ -32,7 +34,7 @@
           <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/" icon="fa-solid fa-right-to-bracket">
             Logout
           </SidebarLink>
-          <SidebarLink v-else  to="/login" icon="fa-solid fa-right-to-bracket">
+          <SidebarLink v-else to="/login" icon="fa-solid fa-right-to-bracket">
             Login
           </SidebarLink>
         </div>
@@ -50,10 +52,8 @@
 <script>
 // import Sidebar from "./components/Sidebar";
 import SidebarLink from "./components/SidebarLink.vue";
-
-
-
 // import { sidebarWidth } from "./components/state";
+
 export default {
   components: { SidebarLink },
   // setup() {
@@ -68,11 +68,13 @@ import { useStore } from 'vuex';
 import { computed } from "vue";
 
 const store = useStore();
+
 onMounted(() => {
   store.dispatch("fetchUpcoming");
 })
 
 const user = computed(() => {
+  // console.log(store.getters.user)
   return store.getters.user
 })
 
@@ -117,6 +119,8 @@ nav a.router-link-exact-active {
   max-width: none;
 }
 .sidebar {
+  min-height: 100%;
+  max-height: none;
   width: 60px;
   transition: 0.4s ease;
 }

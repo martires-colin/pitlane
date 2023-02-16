@@ -45,7 +45,7 @@ export default {
           class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-slate-700 bg-clip-padding rounded-md outline-none text-current">
           <div
             class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-slate-900 rounded-t-md">
-            <h5 class="text-xl font-medium leading-normal" id="modal2Label">Choose a driver:</h5>
+            <h5 class="text-xl font-medium leading-normal" id="modal2Label">Select your second driver:</h5>
             <!-- <h5 class="text-xl font-medium leading-normal" id="modal2Label">{{ forDriver }}</h5> -->
             <button type="button"
               class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
@@ -55,8 +55,8 @@ export default {
             <div class="flex flex-col items-start text-xl">
               <!-- <div v-for="(driver, index) in allDrivers" :key="index" @click="$emit('setDriver1', buttonTitle[1], s`driver`)"> {{ driver }}</div> -->
               <div v-for="(driver2, index) in allDrivers" :key="index">
-                <input type="checkbox" :id="driver2" :value="driver2" v-model="driverTwo">
-                <label class="pl-2" :for="driver2">{{ driver2 }}</label>
+                <input type="checkbox" :id="driver2 + '2'" :value="driver2" v-model="driverTwo">
+                <label class="pl-2" :for="driver2 + '2'">{{ driver2 }}</label>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default {
               active:bg-purple-800 active:shadow-lg
               transition
               duration-150
-              ease-in-out" data-bs-dismiss="modal">Close</button>
+              ease-in-out" data-bs-dismiss="modal">Cancel</button>
               
               <button type="button" class="px-6
               py-2.5
@@ -98,7 +98,7 @@ export default {
               ml-1"
               @click="$emit('setDriver2', driverTwo[0])"
               data-bs-dismiss="modal"
-              >Save Driver 2</button>
+              >Save</button>
           </div>
         </div>
       </div>
