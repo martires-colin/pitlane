@@ -183,4 +183,5 @@ class Team(Base):
     driver2id = Column(Integer, ForeignKey(Driver.driverid))
     constructorid = Column(Integer, ForeignKey(Constructor.constructorid))
     teamname = Column(String)
+    points = Column(Integer)
     notifcationflag = Column(Boolean)
