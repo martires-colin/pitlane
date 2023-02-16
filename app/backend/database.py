@@ -106,5 +106,5 @@ def fan_drivers_and_constructor(league):
         driver2name = q[0] + q[1]
         constructorname = (session.query(Constructor.name).filter(Constructor.constructorid == team.constructorid).first())[0]
         list.append({"teamname":team.teamname,"points":team.points,"driver1":driver1name, "driver2":driver2name, "constructor":constructorname})
-        session.close()
+    session.close()
     return list
