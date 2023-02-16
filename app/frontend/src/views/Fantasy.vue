@@ -22,7 +22,8 @@
             <p>{{ $store.state.nextRace[1] }} </p>
         </div>
       </div>
-      <div class="fantasy-grid">
+    </div>
+      <div v-if="teamSelected" class="fantasy-grid">
         <div class="bg-dark-300 flex flex-col justify-evenly">
           <div class="flex flex-row justify-evenly">
             <div class="driver-item">
@@ -62,7 +63,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

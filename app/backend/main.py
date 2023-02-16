@@ -16,6 +16,7 @@ from fantasy import *
 import warnings
 import requests
 from database import *
+from datetime import date, datetime
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
@@ -41,9 +42,10 @@ def schedule(Year):
                 schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
             return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
 
-@app.route('/schedule/nextprev', methods=['POST'])
+@app.route('/schedule/nextprev', methods=['POST', 'GET'])
 def nextprev():
     if request.method == 'POST':
+
         post_data = request.get_json()
         isOffseason = post_data.get('Offseason')
         if isOffseason:
@@ -63,8 +65,28 @@ def nextprev():
             prevFlag = prevCountry.json()[0]['flags']['png']
             nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextCountryName}?fields=flags")
             nextFlag = nextCountry.json()[0]['flags']['png']
-
+            json.dump({'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
+    if request.method == 'GET':
+        Date = datetime.today()
+        # Date = datetime.strptime("2023-03-21", '%Y-%m-%d')
+        # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
+        # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
+        with open("fantasycache/NextPrevRaces.json",'r') as file:
+            fileData = json.load(file)
+        if Date > datetime.strptime(fileData['currentDate'], '%Y-%m-%d'):
+            prevRace, nextRace = getNextPrevRaces(datetime.strptime(fileData['currentDate'], '%Y-%m-%d'))
+            prevRace.append(requests.get(f"https://restcountries.com/v3.1/name/{prevRace[2]}?fields=flags").json()[0]['flags']['png'])
+            nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
+            # print(prevRace, nextRace)
+            # print(prevFlag, nextFlag)
+            with open("fantasycache/NextPrevRaces.json", "w") as file:
+                json.dump({"currentDate": Date.strftime('%Y-%m-%d'), "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
+                
+            return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})
+        else:
+            return jsonify({'status': '200', 'prevRace': fileData['prevRace'], 'nextRace': fileData['nextRace']})
+
 
 @app.route("/standings/<int:Year>")
 def standings(Year):
