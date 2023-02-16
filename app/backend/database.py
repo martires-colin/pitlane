@@ -90,7 +90,7 @@ def create_team(u_id, i_code, d1, d2, c_id, t_name, n_f):
 
 # Function for returning all teams in a league,
 # Takes leagueID (INTEGER) and returns a LIST of TEAM objects.
-def fantasy_info(leagueID):
+def fantasy_info(leagueID, session):
     return (session.query(Team).filter(Team.leagueid == leagueID).all())
 
 
