@@ -99,9 +99,9 @@ def standings(Year):
 def pitlane():
     fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
-        post_data = request.get_json()['form']
+        post_data = request.get_json()
         print(request.get_json())
-        if post_data['method'] == 'h2h':
+        if post_data['method'] == 'headtohead':
             # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -142,7 +142,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'gear':
+        if post_data['method'] == 'gearshift':
             # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -195,7 +195,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'speed':
+        if post_data['method'] == 'speedvisual':
             # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({

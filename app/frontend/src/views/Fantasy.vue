@@ -11,13 +11,13 @@
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-t border-gray-500">
         <div class="flex flex-row">
             <p class="text-red-500 pr-4">Previous Race</p>
-            <img :src="$store.state.prevRace[2]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.prevRace[3]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
             <p class="px-4">{{ $store.state.prevRace[0] }} </p>
             <p>{{ $store.state.prevRace[1] }} </p>
         </div>
         <div class="flex flex-row">
             <p class="text-green-500 pr-4">Next Race</p>
-            <img :src="$store.state.nextRace[2]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.nextRace[3]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
             <p class="px-4"> {{ $store.state.nextRace[0] }}</p>
             <p>{{ $store.state.nextRace[1] }} </p>
         </div>
