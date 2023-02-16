@@ -90,7 +90,6 @@ export default {
           password: password.value
         })
         console.log(response)
-        // console.log(`Successfully logged in ${response.user.displayName}`)
         router.push('/')
       }
       catch (err) {

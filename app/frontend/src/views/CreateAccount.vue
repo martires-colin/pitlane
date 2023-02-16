@@ -31,7 +31,7 @@
                     <!-- <label class="form-label">Name</label> -->
                     <input
                       type="text"
-                      placeholder="Full Name"
+                      placeholder="Username"
                       class="form-control form-control-lg"
                       v-model="name"
                       required/>
@@ -69,6 +69,7 @@
 
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
+                    <!-- <a href="/" class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</a> -->
                   </div>
 
                   <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
@@ -108,10 +109,6 @@ export default {
     const router = useRouter()
 
     const register = async () => {
-
-      console.log(password.value)
-      console.log(password2.value)
-
       if (password.value !== password2.value) {
         alert("Passwords do not match")
         return
@@ -124,6 +121,8 @@ export default {
           name: name.value
         })
         console.log("Registered User")
+
+        // await store.dispatch('fetchUser')
         router.push("/")
       }
       catch (err) {
@@ -151,6 +150,7 @@ export default {
     return { register, name, email, password, password2, error }
 
   }
+
 };
 
 </script>
