@@ -225,18 +225,38 @@ def pitlane():
     if request.method == 'GET':    
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
+@app.route("/fantasy", methods=['GET', 'POST'])
+def fantasy():
+    # frontend will send userid once that is setup in firebase or our db using psuedo-user for now.
+    if request.method == 'POST':
+        userID = request.get_json()['userid']
+        # print(userID['userid'])
+        teams = getUserTeams(userID)
+        teamsJSON = []
+        for i in range(len(teams.all())):
+            teamsJSON.append([teams[i].teamname, teams[i].leagueid])
+        return jsonify({'status': '200', 'teams': teamsJSON})
 
-@app.route("/fantasy/drivers")
-def fantasyDrivers():
-    drivers = getFantasyDrivers()
-    print(drivers)
-    return jsonify({'drivers': drivers})
+@app.route("/fantasy/league", methods=['POST'])
+def fantasyLeague():
+    if request.method == 'POST':
+        leagueid = request.get_json()['leagueid']
+        league = getLeague(leagueid)
+        print(league[0])
+        return jsonify({'status': '200', 'leagueName': league[0]})
 
-@app.route("/fantasy/constructors")
-def fantasyConstructors():
-    constructors = getFantasyConstructors()
-    print(constructors)
-    return jsonify({'constructors': constructors})
+
+# @app.route("/fantasy/drivers")
+# def fantasyDrivers():
+#     drivers = getFantasyDrivers()
+#     print(drivers)
+#     return jsonify({'drivers': drivers})
+
+# @app.route("/fantasy/constructors")
+# def fantasyConstructors():
+#     constructors = getFantasyConstructors()
+#     print(constructors)
+#     return jsonify({'constructors': constructors})
 
 # MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
 
