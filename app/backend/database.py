@@ -109,9 +109,9 @@ def fan_drivers_and_constructor(league):
     session.close()
     return list
 
-def get_roster(uid):
+def get_roster(userid, leagueid):
     session = get_session()
-    subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == uid).first())
+    subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == userid, Team.leagueid == leagueid).first())
     q = (session.query(Driver.driverid, Driver.forename, Driver.surname).filter(Driver.driverid.in_(subquery)).all())
     list = []
     for x in q:

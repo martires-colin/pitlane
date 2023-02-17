@@ -30,16 +30,16 @@
           <div class="flex flex-row justify-evenly">
             <div class="driver-item">
               <p v-if="driver1 === ''" class="py-2">Add Driver</p>
-              <FantasyModal button-title="+" :all-drivers="allDrivers" @set-driver1="(str) => driver1 = str" v-if="driver1 === ''" />
-              <p class="pt-28 text-xl" v-if="driver1 !== ''">{{ driver1 }}</p>
-              <FantasyModal button-title="Edit" :all-drivers="allDrivers" @set-driver1="(str) => driver1 = str" v-if="driver1 !== ''" />
+              <FantasyModal button-title="+" :all-drivers="teamJSON" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
+              <p class="pt-28 text-xl" v-if="driver1 !== ''">{{ driver1.drivername }}</p>
+              <FantasyModal button-title="Edit" :all-drivers="teamJSON" @set-driver1="(setDriver1)" v-if="driver1 !== ''" />
             </div>
             <div class="driver-item">
               <p v-if="driver2 === ''" class="py-2">Add Driver</p>
-              <Driver2Modal button-title="+" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 === ''" />
+              <Driver2Modal button-title="+" :all-drivers="teamJSON" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
                 <!-- <FantasyModal :button-title="['+', 'two']" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 === ''" /> -->
-              <p class="pt-28 text-xl" v-if="driver2 !== ''">{{ driver2 }}</p>
-              <Driver2Modal button-title="Edit" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 !== ''" />
+              <p class="pt-28 text-xl" v-if="driver2 !== ''">{{ driver2.drivername }}</p>
+              <Driver2Modal button-title="Edit" :all-drivers="teamJSON" @set-driver2="(setDriver2)" v-if="driver2 !== ''" />
               <!-- <FantasyModal :for-driver="2" button-title="Edit" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 !== ''" /> -->
             </div>
           </div>
@@ -98,17 +98,17 @@ export default {
     }
   },
   methods: {
-    setDriver1(str) {
-      console.log(str)  
+    setDriver1(obj) {
+      console.log(obj)  
       console.log('string1')
-      this.driver1 = str;
+      this.driver1 = obj;
       // console.log(this.allDrivers)
       // this.allDrivers.splice(this.allDrivers.indexOf(str), 1);
       // console.log(this.allDrivers)
     },
-    setDriver2(str) {
+    setDriver2(obj) {
       console.log('string2')
-      this.driver2 = str;
+      this.driver2 = obj;
     },
     async fetchDrivers() {
       const res = await fetch(`http://localhost:3001/fantasy/drivers`);
