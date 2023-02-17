@@ -267,7 +267,14 @@ def fantasyLeague():
         print(league[0])
         return jsonify({'status': '200', 'leagueName': league[0]})
 
-
+@app.route("/fantasy/team", methods=['GET', 'POST'])
+def fantasyTeam():
+    if request.method == 'POST':
+        userid = request.get_json()['userid']
+        leagueid = request.get_json()['leagueid']
+        teamJSON = getUserTeamJSON(userid, leagueid)
+        print(teamJSON)
+        return jsonify({'status': '200', 'teamJSON': teamJSON})
 # @app.route("/fantasy/drivers")
 # def fantasyDrivers():
 #     drivers = getFantasyDrivers()

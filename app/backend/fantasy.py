@@ -75,7 +75,7 @@ def getUserTeamJSON(userid, leagueid):
     team = session.query(Team).filter(Team.userid == userid, Team.leagueid == leagueid).first()
     session.close()
     # make a json file with driverid -> driver name and constructorid -> constructor name
-    teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid}
+    teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid, 'points': team.points}
     return teamJSON
 
 def getLeague(leagueID):
