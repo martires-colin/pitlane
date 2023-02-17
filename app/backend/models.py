@@ -29,10 +29,6 @@ class Race(Base):
     sprint_date = Column(Date)
     sprint_time = Column(Time)
 
-class Status(Base):
-    __tablename__ = "status"
-    statusid = Column(Integer, primary_key = True)
-    status = Column(String)
 
 class Driver(Base):
     __tablename__ = "drivers"
@@ -45,6 +41,16 @@ class Driver(Base):
     dob = Column(String)
     nationality = Column(String)
     url = Column(String)
+
+class Driver_Standings(Base):
+    __tablename__ = "driver_standings"
+    driverstandingsid = Column(Integer, primary_key = True)
+    raceid = Column(Integer, ForeignKey(Race.raceid))
+    driverid = Column(Integer, ForeignKey(Driver.driverid))
+    points = Column(Integer)
+    position = Column(Integer)
+    positiontext = Column(String)
+    wins = Column(Integer)
 
 class Constructor(Base):
     __tablename__ = "constructors"
@@ -82,16 +88,6 @@ class Constructor_Standings(Base):
     positiontext = Column(String)
     wins = Column(Integer)
 
-class Driver_Standings(Base):
-    __tablename__ = "driver_standings"
-    driverstandingsid = Column(Integer, primary_key = True)
-    raceid = Column(Integer, ForeignKey(Race.raceid))
-    driverid = Column(Integer, ForeignKey(Driver.driverid))
-    points = Column(Integer)
-    position = Column(Integer)
-    positiontext = Column(String)
-    wins = Column(Integer)
-
 class Lap_Time(Base):
     __tablename__ = "lap_times"
     raceid = Column(Integer, ForeignKey(Race.raceid))
@@ -112,7 +108,7 @@ class Pit_Stops(Base):
 
 class Quali(Base):
     __tablename__ = "qualifying"
-    qualifyid = Column(Integer, primary_key = True)
+    qualiid = Column(Integer, primary_key = True)
     raceid = Column(Integer, ForeignKey(Race.raceid))
     driverid = Column(Integer, ForeignKey(Driver.driverid))
     constructorid = Column(Integer, ForeignKey(Constructor.constructorid))
@@ -141,16 +137,20 @@ class Results(Base):
     rank = Column(Integer)
     fastestlaptime = Column(String)
     fastestlapspeed = Column(Float)
-    statusid = Column(Float, ForeignKey(Status.statusid))
 
 class Season(Base):
     __tablename__ = "seasons"
     year = Column(Integer, primary_key = True)
     url = Column(String)
 
+class Status(Base):
+    __tablename__ = "status"
+    statusid = Column(Integer, primary_key = True)
+    status = Column(String)
+
 class SprintResults(Base):
     __tablename__ = "sprint_results"
-    resultsid = Column(Integer, primary_key = True)
+    resultsid = Column(Integer, ForeignKey(Results.resultid), primary_key = True)
     raceid = Column(Integer, ForeignKey(Race.raceid))
     driverid = Column(Integer, ForeignKey(Driver.driverid))
     constructorid = Column(Integer, ForeignKey(Constructor.constructorid))
@@ -184,9 +184,3 @@ class Team(Base):
     constructorid = Column(Integer, ForeignKey(Constructor.constructorid))
     teamname = Column(String)
     notifcationflag = Column(Boolean)
-    d1 = Column(Integer, ForeignKey(Driver.driverid))
-    d2 = Column(Integer, ForeignKey(Driver.driverid))
-    d3 = Column(Integer, ForeignKey(Driver.driverid))
-    d4 = Column(Integer, ForeignKey(Driver.driverid))
-    d5 = Column(Integer, ForeignKey(Driver.driverid))
-    points = Column(Integer)
