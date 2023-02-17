@@ -5,24 +5,27 @@
     <SelectFantasyTeam v-if="!teamSelected" :user-teams="userTeams" @set-selected-team="(setSelectedTeam)"></SelectFantasyTeam>
     <div v-if="teamSelected">
       <div class="flex flex-row justify-between p-4">
-        <h1> {{ leagueName }} </h1>
+        <h1>League: {{ leagueName }} </h1>
+        <h1>Your Team: {{ selectedTeam }}</h1>
         <h1>Total points: 0</h1>
+        <!-- <h1>{{ teamJSON.driver2id }}</h1> -->
       </div>
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-t border-gray-500">
         <div class="flex flex-row">
             <p class="text-red-500 pr-4">Previous Race</p>
-            <img :src="$store.state.prevRace[2]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.prevRace[3]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
             <p class="px-4">{{ $store.state.prevRace[0] }} </p>
             <p>{{ $store.state.prevRace[1] }} </p>
         </div>
         <div class="flex flex-row">
             <p class="text-green-500 pr-4">Next Race</p>
-            <img :src="$store.state.nextRace[2]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.nextRace[3]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
             <p class="px-4"> {{ $store.state.nextRace[0] }}</p>
             <p>{{ $store.state.nextRace[1] }} </p>
         </div>
       </div>
-      <div class="fantasy-grid">
+    </div>
+      <div v-if="teamSelected" class="fantasy-grid">
         <div class="bg-dark-300 flex flex-col justify-evenly">
           <div class="flex flex-row justify-evenly">
             <div class="driver-item">
@@ -62,7 +65,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -92,6 +94,7 @@ export default {
       userTeams: [],
       selectedTeam: "",
       leagueName: "",
+      teamJSON: null,
     }
   },
   methods: {
@@ -137,6 +140,7 @@ export default {
       console.log(teamname, leagueid)
       this.selectedTeam = teamname;
       await this.fetchLeague(leagueid);
+      await this.fetchTeamJSON('12345678910', leagueid)
       this.teamSelected = true;
     },
     async fetchLeague(leagueid) {
@@ -152,6 +156,19 @@ export default {
       console.log('league info', data)
       this.leagueName = data.leagueName;
     },
+    async fetchTeamJSON(userid, leagueid) {
+      const res = await fetch('http://localhost:3001/fantasy/team', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify({'leagueid': leagueid, 'userid': userid})
+      });
+      const data = await res.json();
+      console.log('userjson: ', data)
+      this.teamJSON = data.teamJSON;
+    }
   },
   async mounted() {
     // will eventually be fetching drivers/constructors available to user

@@ -1,7 +1,8 @@
 import requests
 import json
 from database import get_session
-from models import League, Team, Constructor, Driver
+from models import League, Team, Constructor, Driver, Race, Circuits
+from sqlalchemy import asc, desc
 
 def getFantasyDrivers():
     response = requests.get("http://ergast.com/api/f1/current/drivers.json")
@@ -24,6 +25,7 @@ def getFantasyConstructors():
 def getDriverListforWeekend():
     session = get_session()
     quali = get_recent_quali(session)
+    session.close()
     print(quali)
     # print(quali.racedid)
 
@@ -52,7 +54,7 @@ def createIDLookupJSON():
         lookupJSON['constructors'][constructor.constructorid] = constructor.name
     for driver in drivers:
         lookupJSON['drivers'][driver.driverid] = driver.forename + ' ' + driver.surname
-    json.dump(lookupJSON, open("fantasyCache/IDLookup.json", "w"), indent=4)
+    json.dump(lookupJSON, open("fantasycache/IDLookup.json", "w"), indent=4)
 
 def giveScoreForUser(User):
     pointSheet = json.load(open("fantasycache/pointSheet.json",))
@@ -71,9 +73,9 @@ def getUserTeams(userid):
 def getUserTeamJSON(userid, leagueid):
     session = get_session()
     team = session.query(Team).filter(Team.userid == userid, Team.leagueid == leagueid).first()
-    session.closer()
+    session.close()
     # make a json file with driverid -> driver name and constructorid -> constructor name
-    teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid}
+    teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid, 'points': team.points}
     return teamJSON
 
 def getLeague(leagueID):
@@ -84,6 +86,22 @@ def getLeague(leagueID):
         teams.append(s)
     session.close()
     return leagueName, teams
+
+def getNextPrevRaces(Date):
+    session = get_session()
+    nextRace = session.query(Race).filter(Race.date >= Date).order_by(asc(Race.date)).first()
+    # nextRace = session.query(Race).filter(Race.date >= Date).first()
+    # print(nextRace.year, nextRace.round, nextRace.name)
+    if nextRace.round == 1:
+        prevRace = session.query(Race).filter(Race.year == nextRace.year-1).order_by(desc(Race.round)).first()
+        # print(prevRace.year, prevRace.round, prevRace.name)
+    else:
+        prevRace = session.query(Race).filter(Race.year == nextRace.year, Race.round == nextRace.round-1).first()
+        # print(prevRace.year, prevRace.round, prevRace.name)
+    prevRaceCountry = session.query(Circuits).filter(Circuits.circuitid == prevRace.circuitid).first()
+    nextRaceCountry = session.query(Circuits).filter(Circuits.circuitid == nextRace.circuitid).first()
+    session.close()   
+    return [prevRace.name, prevRace.date.strftime('%Y-%m-%d'), prevRaceCountry.country], [nextRace.name, nextRace.date.strftime('%Y-%m-%d'), nextRaceCountry.country]
 
 if __name__ == '__main__':
     # createPointSheet()
