@@ -212,7 +212,7 @@ export default {
   },
   methods: {
     getPythonData() {
-      const path = "http://127.0.0.1:5000/pitlane";
+      const path = "http://localhost:3001/pitlane";
       axios
         .get(path)
         .then((res) => {
@@ -227,7 +227,7 @@ export default {
         });
     },
     sendForm(payload) {
-      const path = "http://127.0.0.1:5000/pitlane";
+      const path = "http://localhost:3001/pitlane";
       axios
         .post(path, payload)
         .then((res) => {
