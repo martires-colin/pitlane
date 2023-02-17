@@ -108,3 +108,13 @@ def fan_drivers_and_constructor(league):
         list.append({"teamname":team.teamname,"points":team.points,"driver1":driver1name, "driver2":driver2name, "constructor":constructorname})
     session.close()
     return list
+
+def get_roster(uid):
+    session = get_session()
+    subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == uid).first())
+    q = (session.query(Driver.driverid, Driver.forename, Driver.surname).filter(Driver.driverid.in_(subquery)).all())
+    list = []
+    for x in q:
+        list.append({'drivername':x[1] + ' ' + x[2], 'driverid': x[0]})
+    session.close()
+    return list
