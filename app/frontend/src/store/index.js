@@ -31,7 +31,12 @@ export default createStore({
       displayName: null,
       email: null,
       phoneNumber: null,
-      photoURL: null
+      photoURL: null,
+      notificationPreferences: {
+        lightsOutNotif: false,
+        upcomingRacesNotif: false,
+        completeNotif: false
+      }
     },
     nextRace: [],
     prevRace: null,
@@ -51,6 +56,11 @@ export default createStore({
     SET_UPCOMING(state, upcoming) {
       state.nextRace = upcoming.nextRace
       state.prevRace = upcoming.prevRace
+    },
+    SET_NOTIFICATION_PREFERENCES(state, data) {
+      state.user.notificationPreferences.lightsOutNotif = data.lightsOutNotif
+      state.user.notificationPreferences.upcomingRacesNotif = data.upcomingRacesNotif
+      state.user.notificationPreferences.completeNotif = data.completeNotif
     }
   },
   actions: {
@@ -70,6 +80,7 @@ export default createStore({
             phoneNumber: ""
           });
           console.log("Document written with ID: ", response.user.uid);
+          await new Promise(r => setTimeout(r, 500));
         } catch (e) {
           console.error("Error adding document: ", e);
         }
@@ -103,6 +114,20 @@ export default createStore({
         phoneNumber: phoneNumber
       })
       commit('SET_USER_PHONENUMBER', phoneNumber)
+    },
+    async updateNotifications({ commit }, notifPreferences) {
+      const user = auth.currentUser;
+      const docRef = doc(db, "users", user.uid)
+      await updateDoc(docRef, {
+        lightsOutNotif: notifPreferences.lightsOutNotif,
+        upcomingRacesNotif: notifPreferences.upcomingRacesNotif,
+        completeNotif: notifPreferences.completeNotif
+      })
+      commit('SET_NOTIFICATION_PREFERENCES', {
+        lightsOutNotif: notifPreferences.lightsOutNotif,
+        upcomingRacesNotif: notifPreferences.upcomingRacesNotif,
+        completeNotif: notifPreferences.completeNotif
+      })
     },
     async logout({ commit }) {
       await signOut(auth)
@@ -142,8 +167,11 @@ export default createStore({
     },
     async fetchUpcoming({ commit }) {
       try {
+        const payload = {
+          Offseason: 'true',
+        }
         const path = "http://localhost:3001/schedule/nextprev";
-        await axios.get(path).then((response) => {
+        await axios.post(path ,payload).then((response) => {
           commit('SET_UPCOMING', response.data);
         })
       } catch (error) {

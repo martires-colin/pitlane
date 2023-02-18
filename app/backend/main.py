@@ -16,11 +16,15 @@ from fantasy import *
 import warnings
 import requests
 from database import *
-from datetime import date, datetime
+from twilio.rest import Client
+import twilio_config
+
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
 mpl.use('agg')
+
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -42,10 +46,9 @@ def schedule(Year):
                 schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
             return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
 
-@app.route('/schedule/nextprev', methods=['POST', 'GET'])
+@app.route('/schedule/nextprev', methods=['POST'])
 def nextprev():
     if request.method == 'POST':
-
         post_data = request.get_json()
         isOffseason = post_data.get('Offseason')
         if isOffseason:
@@ -65,28 +68,8 @@ def nextprev():
             prevFlag = prevCountry.json()[0]['flags']['png']
             nextCountry = requests.get(f"https://restcountries.com/v3.1/name/{nextCountryName}?fields=flags")
             nextFlag = nextCountry.json()[0]['flags']['png']
-            json.dump({'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
-            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
-    if request.method == 'GET':
-        Date = datetime.today()
-        # Date = datetime.strptime("2023-03-21", '%Y-%m-%d')
-        # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
-        # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
-        with open("fantasycache/NextPrevRaces.json",'r') as file:
-            fileData = json.load(file)
-        if Date > datetime.strptime(fileData['currentDate'], '%Y-%m-%d'):
-            prevRace, nextRace = getNextPrevRaces(datetime.strptime(fileData['currentDate'], '%Y-%m-%d'))
-            prevRace.append(requests.get(f"https://restcountries.com/v3.1/name/{prevRace[2]}?fields=flags").json()[0]['flags']['png'])
-            nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
-            # print(prevRace, nextRace)
-            # print(prevFlag, nextFlag)
-            with open("fantasycache/NextPrevRaces.json", "w") as file:
-                json.dump({"currentDate": Date.strftime('%Y-%m-%d'), "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
-                
-            return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})
-        else:
-            return jsonify({'status': '200', 'prevRace': fileData['prevRace'], 'nextRace': fileData['nextRace']})
 
+            return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
 
 @app.route("/standings/<int:Year>")
 def standings(Year):
@@ -99,9 +82,9 @@ def standings(Year):
 def pitlane():
     fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
-        post_data = request.get_json()
+        post_data = request.get_json()['form']
         print(request.get_json())
-        if post_data['method'] == 'headtohead':
+        if post_data['method'] == 'h2h':
             # data dictionary for the form data retreived
             DATA = {'driver1': '', 'driver2': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -142,7 +125,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'gearshift':
+        if post_data['method'] == 'gear':
             # data dictionary for the form data retreived
             DATA = {'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -195,7 +178,7 @@ def pitlane():
             pngImageB64String = "data:image/png;base64,"
             pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
             return jsonify({'src': pngImageB64String, 'status': 'success'})
-        if post_data['method'] == 'speedvisual':
+        if post_data['method'] == 'speed':
             # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
@@ -247,45 +230,47 @@ def pitlane():
     if request.method == 'GET':    
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
-@app.route("/fantasy", methods=['GET', 'POST'])
-def fantasy():
-    # frontend will send userid once that is setup in firebase or our db using psuedo-user for now.
-    if request.method == 'POST':
-        userID = request.get_json()['userid']
-        # print(userID['userid'])
-        teams = getUserTeams(userID)
-        teamsJSON = []
-        for i in range(len(teams.all())):
-            teamsJSON.append([teams[i].teamname, teams[i].leagueid])
-        return jsonify({'status': '200', 'teams': teamsJSON})
 
-@app.route("/fantasy/league", methods=['POST'])
-def fantasyLeague():
-    if request.method == 'POST':
-        leagueid = request.get_json()['leagueid']
-        league = getLeague(leagueid)
-        print(league[0])
-        return jsonify({'status': '200', 'leagueName': league[0]})
+@app.route("/fantasy/drivers")
+def fantasyDrivers():
+    drivers = getFantasyDrivers()
+    print(drivers)
+    return jsonify({'drivers': drivers})
 
-@app.route("/fantasy/team", methods=['GET', 'POST'])
-def fantasyTeam():
-    if request.method == 'POST':
-        userid = request.get_json()['userid']
-        leagueid = request.get_json()['leagueid']
-        teamJSON = getUserTeamJSON(userid, leagueid)
-        print(teamJSON)
-        return jsonify({'status': '200', 'teamJSON': teamJSON})
-# @app.route("/fantasy/drivers")
-# def fantasyDrivers():
-#     drivers = getFantasyDrivers()
-#     print(drivers)
-#     return jsonify({'drivers': drivers})
+@app.route("/fantasy/constructors")
+def fantasyConstructors():
+    constructors = getFantasyConstructors()
+    print(constructors)
+    return jsonify({'constructors': constructors})
 
-# @app.route("/fantasy/constructors")
-# def fantasyConstructors():
-#     constructors = getFantasyConstructors()
-#     print(constructors)
-#     return jsonify({'constructors': constructors})
+# Colin Martires - push notifications via Twilio
+@app.route("/send_SMS", methods=['POST'])
+def sendSMS():
+    post_data = request.get_json()
+    print(post_data)
+    print("SENDING SMS via TWILIO")
+
+    print(post_data["phoneNumber"])
+    print(post_data["preferences"])
+
+    print(twilio_config.auth_token)
+    print(twilio_config.account_sid)
+    print(twilio_config.twilio_number)
+
+    # client = Client(twilio_config.account_sid, twilio_config.auth_token)
+    # message = client.messages.create(
+    # body="Wassup Colin :)\n\n\nI hope this worked",
+    # from_=twilio_config.twilio_number,
+    # # to="+17029940911" change this to user phone number
+    # to="+17029940911"
+    # )
+
+    # print(message.sid)
+
+
+    # return jsonify({'data': message.sid})
+    return jsonify({'data': "deeznuts"})
+
 
 # MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
 
