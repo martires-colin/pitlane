@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "NotificationSettings",
   data() {
@@ -60,14 +62,32 @@ export default {
     }
   },
   methods: {
-    simulateNotifications() {
+    async simulateNotifications() {
       
       console.log(this.lightsOutNotif)
       console.log(this.upcomingRacesNotif)
       console.log(this.completeNotif)
-    
-      // call backend to execute SMS update
-      
+
+      let payload = {
+        phoneNumber: this.$store.state.user.phoneNumber,
+        preferences: {
+           lightsOutNotif: this.lightsOutNotif,
+           upcomingRacesNotif: this.upcomingRacesNotif,
+           completeNotif: this.completeNotif
+        }
+      }
+
+      const path = "http://localhost:3001/send_SMS"
+      axios
+        .post(path, payload)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+
+
     },
     updateNotificationPreferences() {
       try {

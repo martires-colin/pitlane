@@ -16,10 +16,15 @@ from fantasy import *
 import warnings
 import requests
 from database import *
+from twilio.rest import Client
+import twilio_config
+
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
 mpl.use('agg')
+
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -237,6 +242,35 @@ def fantasyConstructors():
     constructors = getFantasyConstructors()
     print(constructors)
     return jsonify({'constructors': constructors})
+
+# Colin Martires - push notifications via Twilio
+@app.route("/send_SMS", methods=['POST'])
+def sendSMS():
+    post_data = request.get_json()
+    print(post_data)
+    print("SENDING SMS via TWILIO")
+
+    print(post_data["phoneNumber"])
+    print(post_data["preferences"])
+
+    print(twilio_config.auth_token)
+    print(twilio_config.account_sid)
+    print(twilio_config.twilio_number)
+
+    # client = Client(twilio_config.account_sid, twilio_config.auth_token)
+    # message = client.messages.create(
+    # body="Wassup Colin :)\n\n\nI hope this worked",
+    # from_=twilio_config.twilio_number,
+    # # to="+17029940911" change this to user phone number
+    # to="+17029940911"
+    # )
+
+    # print(message.sid)
+
+
+    # return jsonify({'data': message.sid})
+    return jsonify({'data': "deeznuts"})
+
 
 # MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
 
