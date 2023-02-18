@@ -2,7 +2,7 @@
 # Implemented by Noah Howren unless otherwise stated
 
 from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
-from sqlalchemy import create_engine, desc
+from sqlalchemy import create_engine, desc, update
 from sqlalchemy.orm import sessionmaker
 from datetime import date
 import string
@@ -118,3 +118,9 @@ def get_roster(uid):
         list.append({'drivername':x[1] + ' ' + x[2], 'driverid': x[0]})
     session.close()
     return list
+
+def fan_update_drivers(uid, lid, d1, d2):
+    session = get_session()
+    session.execute(update(Team).where(Team.userid == uid, Team.leagueid == lid).values(driver1id=d1, driver2id = d2))
+    session.commit()
+    session.close()
