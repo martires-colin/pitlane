@@ -112,7 +112,7 @@ onMounted(() => {
       <div class="previous-race">
         <p class="text-red-500 text-xl pb-2">Previous Race</p>
         <div class="flex flex-row">
-          <img :src="$store.state.prevRace[2]" alt="" height="40" width="40"/>
+          <img :src="$store.state.prevRace[3]" alt="" height="40" width="40"/>
           <p class="pl-4">{{ $store.state.prevRace[0] }} </p>
         </div>
         <p>{{ $store.state.prevRace[1] }} </p>
@@ -120,7 +120,7 @@ onMounted(() => {
       <div class="upcoming-race">
         <p class="text-green-500 text-xl pb-2">Upcoming Race</p>
         <div class="flex flex-row">
-          <img :src="$store.state.nextRace[2]" alt="" height="40" width="40"/>
+          <img :src="$store.state.nextRace[3]" alt="" height="40" width="40"/>
           <p class="pl-4"> {{ $store.state.nextRace[0] }}</p>
         </div>
         <p> {{ $store.state.nextRace[1] }}</p>

@@ -93,7 +93,6 @@ def create_team(u_id, i_code, d1, d2, c_id, t_name, n_f):
 def fantasy_info(leagueID, session):
     return (session.query(Team).filter(Team.leagueid == leagueID).all())
 
-
 # Function for serializing teams in a league,
 # Takes LIST of TEAM objects (see 'fantasy_info(leagueID)') and returns a LIST of DICTIONARIES containing TEAMS DATA.
 def fan_drivers_and_constructor(league):
@@ -109,15 +108,18 @@ def fan_drivers_and_constructor(league):
     session.close()
     return list
 
-def get_roster(uid):
+def getTeamJSON(userid, leagueid):
     session = get_session()
-    subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == uid).first())
+    subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == userid).first())
     q = (session.query(Driver.driverid, Driver.forename, Driver.surname).filter(Driver.driverid.in_(subquery)).all())
     list = []
     for x in q:
         list.append({'drivername':x[1] + ' ' + x[2], 'driverid': x[0]})
+    constructorid = session.query(Team.constructorid).filter(Team.userid == userid, Team.leagueid == leagueid).first()
+    constructorName = session.query(Constructor.name).filter(Constructor.constructorid == constructorid[0]).first()
+    points = session.query(Team.points).filter(Team.userid == userid, Team.leagueid == leagueid).first()
     session.close()
-    return list
+    return list, constructorName[0], points[0]
 
 def fan_update_drivers(uid, lid, d1, d2):
     session = get_session()
