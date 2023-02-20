@@ -55,8 +55,8 @@ export default {
             <div class="flex flex-col items-start text-xl">
               <!-- <div v-for="(driver, index) in allDrivers" :key="index" @click="$emit('setDriver1', buttonTitle[1], s`driver`)"> {{ driver }}</div> -->
               <div v-for="(driver, index) in allDrivers" :key="index">
-                <input type="checkbox" :id="driver" :value="driver" v-model="driver1">
-                <label class="pl-2" :for="driver">{{ driver }}</label>
+                <input type="checkbox" :id="driver.drivername" :value="driver" v-model="driver1">
+                <label class="pl-2" :for="driver.drivername">{{ driver.drivername }}</label>
               </div>
             </div>
           </div>

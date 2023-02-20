@@ -25,9 +25,16 @@
           <SidebarLink to="/schedule" icon="fa-solid fa-calendar-days">
             Schedule
           </SidebarLink>
-          <SidebarLink v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered"
-            >Fantasy
-          </SidebarLink>
+          <!-- <div class="fantasyDrop text-start" @mouseover="fantasyDropdown = true" @mouseleave="fantasyDropdown = false"> -->
+          <div class="fantasyDrop text-start">
+            <SidebarLink class="fantasy-link" v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered" @mouseover="fantasyDropdown = true"
+              >Fantasy
+            </SidebarLink>
+            <div class="Drop text-start pt-2 text-sm opacity-75" v-if="fantasyDropdown">
+              <SidebarLink class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
+              <SidebarLink to="/fantasy">My Teams</SidebarLink>
+            </div>
+          </div>
           <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
             Settings
           </SidebarLink>
@@ -59,6 +66,11 @@ export default {
   // setup() {
   //   return { sidebarWidth };
   // },
+  data() {
+    return {
+      fantasyDropdown: false,
+    }
+  }
 };
 </script>
 
@@ -126,6 +138,17 @@ nav a.router-link-exact-active {
 }
 .sidebar:hover {
   width: 170px;
+}
+.fantasy-link:hover {
+  width: 180px;
+}
+.fantasyDrop {
+  height: 24px;
+  overflow: hidden;
+  transition: 0.4s ease;
+}
+.fantasyDrop:hover{
+  height: 100px;
 }
 .content {
   flex-grow: 1;
