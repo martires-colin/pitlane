@@ -20,6 +20,8 @@ from twilio.rest import Client
 import twilio_config
 from datetime import *
 from datetime import date, datetime
+from dateutil import tz
+import pytz
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # non-interactive matplotlib backend
@@ -325,14 +327,14 @@ def sendSMS():
 @app.route("/race_results_notif", methods=["GET"])
 def getRaceResultsNotif():
     msg_body = ''
-    results = notif_res()
+    data = notif_res()
 
-    msg_body += "\nRace Results for <insert GP name>\n"
-    for x in results["Results"]:
+    msg_body += f'PITLANE\n\nRace Results for {data["Race"]}\n'
+    for x in data["Results"]:
         msg_body += f'{str(x["Position"]).ljust(3)} {x["Driver"]}\n'
 
     return(jsonify({
-        'results': results,
+        'results': data,
         'msg_body': msg_body
     }))
 
@@ -340,14 +342,14 @@ def getRaceResultsNotif():
 @app.route("/driver_standings_notif", methods=["GET"])
 def getDriverStandingsNotif():
     msg_body = ''
-    results = notif_res()
+    data = notif_res()
 
-    msg_body += "\nDriver's Championship Standings\n"
-    for y in results["Standings"]:
+    msg_body += "PITLANE\n\nDriver's Championship Standings\n"
+    for y in data["Standings"]:
         msg_body += f'{str(y["Position"]).ljust(3)} {y["Driver"].ljust(17)} {int(y["Points"])}pts\n'
 
     return(jsonify({
-        'results': results,
+        'results': data,
         'msg_body': msg_body
     }))
 
@@ -355,14 +357,38 @@ def getDriverStandingsNotif():
 @app.route("/constructor_standings_notif", methods=["GET"])
 def getConstructorStandingsNotif():
     msg_body = ''
-    results = notif_res()
+    data = notif_res()
 
-    msg_body += "\nConstructor's Championship Standings\n"
-    for z in results["Constructors"]:
-        msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(13)} {int(z["Points"])}pts\n'
+    msg_body += "PITLANE\n\nConstructor's Championship Standings\n"
+    for z in data["Constructors"]:
+        msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(12)} {int(z["Points"])}pts\n'
 
     return(jsonify({
-        'results': results,
+        'results': data,
+        'msg_body': msg_body
+    }))
+
+# Colin Martires - retreive upcoming race from database
+@app.route("/upcoming_race_notif", methods=["GET"])
+def getUpcomingRaceNotif():
+    msg_body = ''
+    data = upcoming_race()
+
+    race_name = data["Race"]
+    race_date = data["Date"]
+    race_time_UTC = data["Time"]
+    date_time_str = race_date + " " + race_time_UTC
+
+    date_time_format = "%m/%d/%Y %H:%M:%S"
+    date_time_obj = datetime.strptime(date_time_str, date_time_format)
+    d_utc = date_time_obj.replace(tzinfo=tz.tzutc())
+    d_pst = d_utc.astimezone(tz.tzlocal())
+    race_time_formatted = d_pst.time().strftime("%I:%M %p")
+
+    msg_body = f"PITLANE\n\nUpcoming Race\n{race_name}\nDate: {race_date}\nTime: {race_time_formatted} PST"
+
+    return(jsonify({
+        'results': data,
         'msg_body': msg_body
     }))
 
