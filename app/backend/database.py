@@ -124,3 +124,17 @@ def fan_update_drivers(uid, lid, d1, d2):
     session.execute(update(Team).where(Team.userid == uid, Team.leagueid == lid).values(driver1id=d1, driver2id = d2))
     session.commit()
     session.close()
+
+def notif_res():
+    dt = date.today()
+    race = session.query(Race.raceid).filter(Race.date <= dt).order_by(desc(Race.date)).first()[0]
+    results = []
+    for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race).order_by(Results.position):
+        results.append({'Position':x.Results.position, 'Driver': x.Driver.forename + ' ' + x.Driver.surname, 'Starting Position': x.Results.grid})
+    standings = []
+    for y in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == race).order_by(Driver_Standings.position):
+        standings.append({'Position':y.Driver_Standings.position, 'Driver': y.Driver.forename + ' ' + y.Driver.surname, 'Points': y.Driver_Standings.points})
+    constructors = []
+    for z in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == race).order_by(Constructor_Standings.position):
+        constructors.append({'Position':z.Constructor_Standings.position ,'Constructor':z.Constructor.name, 'Points':z.Constructor_Standings.points})
+    return {'Results':results, 'Standings':standings, 'Constructors':constructors}
