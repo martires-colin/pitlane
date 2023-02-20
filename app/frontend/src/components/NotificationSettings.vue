@@ -5,6 +5,9 @@
 
     <div class="mb-3">
       <h1>Receive notifications from PITLANE!</h1>
+      <div v-if="this.$store.state.user.phoneNumber">
+        <h1>Messages will be sent to {{ this.$store.state.user.phoneNumber }}</h1>
+      </div>
     </div>
 
     <form @submit.prevent="updateNotificationPreferences">
@@ -33,7 +36,25 @@
             <span class="sr-only">Switch for Complete Race Results notification</span>
           </b-form-checkbox>
         </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Complete Race Results" disabled></b-form-input>
+        <b-form-input aria-label="Text input with switch" placeholder="Race Results" disabled></b-form-input>
+      </b-input-group>
+  
+      <b-input-group class="mb-4">
+        <b-input-group-prepend is-text>
+          <b-form-checkbox switch class="mr-n2" v-model="driverStandingsNotif">
+            <span class="sr-only">Switch for Driver's Championship Standings notification</span>
+          </b-form-checkbox>
+        </b-input-group-prepend>
+        <b-form-input aria-label="Text input with switch" placeholder="Driver's Championship Standings" disabled></b-form-input>
+      </b-input-group>
+
+      <b-input-group class="mb-4">
+        <b-input-group-prepend is-text>
+          <b-form-checkbox switch class="mr-n2" v-model="constructorStandingsNotif">
+            <span class="sr-only">Switch for Constructor's Championship Standings notification</span>
+          </b-form-checkbox>
+        </b-input-group-prepend>
+        <b-form-input aria-label="Text input with switch" placeholder="Constructor's Championship Standings" disabled></b-form-input>
       </b-input-group>
   
       <div class="my-2">
@@ -42,10 +63,30 @@
 
     </form>
 
-    <div class="my-2">
-      <button class="btn btn-secondary btn-md" id="update-btn" @click="simulateNotifications">Simulate Push Notifications</button>
+    
+    <div class="container my-2">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
+        </div>
+        <div class="col-sm">
+          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
+        </div>
+        <div class="col-sm">
+          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm">
+          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
+        </div>
+      </div>
     </div>
-
   </div>
 </template>
 
@@ -58,43 +99,20 @@ export default {
     return {
       lightsOutNotif: this.$store.state.user.notificationPreferences.lightsOutNotif,
       upcomingRacesNotif: this.$store.state.user.notificationPreferences.upcomingRacesNotif,
-      completeNotif: this.$store.state.user.notificationPreferences.completeNotif
+      completeNotif: this.$store.state.user.notificationPreferences.completeNotif,
+      driverStandingsNotif: this.$store.state.user.notificationPreferences.driverStandingsNotif,
+      constructorStandingsNotif: this.$store.state.user.notificationPreferences.constructorStandingsNotif
     }
   },
   methods: {
-    async simulateNotifications() {
-      
-      console.log(this.lightsOutNotif)
-      console.log(this.upcomingRacesNotif)
-      console.log(this.completeNotif)
-
-      let payload = {
-        phoneNumber: this.$store.state.user.phoneNumber,
-        preferences: {
-           lightsOutNotif: this.lightsOutNotif,
-           upcomingRacesNotif: this.upcomingRacesNotif,
-           completeNotif: this.completeNotif
-        }
-      }
-
-      const path = "http://localhost:3001/send_SMS"
-      axios
-        .post(path, payload)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-
-
-    },
     updateNotificationPreferences() {
       try {
         this.$store.dispatch('updateNotifications', {
           lightsOutNotif: this.lightsOutNotif,
           upcomingRacesNotif: this.upcomingRacesNotif,
-          completeNotif: this.completeNotif
+          completeNotif: this.completeNotif,
+          driverStandingsNotif: this.driverStandingsNotif,
+          constructorStandingsNotif: this.constructorStandingsNotif
         })
         console.log("Updated Notification Preferences")
       }
@@ -102,10 +120,148 @@ export default {
         console.log(err)
         return;
       }
-    }
+    },
+    async simulateLightsOutNotif() {
+      if (this.lightsOutNotif) {
+        console.log("Sending 'Lights Out!' Notification")
+        const payload = {
+          phoneNumber: this.$store.state.user.phoneNumber,
+          msg_body : 'This is where we call function to get notif'
+        }
+        const path = "http://localhost:3001/send_SMS"
+        axios
+          .post(path, payload)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      } else {
+        console.log("User not subscribed to 'Lights Out' Notifications")
+      }
+    },
+    async simulateUpcomingRaceNotif() {      
+      if (this.upcomingRacesNotif) {
+        console.log("Sending 'Upcoming Race!' Notification")
+        const payload = {
+          phoneNumber: this.$store.state.user.phoneNumber,
+          msg_body : 'This is where we call function to get notif'
+        }
+        const path = "http://localhost:3001/send_SMS"
+        axios
+          .post(path, payload)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      } else {
+        console.log("User not subscribed to 'Upcoming Race' Notifications")
+      }
+    },
+    async simulateCompleteResultsNotif() {
+      if (this.completeNotif) {
+        const data = await this.fetchCompleteResults()
+        console.log(data)
+        console.log("Sending 'Complete Race Results!' Notification")
+        const payload = {
+          phoneNumber: this.$store.state.user.phoneNumber,
+          msg_body : data.msg_body
+        }
+        const path = "http://localhost:3001/send_SMS"
+        axios
+          .post(path, payload)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      } else {
+        console.log("User not subscribed to 'Complete Race Results' Notifications")
+      }
+    },
+    async simulateDriverChampionshipStandingsNotif() {
+      if (this.driverStandingsNotif) {
+        const data = await this.fetchDriverStandings()
+        console.log(data)
+        console.log("Sending 'Driver's Championship Standings!' Notification")
+        const payload = {
+          phoneNumber: this.$store.state.user.phoneNumber,
+          msg_body : data.msg_body
+        }
+        const path = "http://localhost:3001/send_SMS"
+        axios
+          .post(path, payload)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      } else {
+        console.log("User not subscribed to 'Driver's Championship Standings' Notifications")
+      }
+    },
+    async simulateConstructorChampionshipStandingsNotif() {
+      if (this.constructorStandingsNotif) {
+        const data = await this.fetchConstructorStandings()
+        console.log(data)
+        console.log("Sending 'Constructor's Championship Standings!' Notification")
+        const payload = {
+          phoneNumber: this.$store.state.user.phoneNumber,
+          msg_body : data.msg_body
+        }
+        const path = "http://localhost:3001/send_SMS"
+        axios
+          .post(path, payload)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      } else {
+        console.log("User not subscribed to 'Constructor's Championship Standings' Notifications")
+      }
+    },
+    async fetchCompleteResults() {
+      const res = await fetch(`http://localhost:3001/race_results_notif`);
+      const data = await res.json();
+      // console.log(data)
+      return data
+    },
+    async fetchDriverStandings() {
+      const res = await fetch(`http://localhost:3001/driver_standings_notif`);
+      const data = await res.json();
+      console.log(data)
+      return data
+    },
+    async fetchConstructorStandings() {
+      const res = await fetch(`http://localhost:3001/constructor_standings_notif`);
+      const data = await res.json();
+      console.log(data)
+      return data
+    },
+    // async fetchUpcomingRace() {
+    //   // Place holder for fetchUpcomingRace function for upcomingRaces notifications
+
+    //   // const res = await fetch(`http://localhost:3001/fantasy/drivers`);
+    //   // const data = await res.json();
+    //   // console.log(data)
+    //   // this.allDrivers = data.drivers;
+    // },
   }
 }
 </script>
 
 <style>
+
+#simulate-btn {
+  color: white;
+  background-color: rgb(160, 19, 19);
+}
+
 </style>

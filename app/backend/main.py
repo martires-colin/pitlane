@@ -299,33 +299,72 @@ def fantasyLineup():
 #     print(drivers)
 #     return jsonify({'drivers': drivers})
 
+
 # Colin Martires - push notifications via Twilio
 @app.route("/send_SMS", methods=['POST'])
 def sendSMS():
     post_data = request.get_json()
-    print(post_data)
+    user_phone_number = post_data['phoneNumber']
+    msg_body = post_data['msg_body']
+    
+    # Twilio Client to handle SMS notifications
     print("SENDING SMS via TWILIO")
+    client = Client(twilio_config.account_sid, twilio_config.auth_token)
+    message = client.messages.create(
+    body=msg_body,
+    from_=twilio_config.twilio_number,
+    to=user_phone_number
+    )
 
-    print(post_data["phoneNumber"])
-    print(post_data["preferences"])
+    return jsonify({
+        'status': "success",
+        'message_sid': message.sid
+    })
 
-    print(twilio_config.auth_token)
-    print(twilio_config.account_sid)
-    print(twilio_config.twilio_number)
+# Colin Martires - retrieve race results from database
+@app.route("/race_results_notif", methods=["GET"])
+def getRaceResultsNotif():
+    msg_body = ''
+    results = notif_res()
 
-    # client = Client(twilio_config.account_sid, twilio_config.auth_token)
-    # message = client.messages.create(
-    # body="Wassup Colin :)\n\n\nI hope this worked",
-    # from_=twilio_config.twilio_number,
-    # # to="+17029940911" change this to user phone number
-    # to="+17029940911"
-    # )
+    msg_body += "\nRace Results for <insert GP name>\n"
+    for x in results["Results"]:
+        msg_body += f'{str(x["Position"]).ljust(3)} {x["Driver"]}\n'
 
-    # print(message.sid)
+    return(jsonify({
+        'results': results,
+        'msg_body': msg_body
+    }))
 
+# Colin Martires - retreive driver standings from database
+@app.route("/driver_standings_notif", methods=["GET"])
+def getDriverStandingsNotif():
+    msg_body = ''
+    results = notif_res()
 
-    # return jsonify({'data': message.sid})
-    return jsonify({'data': "deeznuts"})
+    msg_body += "\nDriver's Championship Standings\n"
+    for y in results["Standings"]:
+        msg_body += f'{str(y["Position"]).ljust(3)} {y["Driver"].ljust(17)} {int(y["Points"])}pts\n'
+
+    return(jsonify({
+        'results': results,
+        'msg_body': msg_body
+    }))
+
+# Colin Martires - retreive constructor standings from database
+@app.route("/constructor_standings_notif", methods=["GET"])
+def getConstructorStandingsNotif():
+    msg_body = ''
+    results = notif_res()
+
+    msg_body += "\nConstructor's Championship Standings\n"
+    for z in results["Constructors"]:
+        msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(13)} {int(z["Points"])}pts\n'
+
+    return(jsonify({
+        'results': results,
+        'msg_body': msg_body
+    }))
 
 # MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
 

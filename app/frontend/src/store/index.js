@@ -35,7 +35,9 @@ export default createStore({
       notificationPreferences: {
         lightsOutNotif: false,
         upcomingRacesNotif: false,
-        completeNotif: false
+        completeNotif: false,
+        driverStandingsNotif: false,
+        constructorStandingsNotif: false
       }
     },
     nextRace: [],
@@ -61,6 +63,8 @@ export default createStore({
       state.user.notificationPreferences.lightsOutNotif = data.lightsOutNotif
       state.user.notificationPreferences.upcomingRacesNotif = data.upcomingRacesNotif
       state.user.notificationPreferences.completeNotif = data.completeNotif
+      state.user.notificationPreferences.driverStandingsNotif = data.driverStandingsNotif
+      state.user.notificationPreferences.constructorStandingsNotif = data.constructorStandingsNotif
     }
   },
   actions: {
@@ -121,12 +125,16 @@ export default createStore({
       await updateDoc(docRef, {
         lightsOutNotif: notifPreferences.lightsOutNotif,
         upcomingRacesNotif: notifPreferences.upcomingRacesNotif,
-        completeNotif: notifPreferences.completeNotif
+        completeNotif: notifPreferences.completeNotif,
+        driverStandingsNotif: notifPreferences.driverStandingsNotif,
+        constructorStandingsNotif: notifPreferences.constructorStandingsNotif
       })
       commit('SET_NOTIFICATION_PREFERENCES', {
         lightsOutNotif: notifPreferences.lightsOutNotif,
         upcomingRacesNotif: notifPreferences.upcomingRacesNotif,
-        completeNotif: notifPreferences.completeNotif
+        completeNotif: notifPreferences.completeNotif,
+        driverStandingsNotif: notifPreferences.driverStandingsNotif,
+        constructorStandingsNotif: notifPreferences.constructorStandingsNotif
       })
     },
     async logout({ commit }) {
