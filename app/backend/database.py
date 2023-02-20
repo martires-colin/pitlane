@@ -128,6 +128,7 @@ def fan_update_drivers(uid, lid, d1, d2):
     session.close()
 
 def notif_res():
+    session = get_session()
     dt = date.today()
     race = session.query(Race.raceid).filter(Race.date <= dt).order_by(desc(Race.date)).first()[0]
     results = []
@@ -139,4 +140,5 @@ def notif_res():
     constructors = []
     for z in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == race).order_by(Constructor_Standings.position):
         constructors.append({'Position':z.Constructor_Standings.position ,'Constructor':z.Constructor.name, 'Points':z.Constructor_Standings.points})
+    session.close()
     return {'Results':results, 'Standings':standings, 'Constructors':constructors}
