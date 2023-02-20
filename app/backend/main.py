@@ -285,6 +285,7 @@ def fantasyLineup():
         driver1 = request.get_json()['driver1']
         driver2 = request.get_json()['driver2']
         print(request.get_json())
+        fan_update_drivers(userid, leagueid, driver1['driverid'], driver2['driverid'])
         return jsonify({'status': '200'})
 
 # @app.route("/fantasy/constructors")
