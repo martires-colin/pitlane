@@ -121,9 +121,9 @@ def getTeamJSON(userid, leagueid):
     session.close()
     return list, constructorName[0], points[0]
 
-def fan_update_drivers(uid, lid, d1, d2):
+def fan_update_drivers(userid, leagueid, d1, d2):
     session = get_session()
-    session.execute(update(Team).where(Team.userid == uid, Team.leagueid == lid).values(driver1id=d1, driver2id = d2))
+    session.execute(update(Team).where(Team.userid == userid, Team.leagueid == leagueid).values(driver1id=d1, driver2id = d2))
     session.commit()
     session.close()
 
