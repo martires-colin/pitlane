@@ -291,6 +291,14 @@ def fantasyLineup():
         fan_update_drivers(userid, leagueid, driver1['driverid'], driver2['driverid'])
         return jsonify({'status': '200'})
 
+@app.route("/fantasy/createLeague", methods=['POST'])
+def fantasyCreateLeague():
+    if request.method == 'POST':
+        userid = request.get_json()['userid']
+        leagueName = request.get_json()['leagueName']
+        inviteCode = create_league(userid, leagueName)
+        return jsonify({'status': '200', 'inviteCode': inviteCode})
+
 # @app.route("/fantasy/constructors")
 # def fantasyConstructors():
 #     constructors = getFantasyConstructors()

@@ -68,11 +68,12 @@ def get_invite_code(session):
 # Takes userid of the league creator, and league name. Generates invite code and sets members to onoe.
 def create_league(creator, l_name):
     session = get_session()
-    league = League(creatorid = creator, name = l_name, invitecode = get_invite_code(session), members = 1)
+    invCode = get_invite_code(session)
+    league = League(creatorid = creator, name = l_name, invitecode = invCode, members = 0)
     session.add(league)
     session.commit()
     session.close()
-    return
+    return invCode
 
 # Function for creating a league and inserting into db.
 # Takes userid, invite code, driver1 id, driver2 id, constructor name, and notification flag
