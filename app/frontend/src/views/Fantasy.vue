@@ -51,7 +51,7 @@
               <ConstructorModal button-title="Edit" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor !== ''"/> -->
             </div>
           </div>
-          <div class="flex flex-row justify-center" v-if="driver1 !== '' && driver2 !== ''">
+          <div class="flex flex-row justify-center" v-if="lineupChanged">
             <button class="hover:bg-slate-400 p-2 rounded-2 text-xl bg-slate-500" @click="sendLineup">Save Lineup</button>
           </div>
         </div>
@@ -99,6 +99,7 @@ export default {
       leagueid: "",
       driverRoster: null,
       points: 0,
+      lineupChanged: false,
     }
   },
   methods: {
@@ -114,11 +115,13 @@ export default {
       });
       const data = await res.json();
       console.log(data)
+      this.lineupChanged = false;
     },
     setDriver1(obj) {
       console.log(obj)  
       console.log('string1')
       this.driver1 = obj;
+      this.lineupChanged = true;
       // console.log(this.allDrivers)
       // this.allDrivers.splice(this.allDrivers.indexOf(str), 1);
       // console.log(this.allDrivers)
@@ -126,6 +129,7 @@ export default {
     setDriver2(obj) {
       console.log('string2')
       this.driver2 = obj;
+      this.lineupChanged = true;
     },
     async fetchDrivers() {
       const res = await fetch(`http://localhost:3001/fantasy/drivers`);
@@ -186,6 +190,8 @@ export default {
       const data = await res.json();
       console.log('userjson: ', data)
       this.driverRoster = data.driverRoster;
+      this.driver1 = data.driver1;
+      this.driver2 = data.driver2;
       this.constructor = data.constructorName;
       this.points = data.points;
     }

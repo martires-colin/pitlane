@@ -274,10 +274,11 @@ def fantasyTeam():
     if request.method == 'POST':
         userid = request.get_json()['userid']
         leagueid = request.get_json()['leagueid']
-        driverRoster, constructorName, points = getTeamJSON(userid, leagueid)
+        driverRoster, constructorName, points, currentLineup = getTeamJSON(userid, leagueid)
         # teamJSON = getUserTeamJSON(userid, leagueid)
-        print(driverRoster, constructorName, points)
-        return jsonify({'status': '200', 'driverRoster': driverRoster, 'constructorName': constructorName, 'points': points})
+        # print(driverRoster, constructorName, points)
+        print(currentLineup)
+        return jsonify({'status': '200', 'driverRoster': driverRoster, 'constructorName': constructorName, 'points': points, 'driver1': currentLineup[0], 'driver2': currentLineup[1]})
 
 @app.route("/fantasy/lineup", methods=['POST'])
 def fantasyLineup():

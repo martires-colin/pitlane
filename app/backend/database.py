@@ -112,14 +112,19 @@ def getTeamJSON(userid, leagueid):
     session = get_session()
     subquery = (session.query(Team.d1, Team.d2, Team.d3, Team.d4, Team.d5).filter(Team.userid == userid).first())
     q = (session.query(Driver.driverid, Driver.forename, Driver.surname).filter(Driver.driverid.in_(subquery)).all())
-    list = []
+    roster = []
     for x in q:
-        list.append({'drivername':x[1] + ' ' + x[2], 'driverid': x[0]})
+        roster.append({'drivername':x[1] + ' ' + x[2], 'driverid': x[0]})
     constructorid = session.query(Team.constructorid).filter(Team.userid == userid, Team.leagueid == leagueid).first()
     constructorName = session.query(Constructor.name).filter(Constructor.constructorid == constructorid[0]).first()
     points = session.query(Team.points).filter(Team.userid == userid, Team.leagueid == leagueid).first()
+    currentDrivers = session.query(Team.driver1id, Team.driver2id).filter(Team.userid == userid, Team.leagueid == leagueid).first()
+    curDrivers = session.query(Driver.driverid, Driver.forename, Driver.surname).filter(Driver.driverid.in_(currentDrivers)).all()
+    curLineup = []
+    for x in curDrivers:
+        curLineup.append({'drivername': x[1] + ' ' + x[2], 'driverid': x[0]})
     session.close()
-    return list, constructorName[0], points[0]
+    return roster, constructorName[0], points[0], curLineup
 
 def fan_update_drivers(userid, leagueid, d1, d2):
     session = get_session()

@@ -26,13 +26,14 @@
             Schedule
           </SidebarLink>
           <!-- <div class="fantasyDrop text-start" @mouseover="fantasyDropdown = true" @mouseleave="fantasyDropdown = false"> -->
-          <div class="fantasyDrop text-start">
+          <div v-if="user.loggedIn" class="fantasyDrop text-start">
             <SidebarLink class="fantasy-link" v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered" @mouseover="fantasyDropdown = true"
               >Fantasy
             </SidebarLink>
-            <div class="Drop text-start pt-2 text-sm opacity-75" v-if="fantasyDropdown">
-              <SidebarLink class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
-              <SidebarLink to="/fantasy">My Teams</SidebarLink>
+            <div class="Drop text-start pt-2 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn">
+              <SidebarLink v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
+              <SidebarLink v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
+              <SidebarLink v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
             </div>
           </div>
           <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
@@ -148,7 +149,7 @@ nav a.router-link-exact-active {
   transition: 0.4s ease;
 }
 .fantasyDrop:hover{
-  height: 100px;
+  height: 150px;
 }
 .content {
   flex-grow: 1;
