@@ -4,3 +4,4 @@ fastf1 == 2.3.0
 SQLAlchemy
 twilio
 python-dotenv>=0.19.2
+pytz

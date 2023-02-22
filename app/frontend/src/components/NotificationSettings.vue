@@ -143,10 +143,12 @@ export default {
     },
     async simulateUpcomingRaceNotif() {      
       if (this.upcomingRacesNotif) {
+        const data = await this.fetchUpcomingRace()
+        console.log(data)
         console.log("Sending 'Upcoming Race!' Notification")
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
-          msg_body : 'This is where we call function to get notif'
+          msg_body : data.msg_body
         }
         const path = "http://localhost:3001/send_SMS"
         axios
@@ -245,14 +247,12 @@ export default {
       console.log(data)
       return data
     },
-    // async fetchUpcomingRace() {
-    //   // Place holder for fetchUpcomingRace function for upcomingRaces notifications
-
-    //   // const res = await fetch(`http://localhost:3001/fantasy/drivers`);
-    //   // const data = await res.json();
-    //   // console.log(data)
-    //   // this.allDrivers = data.drivers;
-    // },
+    async fetchUpcomingRace() {
+      const res = await fetch(`http://localhost:3001/upcoming_race_notif`);
+      const data = await res.json();
+      console.log(data)
+      return data
+    },
   }
 }
 </script>

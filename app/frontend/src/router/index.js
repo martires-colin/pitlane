@@ -9,6 +9,8 @@ import Fantasy from "../views/Fantasy.vue";
 import Settings from "../views/Settings.vue";
 import ScheduleYear from "../views/ScheduleYear.vue"
 import StandingsYear from "../views/StandingsYear.vue"
+import CreateLeague from "../views/CreateLeague.vue"
+import JoinLeague from "../views/JoinLeague.vue"
 
 // const Year = {
 //   template: '<div> YEAR: {{ $route.params.year }}</div>'
@@ -72,6 +74,22 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    path: "/fantasy/createLeague",
+    name: "CreateLeague",
+    component: CreateLeague,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: "/fantasy/joinLeague",
+    name: "JoinLeague",
+    component: JoinLeague,
+    meta: {
+      requiresAuth: true,
+    }
   },
   {
     path: "/settings",
