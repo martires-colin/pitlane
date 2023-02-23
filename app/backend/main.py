@@ -299,6 +299,24 @@ def fantasyCreateLeague():
         inviteCode = create_league(userid, leagueName)
         return jsonify({'status': '200', 'inviteCode': inviteCode})
 
+@app.route("/fantasy/createTeam", methods=['POST'])
+def fantasyCreateTeam():
+    if request.method == 'POST':
+        # teamInformation
+        tInfo = request.get_json()['teamInformation']
+        print(tInfo)
+        roster = []
+        for index in range(5):
+            x = tInfo['roster'][f'd{index+1}'].split()
+            # print(x)
+            roster.append(driverlist(x[0], x[1]))
+        tInfo['constructorid'] = constructorIDs(tInfo['constructorid'])
+        print(tInfo['constructorid'])
+        print(roster)
+        worked = create_team(u_id=tInfo['userid'], i_code=tInfo['inviteCode'], dr1=roster[0], dr2=roster[1], dr3=roster[2],
+                    dr4=roster[3], dr5=roster[4], c_id=tInfo['constructorid'], t_name=tInfo['teamname'], n_f=True) 
+        print(worked)
+        return jsonify({'status': '200'})
 # @app.route("/fantasy/constructors")
 # def fantasyConstructors():
 #     constructors = getFantasyConstructors()
