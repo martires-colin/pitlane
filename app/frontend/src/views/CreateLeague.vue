@@ -14,7 +14,7 @@ export default {
                 'Content-Type': 'application/json',
                 },
                 mode: 'cors',
-                body: JSON.stringify({'userid': '12345678910', 'leagueName': this.leagueName})
+                body: JSON.stringify({'userid': this.$store.state.user.uid, 'leagueName': this.leagueName})
             });
             const data = await res.json();
             console.log(data)

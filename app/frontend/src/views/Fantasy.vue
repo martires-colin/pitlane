@@ -146,7 +146,7 @@ export default {
           'Content-Type': 'application/json',
         },
         mode: 'cors',
-        body: JSON.stringify({'userid': '12345678910', 'leagueid': this.leagueid, 'driver1': this.driver1, 'driver2': this.driver2})
+        body: JSON.stringify({'userid': this.$store.state.user.uid, 'leagueid': this.leagueid, 'driver1': this.driver1, 'driver2': this.driver2})
       });
       const data = await res.json();
       console.log(data)
@@ -187,7 +187,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({'userid': '12345678910'}),
+        body: JSON.stringify({'userid': this.$store.state.user.uid}),
         mode: 'cors'
       });
       const data = await res.json();
@@ -198,7 +198,7 @@ export default {
       console.log(teamname, leagueid)
       this.selectedTeam = teamname;
       await this.fetchLeague(leagueid);
-      await this.fetchTeamJSON('12345678910', leagueid)
+      await this.fetchTeamJSON(this.$store.state.user.uid, leagueid)
       this.teamSelected = true;
     },
     async fetchLeague(leagueid) {
@@ -228,6 +228,7 @@ export default {
       console.log('userjson: ', data)
       this.driverRoster = data.driverRoster;
       this.driver1 = data.driver1;
+      // need to add rookie drivers pics.
       this.driver1Image = require(`@/assets/driverimages/${this.driver1.driverid}.png`)
       this.driver2 = data.driver2;
       this.driver2Image = require(`@/assets/driverimages/${this.driver2.driverid}.png`)
