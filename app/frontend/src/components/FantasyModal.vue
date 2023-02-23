@@ -24,7 +24,7 @@ export default {
     <!-- Button trigger modal -->
     <button type="button" class="px-6
                   py-2
-                  mt-16
+                  mt-8
                   text-white
                   font-medium
                   text-xl

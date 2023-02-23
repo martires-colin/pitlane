@@ -1,7 +1,7 @@
 <!-- Started by Anthony Ganci -->
 
 <template>
-  <div v-if="ready" class="flex flex-col h-screen">
+  <div v-if="ready" class="fantasy flex flex-col h-screen">
     <SelectFantasyTeam v-if="!teamSelected" :user-teams="userTeams" @set-selected-team="(setSelectedTeam)"></SelectFantasyTeam>
     <div v-if="teamSelected">
       <div class="flex flex-row justify-between p-4">
@@ -10,7 +10,7 @@
         <h1>Total points: 0</h1>
         <!-- <h1>{{ teamJSON.driver2id }}</h1> -->
       </div>
-      <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-t border-gray-500">
+      <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-y border-gray-500">
         <div class="flex flex-row">
             <p class="text-red-500 pr-4">Previous Race</p>
             <img :src="$store.state.prevRace[3]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
@@ -26,9 +26,33 @@
       </div>
     </div>
       <div v-if="teamSelected" class="fantasy-grid">
-        <div class="bg-dark-300 flex flex-col justify-evenly">
+        <div class="flex flex-col justify-evenly">
           <div class="flex flex-row justify-evenly">
-            <div class="driver-item">
+            <BCard
+              :img-src="driver1Image"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 20rem;"
+              class="mb-2 bg-slate-500">
+              <p v-if="driver1 === ''" class="py-2">Add Driver</p>
+              <FantasyModal button-title="+" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
+              <BCardText class="text-xl">{{ driver1.drivername }}</BCardText>
+              <FantasyModal button-title="Edit" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 !== ''" />
+            </BCard>
+            <BCard
+              :img-src="driver2Image"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 20rem;"
+              class="mb-2 bg-slate-500">
+              <p v-if="driver2 === ''" class="py-2">Add Driver</p>
+              <Driver2Modal button-title="+" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
+              <BCardText class="text-xl">{{ driver2.drivername }}</BCardText>
+              <Driver2Modal button-title="Edit" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 !== ''" />
+            </BCard>
+            <!-- <div class="driver-item">
               <p v-if="driver1 === ''" class="py-2">Add Driver</p>
               <FantasyModal button-title="+" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
               <p class="pt-28 text-xl" v-if="driver1 !== ''">{{ driver1.drivername }}</p>
@@ -37,19 +61,27 @@
             <div class="driver-item">
               <p v-if="driver2 === ''" class="py-2">Add Driver</p>
               <Driver2Modal button-title="+" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
-                <!-- <FantasyModal :button-title="['+', 'two']" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 === ''" /> -->
               <p class="pt-28 text-xl" v-if="driver2 !== ''">{{ driver2.drivername }}</p>
               <Driver2Modal button-title="Edit" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 !== ''" />
-              <!-- <FantasyModal :for-driver="2" button-title="Edit" :all-drivers="allDrivers" @set-driver2="(str) => driver2 = str" v-if="driver2 !== ''" /> -->
-            </div>
+            </div> -->
           </div>
           <div class="flex flex-row justify-center">
-            <div class="bg-slate-500 h-32 w-50 rounded-[20px]">
-              <p class="pt-10 text-xl">{{ constructor }}</p>
-              <!-- <p class="py-2">Add Constructor</p>
+            <!-- <BCard 
+              :img-src="constructorImage"
+              img-alt="Image"
+              
+              tag="article"
+              style="max-width: 20rem;"
+              class="mb-2 bg-slate-500"
+            >
+            </BCard> -->
+            <img :src="constructorImage" class="bg-slate-500 rounded-2 max-w-[600px] max-h-[400px]">
+            <!-- <div class="bg-slate-500 h-32 w-50 rounded-[20px]">
+              <p class="pt-10 text-xl">{{ constructor.constructorName }}</p>
+              <p class="py-2">Add Constructor</p>
               <ConstructorModal button-title="+" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor === ''"/>
-              <ConstructorModal button-title="Edit" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor !== ''"/> -->
-            </div>
+              <ConstructorModal button-title="Edit" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor !== ''"/>
+            </div> -->
           </div>
           <div class="flex flex-row justify-center" v-if="lineupChanged">
             <button class="hover:bg-slate-400 p-2 rounded-2 text-xl bg-slate-500" @click="sendLineup">Save Lineup</button>
@@ -85,7 +117,7 @@ export default {
   },
   data() {
     return {
-      allDrivers: ['Alexander Albon', 'Fernando Alonso', 'Valtteri Bottas', 'Nyck de Vries', 'Pierre Gasly', 'Lewis Hamilton', 'Nico Hülkenberg', 'Nicholas Latifi', 'Charles Leclerc', 'Kevin Magnussen', 'Lando Norris', 'Esteban Ocon', 'Sergio Pérez', 'Daniel Ricciardo', 'George Russell', 'Carlos Sainz', 'Mick Schumacher', 'Lance Stroll', 'Yuki Tsunoda', 'Max Verstappen', 'Sebastian Vettel', 'Guanyu Zhou'],
+      allDrivers: ['Alexander Albon', 'Fernando Alonso', 'Valtteri Bottas', 'Nyck de Vries', 'Pierre Gasly', 'Lewis Hamilton', 'Nico Hülkenberg', 'Logan Sargeant', 'Charles Leclerc', 'Kevin Magnussen', 'Lando Norris', 'Esteban Ocon', 'Sergio Pérez', 'Oscar Piastri', 'George Russell', 'Carlos Sainz', 'Mick Schumacher', 'Lance Stroll', 'Yuki Tsunoda', 'Max Verstappen', 'Guanyu Zhou'],
       allConstructors: ['Alfa Romeo', 'AlphaTauri', 'Alpine F1 Team', 'Aston Martin', 'Ferrari', 'Haas F1 Team', 'McLaren', 'Mercedes', 'Red Bull', 'Williams'],
       ready: false,
       driver1: "",
@@ -100,6 +132,9 @@ export default {
       driverRoster: null,
       points: 0,
       lineupChanged: false,
+      driver1Image: null,
+      driver2Image: null,
+      constructorImage: null,
     }
   },
   methods: {
@@ -121,6 +156,7 @@ export default {
       console.log(obj)  
       console.log('string1')
       this.driver1 = obj;
+      this.driver1Image = require(`@/assets/driverimages/${this.driver1.driverid}.png`)
       this.lineupChanged = true;
       // console.log(this.allDrivers)
       // this.allDrivers.splice(this.allDrivers.indexOf(str), 1);
@@ -129,6 +165,7 @@ export default {
     setDriver2(obj) {
       console.log('string2')
       this.driver2 = obj;
+      this.driver2Image = require(`@/assets/driverimages/${this.driver2.driverid}.png`)
       this.lineupChanged = true;
     },
     async fetchDrivers() {
@@ -191,8 +228,11 @@ export default {
       console.log('userjson: ', data)
       this.driverRoster = data.driverRoster;
       this.driver1 = data.driver1;
+      this.driver1Image = require(`@/assets/driverimages/${this.driver1.driverid}.png`)
       this.driver2 = data.driver2;
+      this.driver2Image = require(`@/assets/driverimages/${this.driver2.driverid}.png`)
       this.constructor = data.constructorName;
+      this.constructorImage = require(`@/assets/constructorimages/${this.constructor.constructorid}.png`)
       this.points = data.points;
     }
   },
@@ -215,12 +255,21 @@ export default {
   border-radius: 20px;
 }
 
+.fantasy {
+  
+}
+
 .fantasy-grid {
   display: grid;
   grid-template-columns: minmax(70%, auto) minmax(auto, 600px);
   grid-template-rows: repeat(1, minmax(0, 1fr));
   height: 100%;
-}
+  /* background-image: url('../assets/fantasy2.jpg');  
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 100%; */
+} 
 
 .driver-grid {
   display: grid;

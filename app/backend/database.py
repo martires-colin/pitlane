@@ -125,7 +125,7 @@ def getTeamJSON(userid, leagueid):
     for x in curDrivers:
         curLineup.append({'drivername': x[1] + ' ' + x[2], 'driverid': x[0]})
     session.close()
-    return roster, constructorName[0], points[0], curLineup
+    return roster, {'constructorid': constructorid[0], 'constructorName': constructorName[0]}, points[0], curLineup
 
 def fan_update_drivers(userid, leagueid, d1, d2):
     session = get_session()
