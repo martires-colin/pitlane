@@ -32,6 +32,7 @@ export default createStore({
       email: null,
       phoneNumber: null,
       photoURL: null,
+      uid: null,
       notificationPreferences: {
         lightsOutNotif: false,
         upcomingRacesNotif: false,
@@ -51,6 +52,7 @@ export default createStore({
       state.user.displayName = data.displayName
       state.user.email = data.email
       state.user.photoURL = data.photoURL
+      state.user.uid = data.uid
     },
     SET_USER_PHONENUMBER(state, value) {
       state.user.phoneNumber = value
@@ -81,7 +83,8 @@ export default createStore({
             username: name,
             email: email,
             password: password,
-            phoneNumber: ""
+            phoneNumber: "",
+            uid: response.user.uid
           });
           console.log("Document written with ID: ", response.user.uid);
           await new Promise(r => setTimeout(r, 500));
@@ -153,7 +156,8 @@ export default createStore({
         commit('SET_USER', {
           displayName: user.displayName,
           email: user.email,
-          photoURL: user.photoURL
+          photoURL: user.photoURL,
+          uid: user.uid
         })
         const docRef = doc(db, "users", user.uid)
         const docSnap = await getDoc(docRef)
@@ -168,7 +172,8 @@ export default createStore({
           loggedIn: false,
           displayName: null,
           email: null,
-          photoURL: null
+          photoURL: null,
+          uid: null
         })
         commit('SET_USER_PHONENUMBER', null)
       }
