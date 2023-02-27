@@ -43,7 +43,7 @@
                       <h5 class="user-name">{{ user.displayName }}</h5>
                     </div>
                   </div>
-                  <div class="col-8">
+                  <div class="col-8 text-center">
                     <PasswordSettings />
                   </div>
                 </div>
@@ -69,8 +69,8 @@
                 </div>
               </div>
             </b-tab>
-
           </b-tabs>
+          <div id="portal"></div>
         </div>
       </div>
     </section>

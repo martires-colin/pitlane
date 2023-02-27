@@ -51,7 +51,7 @@
                     <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Login</button>
                   </div>
 
-                  <!-- <input type="button" @click="forgotPassword" style="color: #393f81;" value="Forgot password?" /> -->
+                  <a href="/forgot-password" style="color: #393f81;">Forgot Password?</a>
                   <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <a href="/create-account"
                       style="color: #393f81;">Register here</a></p>
 
@@ -109,20 +109,13 @@ export default {
 
     return { login, email, password, error }
 
-  },
-  methods: {
-// make modal pop up for user to enter email
-    // forgotPassword() {
-    //   console.log('Sending password reset email.')
-
-
-    // }
   }
 }
 
 </script>
 
 <style>
+
 #login-btn {
   background-color: #005b96;
 }

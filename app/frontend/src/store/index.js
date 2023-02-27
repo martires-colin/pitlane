@@ -8,9 +8,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  // updateEmail,
-  updateProfile,
-  sendPasswordResetEmail
+  updateProfile
 } from "firebase/auth";
 import { db } from "../firebase"
 import {
@@ -138,19 +136,6 @@ export default createStore({
         driverStandingsNotif: notifPreferences.driverStandingsNotif,
         constructorStandingsNotif: notifPreferences.constructorStandingsNotif
       })
-    },
-    async sendPasswordResetEmail() {
-      const user = auth.currentUser;
-      sendPasswordResetEmail(auth, user.email)
-        .then(() => {
-          console.log("password reset email sent!")
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode)
-          console.log(errorMessage)
-        })
     },
     async logout({ commit }) {
       await signOut(auth)

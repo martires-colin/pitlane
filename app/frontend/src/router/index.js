@@ -11,6 +11,7 @@ import ScheduleYear from "../views/ScheduleYear.vue"
 import StandingsYear from "../views/StandingsYear.vue"
 import CreateLeague from "../views/CreateLeague.vue"
 import JoinLeague from "../views/JoinLeague.vue"
+import ForgotPassword from "../views/ForgotPassword.vue"
 
 // const Year = {
 //   template: '<div> YEAR: {{ $route.params.year }}</div>'
@@ -95,6 +96,14 @@ const routes = [
     path: "/settings",
     name: "Settings",
     component: Settings,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
     meta: {
       requiresAuth: true,
     },

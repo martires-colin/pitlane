@@ -1,97 +1,87 @@
 <!-- By Colin Martires -->
 
 <template>
+  <div>
 
-  <form @submit.prevent="update">
-    <div class="row py-2">
-      <div class="form-group">
-        <label class="pb-1">Username</label>
-        <input type="text" class="form-control" :value="user.displayName" :disabled="true">
-      </div>
-    </div>
-    <div class="row py-2">
-      <div class="form-group">
-        <label class="pb-1">Email</label>
-        <input type="text" class="form-control" :value="user.email" :disabled="true">
-      </div>
-    </div>
-    <div v-if="user.phoneNumber">
+    <form @submit.prevent="update">
       <div class="row py-2">
         <div class="form-group">
-          <div class="container">
-            <div class="row">
-              <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
-            </div>
-            <div class="row">
+          <label class="pb-1">Username</label>
+          <input type="text" class="form-control" :value="user.displayName" :disabled="true">
+        </div>
+      </div>
+      <div class="row py-2">
+        <div class="form-group">
+          <label class="pb-1">Email</label>
+          <input type="text" class="form-control" :value="user.email" :disabled="true">
+        </div>
+      </div>
+      <div v-if="user.phoneNumber">
+        <div class="row py-2">
+          <div class="form-group">
+            <div class="container">
+              <div class="row">
+                <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
+              </div>
+              <div class="row">
 
-              <!-- <input
-              class="form-control form-rounded"
-              type="tel"
-              id="phone"
-              name="phone"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              :placeholder="user.phoneNumber"
-              v-model="phoneNumber"
-              required> -->
+                <cleave
+                type="tel"
+                v-model="phoneNumber"
+                :options="phoneOptions"
+                class="form-control"
+                :placeholder="user.phoneNumber"
+                >
+                </cleave>
 
-              <cleave
-              type="tel"
-              v-model="phoneNumber"
-              :options="phoneOptions"
-              class="form-control"
-              :placeholder="user.phoneNumber"
-              >
-              </cleave>
-
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <div class="row py-2">
-        <div class="form-group">
-          <div class="container">
-            <div class="row">
-              <label class="pb-1" for="phone">Phone Number</label>
-            </div>
-            <div class="row">
+      <div v-else>
+        <div class="row py-2">
+          <div class="form-group">
+            <div class="container">
+              <div class="row">
+                <label class="pb-1" for="phone">Phone Number</label>
+              </div>
+              <div class="row">
 
-              <!-- <input
-              class="form-control form-rounded"
-              type="tel"
-              id="phone"
-              name="phone"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              placeholder="123-456-7890"
-              v-model="phoneNumber"
-              required> -->
+                <cleave
+                type="tel"
+                v-model="phoneNumber"
+                :options="phoneOptions"
+                class="form-control"
+                :placeholder="12312345678">
+                </cleave>
 
-              <cleave
-              type="tel"
-              v-model="phoneNumber"
-              :options="phoneOptions"
-              class="form-control"
-              :placeholder="12312345678">
-              </cleave>
-
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-if="user.phoneNumber">
-      <div class="my-2">
-        <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Phone Number</button>
+      <div v-if="user.phoneNumber">
+        <div class="my-2">
+          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Phone Number</button>
+        </div>
       </div>
-    </div>
-    <div v-else>
-      <div class="my-2">
-        <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Add Phone Number</button>
+      <div v-else>
+        <div class="my-2">
+          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Add Phone Number</button>
+        </div>
       </div>
-    </div>
-  </form>
-
+    </form>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
+            Updated Phone Number!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <script>
@@ -110,6 +100,7 @@ export default {
     const store = useStore()
 
     const phoneNumber = ref('')
+    const showAlert = ref(false)
     
     const user = computed(() => {
       console.log(store.getters.user)
@@ -123,13 +114,20 @@ export default {
           phoneNumber: phoneNumber.value
         })
         console.log("Updated Phone Number")
+        triggerAlert()
       }
       catch (err) {
         console.log(err)
         return;
       }
     }
-    return { user, update, phoneNumber }
+
+    const triggerAlert = () => {
+      showAlert.value = true;
+      setTimeout(() => showAlert.value = false, 2000)
+    }
+
+    return { user, update, phoneNumber, showAlert, triggerAlert }
   },
   data() {
     return {
@@ -146,5 +144,22 @@ export default {
 </script>
 
 <style>
-
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: all 0.5s ease;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
 </style>

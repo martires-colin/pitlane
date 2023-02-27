@@ -87,14 +87,32 @@
         </div>
       </div>
     </div>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
+            Updated Notification Preferences!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { ref } from "vue"
 
 export default {
   name: "NotificationSettings",
+  setup() {
+    const showAlert = ref(false)
+    const triggerAlert = () => {
+      showAlert.value = true;
+      setTimeout(() => showAlert.value = false, 2000)
+    }
+    return { showAlert, triggerAlert }
+  },
   data() {
     return {
       lightsOutNotif: this.$store.state.user.notificationPreferences.lightsOutNotif,
@@ -115,6 +133,7 @@ export default {
           constructorStandingsNotif: this.constructorStandingsNotif
         })
         console.log("Updated Notification Preferences")
+        this.triggerAlert()
       }
       catch (err) {
         console.log(err)
@@ -270,6 +289,25 @@ export default {
 #simulate-btn {
   color: white;
   background-color: rgb(160, 19, 19);
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: all 0.5s ease;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: all 0.5s ease;
 }
 
 </style>
