@@ -42,6 +42,7 @@
           <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/" icon="fa-solid fa-right-to-bracket">
             Logout
           </SidebarLink>
+
           <SidebarLink v-else to="/login" icon="fa-solid fa-right-to-bracket">
             Login
           </SidebarLink>
@@ -62,23 +63,26 @@
 import SidebarLink from "./components/SidebarLink.vue";
 // import { sidebarWidth } from "./components/state";
 
+
 export default {
-  components: { SidebarLink },
+  components: {
+    SidebarLink
+  },
   // setup() {
   //   return { sidebarWidth };
   // },
   data() {
     return {
-      fantasyDropdown: false,
+      fantasyDropdown: false
     }
   }
 };
 </script>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed  } from 'vue';
 import { useStore } from 'vuex';
-import { computed } from "vue";
+
 
 const store = useStore();
 
@@ -87,12 +91,13 @@ onMounted(() => {
 })
 
 const user = computed(() => {
-  // console.log(store.getters.user)
   return store.getters.user
 })
 
 const signOut = async () => {
-  await store.dispatch("logout")
+  if(confirm("Are you sure you want to logout?")) {
+    await store.dispatch("logout")
+  }
 }
 
 </script>

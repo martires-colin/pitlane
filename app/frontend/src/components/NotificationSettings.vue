@@ -12,51 +12,61 @@
 
     <form @submit.prevent="updateNotificationPreferences">
 
-      <b-input-group class="mb-4">
-        <b-input-group-prepend is-text>
-          <b-form-checkbox switch class="mr-n2" v-model="lightsOutNotif">
-            <span class="sr-only">Switch for Lights Out notification</span>
-          </b-form-checkbox>
-        </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Lights Out!" disabled></b-form-input>
-      </b-input-group>
-  
-      <b-input-group class="mb-4">
-        <b-input-group-prepend is-text>
-          <b-form-checkbox switch class="mr-n2" v-model="upcomingRacesNotif">
-            <span class="sr-only">Switch for Upcoming Race notification</span>
-          </b-form-checkbox>
-        </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Upcoming Races" disabled></b-form-input>
-      </b-input-group>
-  
-      <b-input-group class="mb-4">
-        <b-input-group-prepend is-text>
-          <b-form-checkbox switch class="mr-n2" v-model="completeNotif">
-            <span class="sr-only">Switch for Complete Race Results notification</span>
-          </b-form-checkbox>
-        </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Race Results" disabled></b-form-input>
-      </b-input-group>
-  
-      <b-input-group class="mb-4">
-        <b-input-group-prepend is-text>
-          <b-form-checkbox switch class="mr-n2" v-model="driverStandingsNotif">
-            <span class="sr-only">Switch for Driver's Championship Standings notification</span>
-          </b-form-checkbox>
-        </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Driver's Championship Standings" disabled></b-form-input>
-      </b-input-group>
+      <div v-b-tooltip.hover title="Recieve a notification 15 minutes before a race starts!">
+        <b-input-group class="mb-4">
+          <b-input-group-prepend is-text>
+            <b-form-checkbox switch class="mr-n2" v-model="lightsOutNotif">
+              <span class="sr-only">Switch for Lights Out notification</span>
+            </b-form-checkbox>
+          </b-input-group-prepend>
+          <b-form-input aria-label="Text input with switch" placeholder="Lights Out!" disabled></b-form-input>
+        </b-input-group>
+      </div>
 
-      <b-input-group class="mb-4">
-        <b-input-group-prepend is-text>
-          <b-form-checkbox switch class="mr-n2" v-model="constructorStandingsNotif">
-            <span class="sr-only">Switch for Constructor's Championship Standings notification</span>
-          </b-form-checkbox>
-        </b-input-group-prepend>
-        <b-form-input aria-label="Text input with switch" placeholder="Constructor's Championship Standings" disabled></b-form-input>
-      </b-input-group>
-  
+      <div v-b-tooltip.hover title="Recieve a notification of the next race!">
+        <b-input-group class="mb-4">
+          <b-input-group-prepend is-text>
+            <b-form-checkbox switch class="mr-n2" v-model="upcomingRacesNotif">
+              <span class="sr-only">Switch for Upcoming Race notification</span>
+            </b-form-checkbox>
+          </b-input-group-prepend>
+          <b-form-input aria-label="Text input with switch" placeholder="Upcoming Race" disabled></b-form-input>
+        </b-input-group>
+      </div>
+
+      <div v-b-tooltip.hover title="Recieve a notification of the most recent race results!">
+        <b-input-group class="mb-4">
+          <b-input-group-prepend is-text>
+            <b-form-checkbox switch class="mr-n2" v-model="completeNotif">
+              <span class="sr-only">Switch for Complete Race Results notification</span>
+            </b-form-checkbox>
+          </b-input-group-prepend>
+          <b-form-input aria-label="Text input with switch" placeholder="Race Results" disabled></b-form-input>
+        </b-input-group>
+      </div>
+
+      <div v-b-tooltip.hover title="Recieve a notification of the current Driver's Championship standings!">
+        <b-input-group class="mb-4">
+          <b-input-group-prepend is-text>
+            <b-form-checkbox switch class="mr-n2" v-model="driverStandingsNotif">
+              <span class="sr-only">Switch for Driver's Championship Standings notification</span>
+            </b-form-checkbox>
+          </b-input-group-prepend>
+          <b-form-input aria-label="Text input with switch" placeholder="Driver's Championship Standings" disabled></b-form-input>
+        </b-input-group>
+      </div>
+
+      <div v-b-tooltip.hover title="Recieve a notification of the current Constructor's Championship standings!">
+        <b-input-group class="mb-4">
+          <b-input-group-prepend is-text>
+            <b-form-checkbox switch class="mr-n2" v-model="constructorStandingsNotif">
+              <span class="sr-only">Switch for Constructor's Championship Standings notification</span>
+            </b-form-checkbox>
+          </b-input-group-prepend>
+          <b-form-input aria-label="Text input with switch" placeholder="Constructor's Championship Standings" disabled></b-form-input>
+        </b-input-group>
+      </div>
+
       <div class="my-2">
         <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Notification Preferences</button>
       </div>
