@@ -70,7 +70,6 @@
               </div>
             </b-tab>
           </b-tabs>
-          <div id="portal"></div>
         </div>
       </div>
     </section>

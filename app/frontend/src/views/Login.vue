@@ -63,6 +63,35 @@
         </div>
       </div>
     </div>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorPassword">
+            Incorrect Password!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorEmail">
+            User not found!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorSomething">
+            Something went wrong!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
   </div>
 
 </template>
@@ -95,19 +124,48 @@ export default {
         console.log(err)
         switch (err.code) {
           case "auth/wrong-password":
-            alert("Incorrect Password");
+            triggerErrorPassword()
             break;
           case "auth/user-not-found":
-            alert("User not found");
+            triggerErrorEmail()
             break;
           default:
-            alert("Something went wrong");
+            triggerErrorSomething()
         }
         return;
       }
     }
 
-    return { login, email, password, error }
+    const showErrorPassword = ref(false)
+    const triggerErrorPassword = () => {
+      showErrorPassword.value = true;
+      setTimeout(() => showErrorPassword.value = false, 2000)
+    }
+
+    const showErrorEmail = ref(false)
+    const triggerErrorEmail = () => {
+      showErrorEmail.value = true;
+      setTimeout(() => showErrorEmail.value = false, 2000)
+    }
+
+    const showErrorSomething = ref(false)
+    const triggerErrorSomething = () => {
+      showErrorSomething.value = true;
+      setTimeout(() => showErrorSomething.value = false, 2000)
+    }
+
+    return {
+      login,
+      email,
+      password,
+      error,
+      showErrorPassword,
+      triggerErrorPassword,
+      showErrorEmail,
+      triggerErrorEmail,
+      showErrorSomething,
+      triggerErrorSomething
+    }
 
   }
 }
@@ -122,6 +180,25 @@ export default {
 
 #login-btn:hover {
   background-color: #03396c;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: all 0.5s ease;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: all 0.5s ease;
 }
 
 </style>
