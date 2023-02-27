@@ -9,7 +9,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   // updateEmail,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { db } from "../firebase"
 import {
@@ -75,14 +76,12 @@ export default createStore({
       if (response) {
         updateProfile(response.user, {
           displayName: name,
-          // temporary initial profile pic of Danny Ric
-          photoURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkcZ1uxSAfe3xexNQXU53iaD9jocSvJGAEIw&usqp=CAU",
+          photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png",
         })
         try {
           await setDoc(doc(db, "users", response.user.uid), {
             username: name,
             email: email,
-            password: password,
             phoneNumber: "",
             uid: response.user.uid
           });
@@ -139,6 +138,19 @@ export default createStore({
         driverStandingsNotif: notifPreferences.driverStandingsNotif,
         constructorStandingsNotif: notifPreferences.constructorStandingsNotif
       })
+    },
+    async sendPasswordResetEmail() {
+      const user = auth.currentUser;
+      sendPasswordResetEmail(auth, user.email)
+        .then(() => {
+          console.log("password reset email sent!")
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode)
+          console.log(errorMessage)
+        })
     },
     async logout({ commit }) {
       await signOut(auth)

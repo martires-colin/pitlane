@@ -160,9 +160,9 @@ def is_lights_out():
     race = session.query(Race).filter(Race.date == date.today()).order_by(Race.date).first()
     if race == None:
         session.close()
-        return False
+        return {'Race':None, 'status': False}
     if datetime.now().replace(tzinfo=None) >= (datetime.combine(race.date, race.time) - timedelta(minutes=15)):
         session.close()
-        return True
+        return {'Race':race.name, 'status': True}
     session.close()
-    return False
+    return {'Race':race.name, 'status': True}

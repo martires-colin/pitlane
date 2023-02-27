@@ -339,7 +339,7 @@ def sendSMS():
     post_data = request.get_json()
     user_phone_number = post_data['phoneNumber']
     msg_body = post_data['msg_body']
-    
+
     # Twilio Client to handle SMS notifications
     print("SENDING SMS via TWILIO")
     client = Client(twilio_config.account_sid, twilio_config.auth_token)
@@ -420,6 +420,31 @@ def getUpcomingRaceNotif():
 
     return(jsonify({
         'results': data,
+        'msg_body': msg_body
+    }))
+
+@app.route("/lights_out_notif", methods=["GET"])
+def getLightsOutNotif():
+    msg_body = ''
+    data = is_lights_out()
+
+    # commented out for demo
+    # if data['status']:
+    #     msg_body = f"PITLANE\n\nThe {data['Race']} starts in 15 minutes!"
+    #     return(jsonify({
+    #         'results': data['status'],
+    #         'msg_body': msg_body
+    #     }))
+
+    # return(jsonify({
+    #     'results': data['status'],
+    #     'msg_body': msg_body
+    # }))
+
+    # simulated response
+    msg_body = f"PITLANE\n\nThe Bahrain Grand Prix starts in 15 minutes!"
+    return(jsonify({
+        'results': True,
         'msg_body': msg_body
     }))
 

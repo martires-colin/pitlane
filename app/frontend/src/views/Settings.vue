@@ -122,7 +122,8 @@ export default {
   height: 150px;
   border-radius: 50%;
   border: 5px solid white;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: white; 
   
   background-repeat: no-repeat;
   background-position: center center;
