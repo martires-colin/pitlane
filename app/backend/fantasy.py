@@ -4,6 +4,17 @@ from database import *
 from models import *
 from sqlalchemy import asc, desc
 
+def driverlist(fn, sn):
+    session = get_session()
+    q = session.query(Driver).filter(Driver.forename==fn, Driver.surname==sn).first()
+    session.close()
+    return(q.driverid)
+
+def constructorIDs(constructorName):
+    session = get_session()
+    q = session.query(Constructor).filter(Constructor.name == constructorName).first()
+    session.close()
+    return(q.constructorid)
 
 def getFantasyDrivers():
     response = requests.get("http://ergast.com/api/f1/current/drivers.json")
@@ -85,15 +96,15 @@ def getNextPrevRaces(Date):
     session.close()   
     return [prevRace.name, prevRace.date.strftime('%Y-%m-%d'), prevRaceCountry.country], [nextRace.name, nextRace.date.strftime('%Y-%m-%d'), nextRaceCountry.country]
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # createPointSheet()
-    User = {
-        "name": "Anthony",
-        "drivers": {
-            "driver1": "hamilton",
-            "driver2": "leclerc"
-        },
-        "constructor": "mercedes",
-        "totalPoints": 0
-    }
-    giveScoreForUser(User=User)
+    # User = {
+    #     "name": "Anthony",
+    #     "drivers": {
+    #         "driver1": "hamilton",
+    #         "driver2": "leclerc"
+    #     },
+    #     "constructor": "mercedes",
+    #     "totalPoints": 0
+    # }
+    # giveScoreForUser(User=User)
