@@ -51,11 +51,10 @@
                     <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Login</button>
                   </div>
 
-                  <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/create-account"
+                  <!-- <input type="button" @click="forgotPassword" style="color: #393f81;" value="Forgot password?" /> -->
+                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <a href="/create-account"
                       style="color: #393f81;">Register here</a></p>
-                  <!-- <a href="#!" class="small text-muted">Terms of use.</a>
-                  <a href="#!" class="small text-muted">Privacy policy</a> -->
+
                 </form>
 
               </div>
@@ -110,6 +109,14 @@ export default {
 
     return { login, email, password, error }
 
+  },
+  methods: {
+// make modal pop up for user to enter email
+    // forgotPassword() {
+    //   console.log('Sending password reset email.')
+
+
+    // }
   }
 }
 

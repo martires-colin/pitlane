@@ -123,10 +123,12 @@ export default {
     },
     async simulateLightsOutNotif() {
       if (this.lightsOutNotif) {
+        const data = await this.fetchLightsOut()
+        console.log(data)
         console.log("Sending 'Lights Out!' Notification")
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
-          msg_body : 'This is where we call function to get notif'
+          msg_body : data.msg_body
         }
         const path = "http://localhost:3001/send_SMS"
         axios
@@ -232,7 +234,7 @@ export default {
     async fetchCompleteResults() {
       const res = await fetch(`http://localhost:3001/race_results_notif`);
       const data = await res.json();
-      // console.log(data)
+      console.log(data)
       return data
     },
     async fetchDriverStandings() {
@@ -253,6 +255,12 @@ export default {
       console.log(data)
       return data
     },
+    async fetchLightsOut() {
+      const res = await fetch(`http://localhost:3001/lights_out_notif`);
+      const data = await res.json();
+      console.log(data)
+      return data
+    }
   }
 }
 </script>
