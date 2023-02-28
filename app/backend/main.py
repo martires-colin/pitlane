@@ -202,7 +202,7 @@ def pitlane():
             # data dictionary for the form data retreived
             DATA = {'driver': '', 'track': '', 'year': 0, 'session' : ''}
             DATA.update({
-                'driver': post_data.get('driver'),
+                'driver': post_data.get('driver1'),
                 'track': post_data.get('track'),
                 'year': int(post_data.get('year')),
                 'session': post_data.get('session')

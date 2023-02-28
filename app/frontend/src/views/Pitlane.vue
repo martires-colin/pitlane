@@ -1,112 +1,67 @@
 <!-- Data Visualization Page Implemented by Anthony Ganci -->
 
 <template>
-  <div flex flex-col justify-center>
-
+  <div flex flex-col justify-center h-screen items-center>
     <div class="button-group">
-      <button  class="fastf1-button" @click="(show = 1), (src = '')">
+      <button  class="fastf1-button" @click="(show = 1), (src = ''), (driverLabel = 'Driver 1')">
         Head-to-Head
       </button>
       <button  class="fastf1-button" @click="(show = 2), (src = '')">
         Gear Shifts
       </button>
-      <button class="fastf1-button" @click="(show = 3), (src = '')">
+      <button class="fastf1-button" @click="(show = 3), (src = ''), (driverLabel = 'Driver')">
         Speed Visualization
       </button>
     </div>
-    <div class="fastf1">
-      <form @submit="onSubmitH2H" v-if="show == 1">
-        <div>
-          <label>Driver1: </label>
-          <input class="bg-dark-200" type="text" v-model="form.driver1" placeholder="Driver1" />
-        </div>
-        <div>
-          <label>Driver2: </label>
-          <input class="bg-dark-200" type="text" v-model="form.driver2" placeholder="Driver2" />
-        </div>
-        <div>
-          <label>Track: </label>
-          <select class="bg-dark-200" v-model="form.track">
-            <option disabled value="">Please select one</option>
-            <option>British Grand Prix</option>
-            <option>Monaco Grand Prix</option>
-            <option>Italian Grand Prix</option>
-          </select>
-        </div>
-        <div>
-          <label>Year: </label>
-          <input class="bg-dark-200" type="text" v-model="form.year" placeholder="Year" />
-        </div>
-        <div>
-          <input class="bg-dark-200" type="radio" id="race" value="R" v-model="form.session" />
-          <label for="race">Race</label>
-  
-          <input class="bg-dark-200" type="radio" id="qual" value="Q" v-model="form.session" />
-          <label for="qual">Qualifiying</label>
-        </div>
-        <input type="submit" value="Get Graph" class="btn btn-block" />
-      </form>
-      <form @submit="onSubmitGear" v-if="show == 2">
-        <div>
-          <label>Track: </label>
-          <!-- <input v-model="gearForm.track" placeholder="Track" /> -->
-          <select class="bg-dark-200"  v-model="gearForm.track">
-            <option disabled value="">Please select one</option>
-            <option>British Grand Prix</option>
-            <option>Monaco Grand Prix</option>
-            <option>Italian Grand Prix</option>
-          </select>
-        </div>
-        <div>
-          <label>Year: </label>
-          <input class="bg-dark-200" type="text" v-model="gearForm.year" placeholder="Year" />
-        </div>
-        <div>
-          <input class="bg-dark-200" type="radio" id="race" value="R" v-model="gearForm.session" />
-          <label for="race">Race</label>
-  
-          <input type="radio" id="qual" value="Q" v-model="gearForm.session" />
-          <label for="qual">Qualifiying</label>
-        </div>
-        <input type="submit" value="Get Graph" class="btn btn-block" />
-      </form>
-      <form @submit="onSubmitSpeedVisual" v-if="show == 3">
-        <div>
-          <label>Driver: </label>
-          <input class="bg-dark-200" type="text" v-model="speedForm.driver" placeholder="Driver" />
-        </div>
-        <div>
-          <label>Track: </label>
-          <!-- <input v-model="gearForm.track" placeholder="Track" /> -->
-          <select class="bg-dark-200"  v-model="speedForm.track">
-            <option disabled value="">Please select one</option>
-            <option>British Grand Prix</option>
-            <option>Monaco Grand Prix</option>
-            <option>Italian Grand Prix</option>
-          </select>
-        </div>
-        <div>
-          <label>Year </label>
-          <input class="bg-dark-200" type="text" v-model="speedForm.year" placeholder="Year" />
-        </div>
-        <div>
-          <input class="bg-dark-200" type="radio" id="race" value="R" v-model="speedForm.session" />
-          <label for="race">Race</label>
-  
-          <input type="radio" id="qual" value="Q" v-model="speedForm.session" />
-          <label for="qual">Qualifiying</label>
-        </div>
-        <input type="submit" value="Get Graph" class="btn btn-block" />
-      </form>
-    </div>
-    <div>
-      <div class="loading" v-if="load">
-        <div></div>
-        <div></div>
-        <div></div>
+    <BForm @submit="onSubmitH2H" class="flex flex-col items-center text-center pb-4">
+      <div class="flex flex-row items-center">
+        <BFormGroup
+        label="Year"
+        class="pr-4"
+        >
+          <BFormSelect v-model="form.year" >
+            <BFormSelectOption v-for="n in 74" :value="2023-n" :key="2023-n"> {{ 2023-n }}</BFormSelectOption>
+          </BFormSelect>
+        </BFormGroup>
+        <BFormGroup
+        label="Circuit"
+        >
+          <BFormSelect v-model="form.track" :options="trackOptions">
+          </BFormSelect>
+        </BFormGroup>
       </div>
-      <img style="margin: 10px" :src="src" />
+      <div class="flex flex-row items-center">
+        <BFormGroup label="Driver 1" class="pr-4" v-if="show === 1 || show === 3">
+          <BFormInput class="w-[200px]" required v-model="form.driver1" placeholder="Driver 1"></BFormInput>
+        </BFormGroup>
+        <BFormGroup 
+        v-if="show === 1"
+        label="Driver 2"
+        >
+          <BFormInput class="w-[200px]" required v-model="form.driver2" placeholder="Driver 2"></BFormInput>
+        </BFormGroup>
+      </div>
+      <BFormGroup
+        label="Session"
+        v-slot="{ ariaDescribedby }"
+        invalid-feedback="Select a session."
+        >
+        <BFormRadioGroup
+            v-model="form.session"
+            :options="['Race', 'Qualifiying']"
+            :aria-describedby="ariaDescribedby"
+        >
+        </BFormRadioGroup>
+      </BFormGroup>
+      <BButton type="submit" class="bg-blue-500">Get Graph</BButton>
+    </BForm>
+    
+    <div class="loading" v-if="load">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
+    <img  :src="src" v-if="src !== ''"/>
   </div>
 </template>
 
@@ -181,7 +136,7 @@ select {
 </style>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 export default {
   name: "Pitlane",
   data() {
@@ -189,118 +144,76 @@ export default {
       src: "",
       show: 0,
       load: false,
-      msg: "",
       form: {
         driver1: "",
         driver2: "",
         track: "",
-        year: "",
-        session: "",
+        year: 2022,
+        session: "Race",
       },
-      gearForm: {
-        year: "",
-        track: "",
-        session: "",
-      },
-      speedForm: {
-        driver: "",
-        year: "",
-        track: "",
-        session: "",
-      },
+      driverLabel: '',
+      yearOptions: null,
+      trackOptions: ['Monaco Grand Prix', 'British Grand Prix', 'Italian Grand Prix', 'Circuit de Spa-Francorchamps']
     };
   },
   methods: {
-    getPythonData() {
-      const path = "http://127.0.0.1:5000/pitlane";
-      axios
-        .get(path)
-        .then((res) => {
-          console.log(res.data);
-          // this.msg = res.data.msg;
-          this.initialFormH2H();
-          this.initialFormGear();
-          this.initialFormSpeedVisual();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    async sendForm(method) {
+      const res = await fetch('http://localhost:3001/pitlane', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify({'method': method, 'driver1': this.form.driver1, 'driver2': this.form.driver2, 'year': this.form.year, 'session': this.form.session, 'track': this.form.track})
+      });
+      const data = await res.json();
+      this.src = data.src;
     },
-    sendForm(payload) {
-      const path = "http://127.0.0.1:5000/pitlane";
-      axios
-        .post(path, payload)
-        .then((res) => {
-          this.load = false;
-          this.src = res.data.src;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    },
-    initialFormH2H() {
+    initialForm() {
       (this.form.driver1 = ""),
         (this.form.driver2 = ""),
         (this.form.track = ""),
-        (this.form.session = "R"),
-        (this.form.year = "");
+        (this.form.session = "Race"),
+        (this.form.year = 2022);
     },
-    initialFormGear() {
-      (this.gearForm.track = ""),
-        (this.gearForm.session = "R"),
-        (this.gearForm.year = "");
-    },
-    initialFormSpeedVisual() {
-      (this.speedForm.track = ""),
-        (this.speedForm.driver = ""),
-        (this.speedForm.session = "R"),
-        (this.speedForm.year = "");
-    },
-    onSubmitH2H(e) {
+    async onSubmitH2H(e) {
       this.src = "";
       e.preventDefault();
-      const payload = {
-        method: "headtohead",
-        driver1: this.form.driver1,
-        driver2: this.form.driver2,
-        track: this.form.track,
-        session: this.form.session,
-        year: this.form.year,
-      };
-      this.sendForm(payload);
+      if (this.show === 1) {
+        // const payload = {
+        //   method: "headtohead",
+        //   driver1: this.form.driver1,
+        //   driver2: this.form.driver2,
+        //   track: this.form.track,
+        //   session: this.form.session,
+        //   year: this.form.year,
+        // };
+        await this.sendForm("headtohead");
+      }
+      if (this.show === 2) {
+        // const payload = {
+        // method: "gearshift",
+        // track: this.form.track,
+        // session: this.form.session,
+        // year: this.form.year,
+        // };
+        await this.sendForm("gearshift");
+      }
+      if (this.show === 3) {
+        // const payload = {
+        // method: "speedvisual",
+        // driver: this.form.driver1,
+        // track: this.form.track,
+        // session: this.form.session,
+        // year: this.form.year,
+        // };
+        await this.sendForm("speedvisual");
+      }
       this.load = true;
-      this.initialFormH2H();
-    },
-    onSubmitGear(e) {
-      this.src = "";
-      e.preventDefault();
-      const payload = {
-        method: "gearshift",
-        track: this.gearForm.track,
-        session: this.gearForm.session,
-        year: this.gearForm.year,
-      };
-      this.sendForm(payload);
-      this.load = true;
-      this.initialFormGear();
-    },
-    onSubmitSpeedVisual(e) {
-      this.src = "";
-      e.preventDefault();
-      const payload = {
-        method: "speedvisual",
-        driver: this.speedForm.driver,
-        track: this.speedForm.track,
-        session: this.speedForm.session,
-        year: this.speedForm.year,
-      };
-      this.sendForm(payload);
-      this.load = true;
-      this.initialFormSpeedVisual();
+      this.initialForm();
     },
   },
   created() {
-    this.getPythonData();
   },
 };
 </script>

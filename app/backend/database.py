@@ -42,7 +42,8 @@ def con_standings():
     return standings
 
 # Function for returning the most recent Race object in relation to todays date
-def get_recent_race(session):
+def get_recent_race():
+    session = get_session()
     Date = date.today()
     race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
     session.close()
@@ -83,7 +84,8 @@ def create_team(u_id, i_code, dr1, dr2, dr3, dr4, dr5, c_id, t_name, n_f):
     if l_id == None:
         return False
     l_id = l_id[0]
-    team = Team(userid = u_id, leagueid = l_id, d1 = dr1, d2 = dr2, d3 = dr3, d4 = dr4, d5 = dr5, constructorid = c_id, teamname = t_name, notifcationflag = n_f)
+    team = Team(userid = u_id, leagueid = l_id, d1 = dr1, d2 = dr2, d3 = dr3, d4 = dr4, d5 = dr5, 
+                constructorid = c_id, teamname = t_name, notifcationflag = n_f, points=0, driver1id=dr1, driver2id=dr2)
     session.add(team)
     session.commit()
     session.close()

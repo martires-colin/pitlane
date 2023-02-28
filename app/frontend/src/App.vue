@@ -30,7 +30,7 @@
             <SidebarLink class="fantasy-link" v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered" @mouseover="fantasyDropdown = true"
               >Fantasy
             </SidebarLink>
-            <div class="Drop text-start pt-2 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn">
+            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn">
               <SidebarLink v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
               <SidebarLink v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
               <SidebarLink v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
@@ -149,12 +149,12 @@ nav a.router-link-exact-active {
   width: 180px;
 }
 .fantasyDrop {
-  height: 24px;
+  height: 26px;
   overflow: hidden;
   transition: 0.4s ease;
 }
 .fantasyDrop:hover{
-  height: 150px;
+  height: 160px;
 }
 .content {
   flex-grow: 1;

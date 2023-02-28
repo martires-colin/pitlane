@@ -7,7 +7,7 @@
       <div class="flex flex-row justify-between p-4">
         <h1>League: {{ leagueName }} </h1>
         <h1>Your Team: {{ selectedTeam }}</h1>
-        <h1>Total points: 0</h1>
+        <h1>Total points: {{ points }}</h1>
         <!-- <h1>{{ teamJSON.driver2id }}</h1> -->
       </div>
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-y border-gray-500">

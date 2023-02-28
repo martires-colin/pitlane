@@ -2,7 +2,7 @@ import requests
 import json
 from database import *
 from models import *
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, update
 
 def driverlist(fn, sn):
     session = get_session()
@@ -33,20 +33,6 @@ def getFantasyConstructors():
         constructors.append(data['MRData']['ConstructorTable']['Constructors'][i]['name'])
     # print(drivers)
     return constructors
-
-def createPointSheet():
-    resultsJson = json.load(open("fantasycache/current.json",))
-    pointSheet = {"constructors": {}, "drivers": {}}
-    for i in range(0, int(resultsJson['MRData']['total'])):
-        constructorName = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['Constructor']['constructorId']
-        if constructorName in pointSheet['constructors'].keys():
-            totalPoints = int(pointSheet['constructors'].get(constructorName)) + int(resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points'])
-            pointSheet['constructors'][constructorName] = totalPoints
-        else:
-            pointSheet['constructors'][constructorName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
-        driverName = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['Driver']['driverId'] 
-        pointSheet['drivers'][driverName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
-    json.dump(pointSheet, open("fantasycache/raceResults.json", "w"), indent=4)
 
 def giveScoreForUser(User):
     pointSheet = json.load(open("fantasycache/raceResults.json",))
@@ -96,7 +82,45 @@ def getNextPrevRaces(Date):
     session.close()   
     return [prevRace.name, prevRace.date.strftime('%Y-%m-%d'), prevRaceCountry.country], [nextRace.name, nextRace.date.strftime('%Y-%m-%d'), nextRaceCountry.country]
 
-# if __name__ == '__main__':
+def createPointSheet():
+    resultsJson = json.load(open("fantasycache/current.json",))
+    pointSheet = {"constructors": {}, "drivers": {}}
+    for i in range(0, int(resultsJson['MRData']['total'])):
+        constructorName = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['Constructor']['constructorId']
+        if constructorName in pointSheet['constructors'].keys():
+            totalPoints = int(pointSheet['constructors'].get(constructorName)) + int(resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points'])
+            pointSheet['constructors'][constructorName] = totalPoints
+        else:
+            pointSheet['constructors'][constructorName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
+        driverName = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['Driver']['driverId'] 
+        pointSheet['drivers'][driverName] = resultsJson['MRData']['RaceTable']['Races'][0]['Results'][i]['points']
+    json.dump(pointSheet, open("fantasycache/raceResults.json", "w"), indent=4)
+
+def getResults(raceid):
+    session = get_session()
+    pointSheet = {"raceid": raceid, "constructors": {}, "drivers": {}}
+    for q in session.query(Results.driverid, Results.constructorid, Results.points).filter(Results.raceid == raceid).all():
+        # print(q.driverid, q.constructorid, q.points)
+        if q.constructorid in pointSheet['constructors'].keys():
+            pointSheet['constructors'][q.constructorid] = int(pointSheet['constructors'].get(q.constructorid)) + int(q.points)
+        else:
+            pointSheet['constructors'][q.constructorid] = int(q.points)
+        pointSheet['drivers'][q.driverid] = q.points
+    session.close()
+    json.dump(pointSheet, open("fantasycache/raceResults.json", "w"), indent=4)
+
+def score():
+    session = get_session()
+    pointSheet = json.load(open("fantasycache/raceResults.json",))    
+    for q in session.query(Team.userid, Team.leagueid, Team.driver1id, Team.driver2id, Team.constructorid, Team.points).all():
+        newPoints = pointSheet['drivers'].get(f'{q.driver1id}') + pointSheet['drivers'].get(f'{q.driver2id}') + pointSheet['constructors'].get(f'{q.constructorid}') + int(q.points)
+        # print(q.driver1id, q.driver2id, q.constructorid)
+        session.execute(update(Team).where(Team.userid == q.userid, Team.leagueid == q.leagueid).values(points=newPoints))
+        session.commit()
+        # print(q.userid, newPoints)
+    session.close()
+
+if __name__ == '__main__':
     # createPointSheet()
     # User = {
     #     "name": "Anthony",
@@ -108,3 +132,8 @@ def getNextPrevRaces(Date):
     #     "totalPoints": 0
     # }
     # giveScoreForUser(User=User)
+
+    # recent = get_recent_race()
+    # print(recent.raceid)
+
+    score()
