@@ -97,6 +97,13 @@ def standings(Year):
         if Year in range(1950, 2023):
             standings = getStandings(Year)
             return(jsonify({'standings': standings}))
+        
+@app.route("/races/<int:Year>")
+def races(Year):
+    if request.method == 'GET':
+        if Year in range(1950, 2023):
+            raceNames = getRaceNamesForYear(Year)
+            return (jsonify({'status': '200', 'raceNames': raceNames}))
 
 @app.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():

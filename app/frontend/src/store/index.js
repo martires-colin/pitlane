@@ -40,8 +40,9 @@ export default createStore({
         constructorStandingsNotif: false
       }
     },
-    nextRace: [],
+    nextRace: null,
     prevRace: null,
+    userFeed: null, 
   },
   mutations: {
     SET_LOGGED_IN(state, value) {

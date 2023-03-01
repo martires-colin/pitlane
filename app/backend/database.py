@@ -8,6 +8,14 @@ from datetime import date, timezone, datetime, timedelta
 import string
 import random
 
+def getRaceNamesForYear(year):
+    session = get_session()
+    list = []
+    for q in session.query(Race.name).filter(Race.year == year).all():
+        list.append(q.name)
+    session.close()
+    return list
+
 # Function for creating the session object to connect to the PostgreSQL Database
 def get_session():
     engine = create_engine("postgresql://noah-howren:v2_3wcKR_YFyh6PzHaAE6d4Px2YqngLM@db.bit.io/noah-howren/f1_db")

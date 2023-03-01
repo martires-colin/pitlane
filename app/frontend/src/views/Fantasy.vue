@@ -8,7 +8,6 @@
         <h1>League: {{ leagueName }} </h1>
         <h1>Your Team: {{ selectedTeam }}</h1>
         <h1>Total points: {{ points }}</h1>
-        <!-- <h1>{{ teamJSON.driver2id }}</h1> -->
       </div>
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-y border-gray-500">
         <div class="flex flex-row">
@@ -106,7 +105,6 @@
 <script>
 import FantasyModal from "../components/FantasyModal.vue";
 import Driver2Modal from "@/components/Driver2Modal.vue";
-// import ConstructorModal from "@/components/ConstructorModal.vue";
 import SelectFantasyTeam from "@/components/SelectFantasyTeam.vue";
 
 export default {
@@ -238,9 +236,6 @@ export default {
     }
   },
   async mounted() {
-    // will eventually be fetching drivers/constructors available to user
-    // await this.fetchDrivers();
-    // await this.fetchConstructors();
     await this.fetchUserTeams();
     this.ready = true;
   }

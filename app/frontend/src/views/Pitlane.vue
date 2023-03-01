@@ -13,13 +13,13 @@
         Speed Visualization
       </button>
     </div>
-    <BForm @submit="onSubmitH2H" class="flex flex-col items-center text-center pb-4">
+    <BForm v-if="show !== 0" @submit="onSubmitH2H" class="flex flex-col items-center text-center pb-4">
       <div class="flex flex-row items-center">
         <BFormGroup
         label="Year"
         class="pr-4"
         >
-          <BFormSelect v-model="form.year" >
+          <BFormSelect @change="changeYear($event)" v-model="form.year" >
             <BFormSelectOption v-for="n in 74" :value="2023-n" :key="2023-n"> {{ 2023-n }}</BFormSelectOption>
           </BFormSelect>
         </BFormGroup>
@@ -157,6 +157,14 @@ export default {
     };
   },
   methods: {
+    async changeYear(event){
+      console.log('event', event)
+      const res = await fetch(`http://localhost:3001/races/${event}`, {
+        method: 'GET'
+      });
+      const data = await res.json();
+      this.trackOptions = data.raceNames
+    },
     async sendForm(method) {
       const res = await fetch('http://localhost:3001/pitlane', {
         method: 'POST',
@@ -191,29 +199,17 @@ export default {
         await this.sendForm("headtohead");
       }
       if (this.show === 2) {
-        // const payload = {
-        // method: "gearshift",
-        // track: this.form.track,
-        // session: this.form.session,
-        // year: this.form.year,
-        // };
         await this.sendForm("gearshift");
       }
       if (this.show === 3) {
-        // const payload = {
-        // method: "speedvisual",
-        // driver: this.form.driver1,
-        // track: this.form.track,
-        // session: this.form.session,
-        // year: this.form.year,
-        // };
         await this.sendForm("speedvisual");
       }
       this.load = true;
       this.initialForm();
     },
   },
-  created() {
+  async created() {
+    await this.changeYear(2022);
   },
 };
 </script>

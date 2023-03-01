@@ -30,10 +30,14 @@ export default {
   },
   data() {
     return {
-      username: ""
+      username: "",
+      userFeed: null,
     }
   },
   methods: {
+    async fetchUserFeed() {
+      // const res = await fetch('')
+    }
   },
   //lifecycle hooks
   beforeUpdate() {
@@ -49,6 +53,11 @@ export default {
 
     return { user }
   },
+  mounted() {
+    if (this.user.loggedIn) {
+      // this.fetchUserFeed()
+    }
+  }
   
 
 };
@@ -97,15 +106,10 @@ onMounted(() => {
 <template>
   <div class="flex flex-col justify-center">
     <div class="pitlane-landing flex justify-center">
-      <!-- <img src='../assets/PITWALL.png' class="landing-img"/> -->
-      <!-- <h1 class="py-2 text-4xl font-[500]" >Pitlane</h1>
-      <h2 class="opacity-50 font-[300] text-xl">Formula1 made simple.</h2> -->
     </div>
 
     <div v-if="user.loggedIn">
-      <!-- <p class="pt-3">Welcome, {{user.data.displayName}}</p> -->
       <p class="pt-3">Welcome, {{ user.displayName }}</p>
-      <!-- <p class="pt-3">Welcome, {{ $store.state.user.data.displayName }}</p> -->
     </div>
 
     <div class="py-2 flex flex-row justify-evenly">
@@ -127,12 +131,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <!-- <div class="landing">
-    <div id="landing-1" >
-      <Schedule/>
-    </div>
-    <div id="landing-2">
-      <Standings/>
-    </div>
-  </div> -->
+  <div v-if="user.loggedIn" class="feed flex flex-col justify-center">
+    <!-- Carousel. Retrieve images only problem is that this could take a while to load maybe.-->
+  </div>
 </template>
