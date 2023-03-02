@@ -315,18 +315,20 @@ def fantasyCreateTeam():
         # teamInformation
         tInfo = request.get_json()['teamInformation']
         print(tInfo)
-        roster = []
+        drivers = []
         for index in range(5):
             x = tInfo['roster'][f'd{index+1}'].split()
             # print(x)
-            roster.append(driverlist(x[0], x[1]))
+            drivers.append(x)
+        print(drivers)    
+        roster = driverlist(drivers)
         tInfo['constructorid'] = constructorIDs(tInfo['constructorid'])
         print(tInfo['constructorid'])
         print(roster)
         worked = create_team(u_id=tInfo['userid'], i_code=tInfo['inviteCode'], dr1=roster[0], dr2=roster[1], dr3=roster[2],
                     dr4=roster[3], dr5=roster[4], c_id=tInfo['constructorid'], t_name=tInfo['teamname'], n_f=True) 
         print(worked)
-        return jsonify({'status': '200'})
+        return jsonify({'status': '200', 'success': worked})
 # @app.route("/fantasy/constructors")
 # def fantasyConstructors():
 #     constructors = getFantasyConstructors()

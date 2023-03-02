@@ -1,4 +1,6 @@
 <script>
+import router from '@/router';
+
 
 // import { useStore} from "vuex";
 export default {
@@ -24,6 +26,7 @@ export default {
             options: ["Alexander Albon", "Fernando Alonso", "Valtteri Bottas", "Nyck de Vries", "Pierre Gasly", "Lewis Hamilton", "Nico Hülkenberg", "Logan Sargeant", "Charles Leclerc", "Kevin Magnussen", "Lando Norris", "Esteban Ocon", "Sergio Pérez", "Oscar Piastri", "George Russell", "Carlos Sainz", "Mick Schumacher", "Lance Stroll", "Yuki Tsunoda", "Max Verstappen", "Guanyu Zhou"],
             constructorOptions: ['Alfa Romeo', 'AlphaTauri', 'Alpine F1 Team', 'Aston Martin', 'Ferrari', 'Haas F1 Team', 'McLaren', 'Mercedes', 'Red Bull', 'Williams'],
             selectedConstructor: null,
+            teamSuccess: false,
         };
     },
     methods: {
@@ -56,6 +59,10 @@ export default {
             });
             const data = await res.json();
             console.log(data)
+            this.teamSuccess = data.success;
+            if (this.teamSuccess === true) {
+                router.push("/fantasy")
+            }
             // then redirect them to fantasy team page.
         }
     },
@@ -94,7 +101,7 @@ export default {
 
 <template>
 <div class="flex flex-col items-center h-screen justify-center">
-    <p class="text-xl">Join a League</p>
+    <p v-if="!teamSuccess" class="text-xl">Join a League</p>
     <BForm @submit="enterDraft" class="flex flex-col items-center text-center" v-if="!draftVisible">
         <BFormInput class="w-[200px] mt-4 mb-2" :state="inviteState" required v-model="teamInformation.inviteCode" placeholder="Invite Code"></BFormInput>
         <BFormInvalidFeedback>Invite code must be 5 characters long.</BFormInvalidFeedback>
@@ -102,7 +109,7 @@ export default {
         <BFormInvalidFeedback class="mb-2">Team name must be at least 4 characters.</BFormInvalidFeedback>
         <BButton type="submit">Enter the draft</BButton>
     </BForm>
-    <BForm @submit="submitTeam" class="flex flex-col items-center text-center" v-if="draftVisible">
+    <BForm @submit="submitTeam" class="flex flex-col items-center text-center" v-if="draftVisible && teamSuccess === false">
         <BFormGroup
             label="Drivers"
             v-slot="{ ariaDescribedby }"
@@ -137,6 +144,9 @@ export default {
         </BFormGroup>
         <BButton type="submit" class="bg-blue-500">Create my team!</BButton>
     </BForm>
+    <div v-if="teamSuccess">
+        <p class="text-xl text-green-500">Team created!</p>
+    </div>
 </div>
 </template>
 
