@@ -1,7 +1,7 @@
 import requests
 import json
-from database import *
-from models import *
+from .database import *
+from .models import *
 from sqlalchemy import asc, desc, update
 
 def driverlist(list):

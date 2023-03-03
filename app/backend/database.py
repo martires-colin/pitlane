@@ -1,7 +1,7 @@
 # Functions for managing the database
 # Implemented by Noah Howren unless otherwise stated
 
-from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
+from .models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
 from sqlalchemy import create_engine, desc, update
 from sqlalchemy.orm import sessionmaker
 from datetime import date, timezone, datetime, timedelta

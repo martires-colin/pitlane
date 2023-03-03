@@ -1,6 +1,5 @@
-# Python file responsible for site backend implemented by Anthony Ganci
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import Blueprint, request, jsonify
+import requests
 import fastf1
 from fastf1 import plotting
 import io
@@ -12,30 +11,23 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import pandas as pd
-from fantasy import *
-import warnings
-import requests
-from database import *
-from twilio.rest import Client
-import twilio_config
+from .fantasy import *
+from .database import *
 from datetime import *
 from datetime import date, datetime
 from dateutil import tz
 import pytz
+from twilio.rest import Client
+from .twilio_config import *
+import os
 
-warnings.simplefilter(action='ignore', category=FutureWarning)
-# non-interactive matplotlib backend
-mpl.use('agg')
+main = Blueprint("main", __name__)
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-CORS(app, resources={r"/*":{'origins':"*"}})
-@app.route("/", methods=['GET'])
+@main.route("/", methods=['GET'])
 def index():
     return (jsonify({'status': 200, 'message' :'Welcome to the Pitlane 🏎️'}))
 
-@app.route("/schedule/<int:Year>")
+@main.route("/schedule/<int:Year>")
 def schedule(Year):
     if request.method == 'GET':
         if Year in range(1950, 2024):
@@ -47,7 +39,7 @@ def schedule(Year):
                 schedule.append((jsondump['MRData']['RaceTable']['Races'][i]['raceName'], jsondump['MRData']['RaceTable']['Races'][i]['date'], jsondump['MRData']['RaceTable']['Races'][i]['time']))
             return(jsonify({'status': 200, 'schedule': schedule, 'season': jsondump['MRData']['RaceTable']['season'] }))
 
-@app.route('/schedule/nextprev', methods=['POST', 'GET'])
+@main.route('/schedule/nextprev', methods=['POST', 'GET'])
 def nextprev():
     if request.method == 'POST':
         post_data = request.get_json()
@@ -76,7 +68,7 @@ def nextprev():
         # Date = datetime.strptime("2023-03-21", '%Y-%m-%d')
         # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
         # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
-        with open("fantasycache/NextPrevRaces.json",'r') as file:
+        with open("backend/fantasycache/NextPrevRaces.json",'r') as file:
             fileData = json.load(file)
         if Date > datetime.strptime(fileData['currentDate'], '%Y-%m-%d'):
             prevRace, nextRace = getNextPrevRaces(datetime.strptime(fileData['currentDate'], '%Y-%m-%d'))
@@ -84,30 +76,30 @@ def nextprev():
             nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
             # print(prevRace, nextRace)
             # print(prevFlag, nextFlag)
-            with open("fantasycache/NextPrevRaces.json", "w") as file:
+            with open("backend/fantasycache/NextPrevRaces.json", "w") as file:
                 json.dump({"currentDate": Date.strftime('%Y-%m-%d'), "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
                 
             return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})
         else:
             return jsonify({'status': '200', 'prevRace': fileData['prevRace'], 'nextRace': fileData['nextRace']})
 
-@app.route("/standings/<int:Year>")
+@main.route("/standings/<int:Year>")
 def standings(Year):
     if request.method == 'GET':
         if Year in range(1950, 2023):
             standings = getStandings(Year)
             return(jsonify({'standings': standings}))
         
-@app.route("/races/<int:Year>")
+@main.route("/races/<int:Year>")
 def races(Year):
     if request.method == 'GET':
         if Year in range(1950, 2023):
             raceNames = getRaceNamesForYear(Year)
             return (jsonify({'status': '200', 'raceNames': raceNames}))
 
-@app.route("/pitlane", methods=['GET', 'POST'])
+@main.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
-    fastf1.Cache.enable_cache('cache/')
+    fastf1.Cache.enable_cache('backend/cache/')
     if request.method == 'POST':
         post_data = request.get_json()
         print(request.get_json())
@@ -127,6 +119,7 @@ def pitlane():
 
             driver1Name = race.get_driver(DATA['driver1'])['LastName']
             driver2Name = race.get_driver(DATA['driver2'])['LastName']
+            # can call laps.pick_driver with driver number which we can call from db
             driver1 = race.laps.pick_driver(DATA['driver1'])
             driver2 = race.laps.pick_driver(DATA['driver2'])
             driver1Color = plotting.driver_color(DATA['driver1'])
@@ -257,7 +250,7 @@ def pitlane():
     if request.method == 'GET':    
         # return jsonify({'msg': "Welcome to Pitlane 🏎️! Enter information to get started!", 'status': 'success'})
         return jsonify({'status': 'success'})
-@app.route("/fantasy", methods=['GET', 'POST'])
+@main.route("/fantasy", methods=['GET', 'POST'])
 def fantasy():
     # frontend will send userid once that is setup in firebase or our db using psuedo-user for now.
     if request.method == 'POST':
@@ -269,14 +262,14 @@ def fantasy():
             teamsJSON.append([teams[i].teamname, teams[i].leagueid])
         return jsonify({'status': '200', 'teams': teamsJSON})
     
-@app.route("/fantasy/league", methods=['POST'])
+@main.route("/fantasy/league", methods=['POST'])
 def fantasyLeague():
     if request.method == 'POST':
         leagueid = request.get_json()['leagueid']
         league = getLeague(leagueid)
         print(league[0])
         return jsonify({'status': '200', 'leagueName': league[0]})
-@app.route("/fantasy/team", methods=['POST'])
+@main.route("/fantasy/team", methods=['POST'])
 def fantasyTeam():
     if request.method == 'POST':
         userid = request.get_json()['userid']
@@ -290,7 +283,7 @@ def fantasyTeam():
             return jsonify({'status': '200', 'driverRoster': driverRoster, 'constructorName': constructorName, 'points': points, 'driver1': currentLineup[0], 'driver2': currentLineup[1]})
             
 
-@app.route("/fantasy/lineup", methods=['POST'])
+@main.route("/fantasy/lineup", methods=['POST'])
 def fantasyLineup():
     if request.method == 'POST':
         userid = request.get_json()['userid']
@@ -301,7 +294,7 @@ def fantasyLineup():
         fan_update_drivers(userid, leagueid, driver1['driverid'], driver2['driverid'])
         return jsonify({'status': '200'})
 
-@app.route("/fantasy/createLeague", methods=['POST'])
+@main.route("/fantasy/createLeague", methods=['POST'])
 def fantasyCreateLeague():
     if request.method == 'POST':
         userid = request.get_json()['userid']
@@ -309,7 +302,7 @@ def fantasyCreateLeague():
         inviteCode = create_league(userid, leagueName)
         return jsonify({'status': '200', 'inviteCode': inviteCode})
 
-@app.route("/fantasy/createTeam", methods=['POST'])
+@main.route("/fantasy/createTeam", methods=['POST'])
 def fantasyCreateTeam():
     if request.method == 'POST':
         # teamInformation
@@ -329,13 +322,13 @@ def fantasyCreateTeam():
                     dr4=roster[3], dr5=roster[4], c_id=tInfo['constructorid'], t_name=tInfo['teamname'], n_f=True) 
         print(worked)
         return jsonify({'status': '200', 'success': worked})
-# @app.route("/fantasy/constructors")
+# @main.route("/fantasy/constructors")
 # def fantasyConstructors():
 #     constructors = getFantasyConstructors()
 #     print(constructors)
 #     return jsonify({'constructors': constructors})
-# @app.route("/fantasy/team", methods=['GET', 'POST'])
-# @app.route("/fantasy/drivers")
+# @main.route("/fantasy/team", methods=['GET', 'POST'])
+# @main.route("/fantasy/drivers")
 # def fantasyDrivers():
 #     drivers = getFantasyDrivers()
 #     print(drivers)
@@ -343,7 +336,7 @@ def fantasyCreateTeam():
 
 
 # Colin Martires - push notifications via Twilio
-@app.route("/send_SMS", methods=['POST'])
+@main.route("/send_SMS", methods=['POST'])
 def sendSMS():
     post_data = request.get_json()
     user_phone_number = post_data['phoneNumber']
@@ -364,7 +357,7 @@ def sendSMS():
     })
 
 # Colin Martires - retrieve race results from database
-@app.route("/race_results_notif", methods=["GET"])
+@main.route("/race_results_notif", methods=["GET"])
 def getRaceResultsNotif():
     msg_body = ''
     data = notif_res()
@@ -379,7 +372,7 @@ def getRaceResultsNotif():
     }))
 
 # Colin Martires - retreive driver standings from database
-@app.route("/driver_standings_notif", methods=["GET"])
+@main.route("/driver_standings_notif", methods=["GET"])
 def getDriverStandingsNotif():
     msg_body = ''
     data = notif_res()
@@ -394,7 +387,7 @@ def getDriverStandingsNotif():
     }))
 
 # Colin Martires - retreive constructor standings from database
-@app.route("/constructor_standings_notif", methods=["GET"])
+@main.route("/constructor_standings_notif", methods=["GET"])
 def getConstructorStandingsNotif():
     msg_body = ''
     data = notif_res()
@@ -409,7 +402,7 @@ def getConstructorStandingsNotif():
     }))
 
 # Colin Martires - retreive upcoming race from database
-@app.route("/upcoming_race_notif", methods=["GET"])
+@main.route("/upcoming_race_notif", methods=["GET"])
 def getUpcomingRaceNotif():
     msg_body = ''
     data = upcoming_race()
@@ -432,7 +425,7 @@ def getUpcomingRaceNotif():
         'msg_body': msg_body
     }))
 
-@app.route("/lights_out_notif", methods=["GET"])
+@main.route("/lights_out_notif", methods=["GET"])
 def getLightsOutNotif():
     msg_body = ''
     data = is_lights_out()
@@ -456,8 +449,3 @@ def getLightsOutNotif():
         'results': True,
         'msg_body': msg_body
     }))
-
-# MOVED ALL OTHER DATABASE FUNCTIONS (and the new create_league and create_team functions to app/backend/database.py)
-
-if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=3001)
