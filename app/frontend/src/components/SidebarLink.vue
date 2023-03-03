@@ -20,9 +20,9 @@ export default {
 <template>
 <!-- Jose flores all of sidebar and sidebarLink-->
   <div>
-    <router-link :to="to" class="link" :class="{ active: isActive }">
+    <router-link :to="to" class="link">
       <i class="icon" :class="icon"></i>
-      <span class="pl-[12px] hover:text-red-500">
+      <span class="pl-[12px]">
         <slot></slot>
       </span>
       <!-- <Transition name="fade"
@@ -35,9 +35,9 @@ export default {
 </template>
 
 <style scoped>
-.icon:hover {
+/* .icon:hover {
   color: #ef4444;
-}
+} */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s;
@@ -61,17 +61,18 @@ export default {
   border: radius 0.25em;
   height: 1.5em;
 
-  color: #ffffff;
   text-decoration: none;
 }
 
 .link:hover {
-  background-color: var(--sidebar-item-hover);
+  /* background-color: var(--sidebar-item-hover); */
+  color: black;
+  font-weight: bold;
 }
 
-.link:active {
+/* .link:active {
   background-color: var(--sidebar-item-hover);
-}
+} */
 
 .link .icon {
   flex-shrink: 0;

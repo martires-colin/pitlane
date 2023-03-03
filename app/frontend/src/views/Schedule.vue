@@ -27,7 +27,7 @@ export default {
     // },
     onSubmitYear(event) {
         // this.schedule = [];
-        this.season = parseInt(event.target.value);
+        this.season = parseInt(event);
         router.push({ path: `/schedule/${this.season}`})
         // const payload = {
         //     season: this.season,
@@ -77,11 +77,14 @@ export default {
   <!-- <div class="schedule"> -->
   <div class="pt-6 flex flex-row justify-center">
     <div>
-      <select class="years bg-dark-200 px-2 py-1 rounded-md" @change="onSubmitYear($event)">
+      <BFormSelect v-model="season" @change="onSubmitYear($event)">
+        <BFormSelectOption v-for="n in 74" :value="2024 - n" :key="2024 - n"> {{ 2024-n }}</BFormSelectOption>
+      </BFormSelect>
+      <!-- <select class="years bg-dark-200 px-2 py-1 rounded-md" @change="onSubmitYear($event)">
           <option v-for="n in 74" :value="2024 - n" :key="2024 - n">{{ 2024 - n }}</option>
-      </select>
+      </select> -->
     </div>
-    <table class="schedule">
+    <table class="schedule ml-4">
       <tr id="header">
         <th id="race-name">Name</th>
         <th id="race-date">Date</th>

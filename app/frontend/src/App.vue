@@ -1,6 +1,6 @@
 <template>
-  <div class="pitlane-container flex flex-row bg-[#1b1b1b]">
-    <div class="sidebar bg-[#222222] overflow-hidden">
+  <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800">
+    <div class="relative sidebar overflow-hidden border-r border-slate-500 border-solid" :class="{'w-[170px]': isActive, 'w-[60px]': !isActive}">
       <div class="ml-2 flex flex-col justify-start">
         <div class="flex flex-row justify-start">
           <img
@@ -12,7 +12,7 @@
           />
           <h1 class="py-2 pl-[12px] text-2xl fw400">Pitlane</h1>
         </div>
-        <div class="pt-4 flex flex-col">
+        <div class="pt-4 flex flex-col text-slate-700">
           <SidebarLink to="/" icon="fas fa-home">
             Home
           </SidebarLink>
@@ -31,9 +31,9 @@
               >Fantasy
             </SidebarLink>
             <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn">
-              <SidebarLink v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
-              <SidebarLink v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
-              <SidebarLink v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
+              <SidebarLink icon="fa-solid fa-plus" v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
+              <SidebarLink icon="fa-solid fa-user-plus" v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
+              <SidebarLink icon="fa-solid fa-warehouse" v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
             </div>
           </div>
           <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
@@ -46,6 +46,11 @@
           <SidebarLink v-else to="/login" icon="fa-solid fa-right-to-bracket">
             Login
           </SidebarLink>
+        </div>
+        <div class="absolute bottom-3 right-5">
+          <div :class="{'rotate-180': !isActive}" @click="(isActive = !isActive)">
+            <i class="fa-solid fa-angles-left" />
+          </div>
         </div>
       </div>
       <!-- <Sidebar /> -->
@@ -73,7 +78,9 @@ export default {
   // },
   data() {
     return {
-      fantasyDropdown: false
+      isActive: true,
+      fantasyDropdown: false,
+      button: ">"
     }
   }
 };
@@ -139,11 +146,10 @@ nav a.router-link-exact-active {
 .sidebar {
   min-height: 100%;
   max-height: none;
-  width: 60px;
   transition: 0.4s ease;
 }
 .sidebar:hover {
-  width: 170px;
+  /* width: 170px; */
 }
 .fantasy-link:hover {
   width: 180px;

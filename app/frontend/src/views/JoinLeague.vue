@@ -100,48 +100,50 @@ export default {
 </script>
 
 <template>
-<div class="flex flex-col items-center h-screen justify-center">
-    <p v-if="!teamSuccess" class="text-xl">Join a League</p>
+<div class="flex flex-col items-center min-h-screen justify-center">
+    <p v-if="!teamSuccess" class="text-xl pb-2">Join a League</p>
     <BForm @submit="enterDraft" class="flex flex-col items-center text-center" v-if="!draftVisible">
         <BFormInput class="w-[200px] mt-4 mb-2" :state="inviteState" required v-model="teamInformation.inviteCode" placeholder="Invite Code"></BFormInput>
         <BFormInvalidFeedback>Invite code must be 5 characters long.</BFormInvalidFeedback>
         <BFormInput trim class="w-[400px] mb-2 mt-2" v-model="teamInformation.teamname" :state="teamnameState" required placeholder="Team name"></BFormInput>
         <BFormInvalidFeedback class="mb-2">Team name must be at least 4 characters.</BFormInvalidFeedback>
-        <BButton type="submit">Enter the draft</BButton>
+        <BButton type="submit" class="bg-blue-500">Enter the draft</BButton>
     </BForm>
     <BForm @submit="submitTeam" class="flex flex-col items-center text-center" v-if="draftVisible && teamSuccess === false">
-        <BFormGroup
-            label="Drivers"
-            v-slot="{ ariaDescribedby }"
-            :invalid-feedback="invalidLineup"
-            valid-feedback="Drivers Complete."
-            :state="budget"
-            >
-            <BFormCheckboxGroup
-                v-model="selected"
-                :options="options"
-                :aria-describedby="ariaDescribedby"
+        <div class="flex flex-row space-x-8">
+            <BFormGroup
+                label="Drivers"
+                v-slot="{ ariaDescribedby }"
+                :invalid-feedback="invalidLineup"
+                valid-feedback="Drivers Complete."
                 :state="budget"
-                stacked=""
-            >
-            </BFormCheckboxGroup>
-        </BFormGroup>
-        <BFormGroup
-            label="Constructors"
-            v-slot="{ ariaDescribedby }"
-            invalid-feedback="Select a constructor"
-            valid-feedback="Constructor Complete."
-            :state="constructorBudget"
-            >
-            <BFormRadioGroup
-                v-model="selectedConstructor"
-                :options="constructorOptions"
-                :aria-describedby="ariaDescribedby"
+                >
+                <BFormCheckboxGroup
+                    v-model="selected"
+                    :options="options"
+                    :aria-describedby="ariaDescribedby"
+                    :state="budget"
+                    stacked=""
+                >
+                </BFormCheckboxGroup>
+            </BFormGroup>
+            <BFormGroup
+                label="Constructors"
+                v-slot="{ ariaDescribedby }"
+                invalid-feedback="Select a constructor"
+                valid-feedback="Constructor Complete."
                 :state="constructorBudget"
-                stacked=""
-            >
-            </BFormRadioGroup>
-        </BFormGroup>
+                >
+                <BFormRadioGroup
+                    v-model="selectedConstructor"
+                    :options="constructorOptions"
+                    :aria-describedby="ariaDescribedby"
+                    :state="constructorBudget"
+                    stacked=""
+                >
+                </BFormRadioGroup>
+            </BFormGroup>
+        </div>
         <BButton type="submit" class="bg-blue-500">Create my team!</BButton>
     </BForm>
     <div v-if="teamSuccess">

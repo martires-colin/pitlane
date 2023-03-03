@@ -19,7 +19,7 @@ export default {
     },
     onSubmitYear(event) {
         // this.standings = [];
-        this.season = parseInt(event.target.value);
+        this.season = parseInt(event);
         router.push({ path: `/standings/${this.season}`})
     },
   },
@@ -70,11 +70,14 @@ export default {
   <h2 id="title">Standings for {{ season }} Formula One Season</h2>
   <div class="pt-6 flex flex-row justify-center">
     <div>
-      <select class="years bg-dark-200 px-2 py-1 rounded-md" @change="onSubmitYear($event)">
+      <BFormSelect v-model="season" @change="onSubmitYear($event)">
+        <BFormSelectOption v-for="n in 73" :value="2023 - n" :key="2023 - n"> {{ 2023-n }}</BFormSelectOption>
+      </BFormSelect>
+      <!-- <select class="years px-2 py-1 rounded-md" @change="onSubmitYear($event)">
         <option v-for="n in 73" :value="2023 - n" :key="2023 - n">{{ 2023 - n }}</option>
-      </select>
+      </select> -->
     </div>
-    <table class="standings">
+    <table class="standings ml-4">
         <tr id="header">
             <th id="driver-rank">Rank</th>
             <th id="driver-name">Driver</th>

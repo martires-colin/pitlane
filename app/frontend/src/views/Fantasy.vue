@@ -12,13 +12,13 @@
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-y border-gray-500">
         <div class="flex flex-row">
             <p class="text-red-500 pr-4">Previous Race</p>
-            <img :src="$store.state.prevRace[3]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.prevRace[3]" :alt="$store.state.prevRace[3]" class="h-[24px] w-[40px] border border-black"/>
             <p class="px-4">{{ $store.state.prevRace[0] }} </p>
             <p>{{ $store.state.prevRace[1] }} </p>
         </div>
         <div class="flex flex-row">
             <p class="text-green-500 pr-4">Next Race</p>
-            <img :src="$store.state.nextRace[3]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px]"/>
+            <img :src="$store.state.nextRace[3]" :alt="$store.state.nextRace[3]" class="h-[24px] w-[40px] border border-black"/>
             <p class="px-4"> {{ $store.state.nextRace[0] }}</p>
             <p>{{ $store.state.nextRace[1] }} </p>
         </div>
@@ -33,7 +33,7 @@
               img-top
               tag="article"
               style="max-width: 20rem;"
-              class="mb-2 bg-slate-500">
+              class="mb-2 bg-neutral-200">
               <p v-if="driver1 === ''" class="py-2">Add Driver</p>
               <FantasyModal button-title="+" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
               <BCardText class="text-xl">{{ driver1.drivername }}</BCardText>
@@ -45,59 +45,44 @@
               img-top
               tag="article"
               style="max-width: 20rem;"
-              class="mb-2 bg-slate-500">
+              class="mb-2 bg-neutral-200">
               <p v-if="driver2 === ''" class="py-2">Add Driver</p>
               <Driver2Modal button-title="+" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
               <BCardText class="text-xl">{{ driver2.drivername }}</BCardText>
               <Driver2Modal button-title="Edit" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 !== ''" />
             </BCard>
-            <!-- <div class="driver-item">
-              <p v-if="driver1 === ''" class="py-2">Add Driver</p>
-              <FantasyModal button-title="+" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
-              <p class="pt-28 text-xl" v-if="driver1 !== ''">{{ driver1.drivername }}</p>
-              <FantasyModal button-title="Edit" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 !== ''" />
-            </div>
-            <div class="driver-item">
-              <p v-if="driver2 === ''" class="py-2">Add Driver</p>
-              <Driver2Modal button-title="+" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
-              <p class="pt-28 text-xl" v-if="driver2 !== ''">{{ driver2.drivername }}</p>
-              <Driver2Modal button-title="Edit" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 !== ''" />
-            </div> -->
           </div>
           <div class="flex flex-row justify-center">
-            <!-- <BCard 
-              :img-src="constructorImage"
-              img-alt="Image"
-              
-              tag="article"
-              style="max-width: 20rem;"
-              class="mb-2 bg-slate-500"
-            >
-            </BCard> -->
             <img :src="constructorImage" class="bg-slate-500 rounded-2 max-w-[600px] max-h-[400px]">
-            <!-- <div class="bg-slate-500 h-32 w-50 rounded-[20px]">
-              <p class="pt-10 text-xl">{{ constructor.constructorName }}</p>
-              <p class="py-2">Add Constructor</p>
-              <ConstructorModal button-title="+" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor === ''"/>
-              <ConstructorModal button-title="Edit" :all-constructors="allConstructors" @set-constructor="(str) => constructor = str" v-if="constructor !== ''"/>
-            </div> -->
           </div>
           <div class="flex flex-row justify-center" v-if="lineupChanged">
             <button class="hover:bg-slate-400 p-2 rounded-2 text-xl bg-slate-500" @click="sendLineup">Save Lineup</button>
           </div>
         </div>
-        <div class="bg-dark-300">
-          <div v-if="showDriversConstructors === true" class="bg-clip-content driver-grid bg-jelly-bean-500">
-            <div class="grid-item bg-jelly-bean-900 border-x-2 border-t-2 border-jelly-bean-600 hover:cursor-pointer" @click="showDriversConstructors = true">Drivers</div>
-            <div class="grid-item bg-jelly-bean-800 border-t-2 border-r-2 border-jelly-bean-600 hover:cursor-pointer" @click="showDriversConstructors = false">Constructors</div>
-            <div class="grid-item col-span-2 border-x-2 border-t-2 border-jelly-bean-600" v-for="(driver, index) in allDrivers" :key="index">{{ driver }}</div>
+          <div v-if="whichSubTable === 0" class="leaderboard bg-sky-100">
+            <div class="grid-item bg-sky-300 border-l-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+            <div class="grid-item bg-sky-200 border-r-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
+            <div class="grid-item col-span-3">1</div>
           </div>
-          <div v-if="showDriversConstructors === false" class="bg-clip-content team-grid bg-jelly-bean-500">
-            <div class="grid-item bg-jelly-bean-800 border-x-2 border-t-2 border-jelly-bean-600 hover:cursor-pointer" @click="showDriversConstructors = true">Drivers</div>
-            <div class="grid-item bg-jelly-bean-900 border-t-2 border-r-2 border-jelly-bean-600 hover:cursor-pointer" @click="showDriversConstructors = false">Constructors</div>
-            <div class="grid-item col-span-2 border-x-2 border-t-2 border-jelly-bean-600" v-for="(constructor, index) in allConstructors" :key="index">{{ constructor }}</div>
+          <div v-if="whichSubTable === 1" class="bg-clip-content driver-grid bg-sky-100">
+            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+            <div class="grid-item bg-sky-300 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+            <div class="grid-item bg-sky-200 border-t-2 border-r-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+            <div class="grid-item col-span-3 border-x-2 border-t-2 border-slate-300" v-for="(driver, index) in allDrivers" :key="index">{{ driver }}</div>
           </div>
-        </div>
+          <div v-if="whichSubTable === 2" class="bg-clip-content team-grid bg-sky-100">
+            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+            <div class="grid-item bg-sky-300 border-t-2 border-r-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+            <div class="grid-item col-span-3 border-x-2 border-t-2 border-slate-300" v-for="(constructor, index) in allConstructors" :key="index">{{ constructor }}</div>
+          </div>
       </div>
   </div>
 </template>
@@ -121,7 +106,7 @@ export default {
       driver1: "",
       driver2: "",
       constructor: "",
-      showDriversConstructors: true,
+      whichSubTable: 0,
       teamSelected: false,
       userTeams: [],
       selectedTeam: "",
@@ -156,9 +141,6 @@ export default {
       this.driver1 = obj;
       this.driver1Image = require(`@/assets/driverimages/${this.driver1.driverid}.png`)
       this.lineupChanged = true;
-      // console.log(this.allDrivers)
-      // this.allDrivers.splice(this.allDrivers.indexOf(str), 1);
-      // console.log(this.allDrivers)
     },
     setDriver2(obj) {
       console.log('string2')
@@ -255,6 +237,13 @@ export default {
   
 }
 
+.leaderboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 40px auto;
+  height: 100%;
+}
+
 .fantasy-grid {
   display: grid;
   grid-template-columns: minmax(70%, auto) minmax(auto, 600px);
@@ -269,14 +258,14 @@ export default {
 
 .driver-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 40px auto;
   height: 100%;
 }
 
 .team-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 40px auto;
   height: 100%;
 }

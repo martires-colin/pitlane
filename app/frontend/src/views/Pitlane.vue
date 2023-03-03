@@ -80,14 +80,14 @@
   font-size: 28px;
   text-align: center;
   margin: 5px;
-  padding-inline: 2px;
-  background-color: #005b96;
+  padding-inline: 8px;
+  background-color: #4AA3D1;
   color: #0e1111;
   border-radius: 4px;
   cursor: pointer;
 }
 .fastf1-button:hover {
-  background-color: #03396c;
+  background-color: #2a97cd;
 }
 .fastf1 {
   /* // font-family: "Roboto Mono"; */
