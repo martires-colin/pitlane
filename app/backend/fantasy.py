@@ -4,11 +4,14 @@ from database import *
 from models import *
 from sqlalchemy import asc, desc, update
 
-def driverlist(fn, sn):
+def driverlist(list):
     session = get_session()
-    q = session.query(Driver).filter(Driver.forename==fn, Driver.surname==sn).first()
+    roster = []
+    for fn, sn in list:
+        q = session.query(Driver).filter(Driver.forename==fn, Driver.surname==sn).first()
+        roster.append(q.driverid)
     session.close()
-    return(q.driverid)
+    return(roster)
 
 def constructorIDs(constructorName):
     session = get_session()
