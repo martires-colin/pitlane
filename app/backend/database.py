@@ -92,7 +92,7 @@ def create_team(u_id, i_code, dr1, dr2, dr3, dr4, dr5, c_id, t_name, n_f):
     l = (session.query(League).filter(League.invitecode == i_code).first())
     if League == None:
         return False
-    l_id = l.leagueid()
+    l_id = l.leagueid
     session.execute(update(League).where(League.leagueid == l_id).values(members = l.members + 1)) 
     team = Team(userid = u_id, leagueid = l_id, d1 = dr1, d2 = dr2, d3 = dr3, d4 = dr4, d5 = dr5, 
                 constructorid = c_id, teamname = t_name, notifcationflag = n_f, points=0, driver1id=dr1, driver2id=dr2)

@@ -312,6 +312,9 @@ def fantasyCreateTeam():
         for index in range(5):
             x = tInfo['roster'][f'd{index+1}'].split()
             # print(x)
+            if len(x) > 2:
+                x[1] = x[1] + " " + x[2]
+                del x[2]
             drivers.append(x)
         print(drivers)    
         roster = driverlist(drivers)
