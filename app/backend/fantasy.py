@@ -71,19 +71,21 @@ def getLeague(leagueID):
 
 def getNextPrevRaces(Date):
     session = get_session()
-    nextRace = session.query(Race).filter(Race.date >= Date).order_by(asc(Race.date)).first()
-    # nextRace = session.query(Race).filter(Race.date >= Date).first()
+    # nextRace = session.query(Race).filter(Race.date > Date).order_by(asc(Race.date)).first()
+    nextRace = session.query(Race).filter(Race.raceid == Date+1).first()
+    prevRace = session.query(Race).filter(Race.raceid == Date).first()
     # print(nextRace.year, nextRace.round, nextRace.name)
-    if nextRace.round == 1:
-        prevRace = session.query(Race).filter(Race.year == nextRace.year-1).order_by(desc(Race.round)).first()
-        # print(prevRace.year, prevRace.round, prevRace.name)
-    else:
-        prevRace = session.query(Race).filter(Race.year == nextRace.year, Race.round == nextRace.round-1).first()
+
+    # if nextRace.round == 1:
+    #     prevRace = session.query(Race).filter(Race.year == nextRace.year-1).order_by(desc(Race.round)).first()
+    #     # print(prevRace.year, prevRace.round, prevRace.name)
+    # else:
+    #     prevRace = session.query(Race).filter(Race.year == nextRace.year, Race.round == nextRace.round-1).first()
         # print(prevRace.year, prevRace.round, prevRace.name)
     prevRaceCountry = session.query(Circuits).filter(Circuits.circuitid == prevRace.circuitid).first()
     nextRaceCountry = session.query(Circuits).filter(Circuits.circuitid == nextRace.circuitid).first()
-    session.close()   
-    return [prevRace.name, prevRace.date.strftime('%Y-%m-%d'), prevRaceCountry.country], [nextRace.name, nextRace.date.strftime('%Y-%m-%d'), nextRaceCountry.country]
+    session.close()
+    return [prevRace.name, prevRace.date.strftime('%m/%d/%Y'), prevRaceCountry.country], [nextRace.name, nextRace.date.strftime('%m/%d/%Y'), nextRaceCountry.country]
 
 def createPointSheet():
     resultsJson = json.load(open("fantasycache/current.json",))
@@ -138,5 +140,6 @@ if __name__ == '__main__':
 
     # recent = get_recent_race()
     # print(recent.raceid)
-
-    score()
+    t1, t2 = getNextPrevRaces(datetime.strptime("2023-03-05 00:00:00", "%Y-%m-%d %H:%M:%S"))
+    print(t1,t2)
+    # score()

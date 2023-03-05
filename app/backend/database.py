@@ -27,7 +27,7 @@ def get_session():
 def getStandings(year):
     session = get_session()
     if year == 0:
-        recentrace = get_recent_race(session)
+        recentrace = get_recent_race()
     else:
         recentrace = getRaceForYear(session, year)
     standings = []
@@ -41,7 +41,7 @@ def getStandings(year):
 # Function for reteiving current constructors' championship standings.
 def con_standings():
     session = get_session()
-    recentrace = get_recent_race(session)
+    recentrace = get_recent_race()
     standings = {}
     for s in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == recentrace.raceid).order_by(Constructor_Standings.position) :
         x = {'constructor':s.Constructor.name, 'points':s.Constructor_Standings.points}

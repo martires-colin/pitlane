@@ -64,20 +64,30 @@ def nextprev():
 
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
     if request.method == 'GET':
-        Date = datetime.today()
+        # Date = datetime.today()
+        # print(get_recent_race().raceid)
         # Date = datetime.strptime("2023-03-21", '%Y-%m-%d')
+        # print(Date.today())
+        # print(Date.now())
+        # print(Date.today())
+        # print(datetime.strftime(Date.now(), "%c %z %Z"))
+        # t1, t2 = getNextPrevRaces(datetime.strptime("03/05/2023 00:00:00", "%m/%d/%Y %H:%M:%S"))
+        # print(t1, t2)
+
         # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
         # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
         with open("backend/fantasycache/NextPrevRaces.json",'r') as file:
             fileData = json.load(file)
-        if Date > datetime.strptime(fileData['currentDate'], '%Y-%m-%d'):
-            prevRace, nextRace = getNextPrevRaces(datetime.strptime(fileData['currentDate'], '%Y-%m-%d'))
+        newRecentID = get_recent_race().raceid
+        if fileData['recentRaceID'] < newRecentID:
+            prevRace, nextRace = getNextPrevRaces(newRecentID)
+            # prevRace, nextRace = getNextPrevRaces()
             prevRace.append(requests.get(f"https://restcountries.com/v3.1/name/{prevRace[2]}?fields=flags").json()[0]['flags']['png'])
             nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
             # print(prevRace, nextRace)
             # print(prevFlag, nextFlag)
             with open("backend/fantasycache/NextPrevRaces.json", "w") as file:
-                json.dump({"currentDate": Date.strftime('%Y-%m-%d'), "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
+                json.dump({"recentRaceID": newRecentID, "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
                 
             return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})
         else:
