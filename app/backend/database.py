@@ -53,7 +53,7 @@ def con_standings():
 # Function for returning the most recent Race object in relation to todays date
 def get_recent_race():
     session = get_session()
-    Date = datetime.now()
+    Date = datetime.utcnow()
     race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
     session.close()
     return race
@@ -147,7 +147,7 @@ def fan_update_drivers(userid, leagueid, d1, d2):
 
 def notif_res():
     session = get_session()
-    now = datetime.now()
+    now = datetime.utcnow()
     race = session.query(Race.raceid).filter(Race.date <= now).order_by(desc(Race.date)).first()[0]
     results = []
     for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race).order_by(Results.position):
@@ -163,17 +163,17 @@ def notif_res():
 
 def upcoming_race():
     session = get_session()
-    race = session.query(Race).filter(Race.date >= datetime.now()).order_by(Race.date).first()
+    race = session.query(Race).filter(Race.date >= datetime.utcnow()).order_by(Race.date).first()
     session.close()
     return{'Year':race.year, 'Race':race.name, 'Round':race.round, 'Date':race.date.strftime('%m-%d-%Y %H:%M:%S')}
 
 def is_lights_out():
     session = get_session()
-    race = session.query(Race).filter(Race.date == datetime.now()).order_by(Race.date).first()
+    race = session.query(Race).filter(Race.date == datetime.utcnow()).order_by(Race.date).first()
     if race == None:
         session.close()
         return {'Race':None, 'status': False}
-    if datetime.now().replace(tzinfo=None) >= (race.date - timedelta(minutes=15)):
+    if datetime.utcnow().replace(tzinfo=None) >= (race.date - timedelta(minutes=15)):
         session.close()
         return {'Race':race.name, 'status': True}
     session.close()
@@ -182,92 +182,3 @@ def is_lights_out():
 # Finds the exact status stored in the database
 def status_match(status, session):
     return(session.query(Status.statusid).filter(Status.status == status).first())[0]
-
-# Queries ERGAST drivers for a year
-def cache_drivers(year):
-    response = requests.get('http://ergast.com/api/f1/%s/drivers.json'%(year)).json()
-    return(response)
-
-# Queries ERGAST constructors results
-def cache_con_res(race):
-    response = requests.get('http://ergast.com/api/f1/%s/%s/constructors.json'%(race.year, race.round)).json()
-    return(response)
-
-# Queries ERGAST drivers results
-def cache_results(race):
-    response = requests.get('http://ergast.com/api/f1/%s/%s/results.json'%(race.year, race.round)).json()
-    return(response)
-
-# Returns constructorid of constructor referenced in 'con'
-def con_to_id(con, session):
-    return(session.query(Constructor.constructorid).filter(Constructor.constructorref == con).first())[0]
-
-# Returns driver object referenced in 'ref'
-def ref_to_id(ref, session):
-    return(session.query(Driver).filter(Driver.driverref == ref).first())
-
-
-# Checks ERGAST drivers for a given year and inserts any that is not already in the table
-def update_drivers(year, session):
-    res = cache_drivers(year)['MRData']['DriverTable']['Drivers']
-    for x in res:
-        if session.query(Driver).filter(Driver.driverref == x['driverId']).first() ==  None:
-            d = Driver(driverref = x['driverId'], number = x['permanentNumber'], 
-                       code = x['code'], forename = x['givenName'], 
-                       surname = x['familyName'], dob = x['dateOfBirth'], 
-                       nationality = x['nationality'], url = x['url'])
-            session.add(d)
-    session.commit()
-
-# Checks ERGAST constructor results for a given race and calculates and inserts values into table 
-def update_c_results(race, session):
-    res = cache_con_res(race)['MRData']['ConstructorTable']['Constructors']
-    for r in res:
-        c_id = con_to_id(r['constructorId'], session)
-        p = session.query(Results.points).filter(Results.raceid == race.raceid, Results.constructorid == c_id).all()
-        re = Constructor_Results(raceid = race.raceid, constructorid = c_id, points = p[0][0] + p[1][0])
-        session.add(re)
-        session.commit()
-
-# Updates driver, results, and constructorResults tables.
-# Returns false if the API doesn't have the data
-# Returns true if all the data is received
-def update_results(race):
-    try:
-        res = cache_results(race)['MRData']['RaceTable']['Races'][0]['Results']
-    except:
-        return False
-    session = get_session()
-    # Check to see if driver list has been updated
-    update_drivers(race.year, session)
-    for r in res:
-        d = ref_to_id(r['Driver']['driverId'], session)
-        c_i = con_to_id(r['Constructor']['constructorId'], session) 
-        real = Results(
-            raceid = race.raceid,
-            driverid = d.driverid,
-            number = d.number,
-            constructorid = c_i,
-            position = r['position'],
-            positiontext = r['positionText'],
-            positionorder = r['position'],
-            points = r['points'],
-            grid = r['grid'],
-            laps = r['laps'],
-            statusid = status_match(r['status'], session)
-        )
-        try:
-            real.fastestlap = r['FastestLap']['lap']
-            real.rank = r['FastestLap']['rank']
-            real.fastestlapspeed = r['FastestLap']['AverageSpeed']['speed']
-            real.fastestlaptime = r['FastestLap']['Time']['time']
-            real.time = r['Time']['time']
-            real.milliseconds = r['Time']['millis']
-        except:
-            pass
-        session.add(real)
-    session.commit()
-    # Update constructor results
-    update_c_results(race, session)
-    session.close()
-    return True
