@@ -4,7 +4,7 @@
 from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
 from sqlalchemy import create_engine, desc, update
 from sqlalchemy.orm import sessionmaker
-from datetime import date, timezone, datetime, timedelta
+from datetime import date, datetime, timedelta
 import string
 import random
 import requests
@@ -53,7 +53,7 @@ def con_standings():
 # Function for returning the most recent Race object in relation to todays date
 def get_recent_race():
     session = get_session()
-    Date = date.today()
+    Date = datetime.now()
     race = session.query(Race).filter(Race.date <= Date).order_by(desc(Race.date)).first()
     session.close()
     return race
@@ -147,33 +147,33 @@ def fan_update_drivers(userid, leagueid, d1, d2):
 
 def notif_res():
     session = get_session()
-    dt = date.today()
-    race = session.query(Race).filter(Race.date <= dt).order_by(desc(Race.date)).first()
+    now = datetime.now()
+    race = session.query(Race.raceid).filter(Race.date <= now).order_by(desc(Race.date)).first()[0]
     results = []
-    for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race.raceid).order_by(Results.position):
+    for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race).order_by(Results.position):
         results.append({'Position':x.Results.position, 'Driver': x.Driver.forename + ' ' + x.Driver.surname, 'Starting Position': x.Results.grid})
     standings = []
-    for y in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == race.raceid).order_by(Driver_Standings.position):
+    for y in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == race).order_by(Driver_Standings.position):
         standings.append({'Position':y.Driver_Standings.position, 'Driver': y.Driver.forename + ' ' + y.Driver.surname, 'Points': y.Driver_Standings.points})
     constructors = []
-    for z in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == race.raceid).order_by(Constructor_Standings.position):
+    for z in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == race).order_by(Constructor_Standings.position):
         constructors.append({'Position':z.Constructor_Standings.position ,'Constructor':z.Constructor.name, 'Points':z.Constructor_Standings.points})
     session.close()
-    return {'Race':race.name, 'Results':results, 'Standings':standings, 'Constructors':constructors}
+    return {'Results':results, 'Standings':standings, 'Constructors':constructors}
 
 def upcoming_race():
     session = get_session()
-    race = session.query(Race).filter(Race.date >= date.today()).order_by(Race.date).first()
+    race = session.query(Race).filter(Race.date >= datetime.now()).order_by(Race.date).first()
     session.close()
-    return{'Year':race.year, 'Race':race.name, 'Round':race.round, 'Date':race.date.strftime('%m/%d/%Y'), 'Time':race.time.strftime('%H:%M:%S')}
+    return{'Year':race.year, 'Race':race.name, 'Round':race.round, 'Date':race.date.strftime('%m-%d-%Y %H:%M:%S')}
 
 def is_lights_out():
     session = get_session()
-    race = session.query(Race).filter(Race.date == date.today()).order_by(Race.date).first()
+    race = session.query(Race).filter(Race.date == datetime.now()).order_by(Race.date).first()
     if race == None:
         session.close()
         return {'Race':None, 'status': False}
-    if datetime.now().replace(tzinfo=None) >= (datetime.combine(race.date, race.time) - timedelta(minutes=15)):
+    if datetime.now().replace(tzinfo=None) >= (race.date - timedelta(minutes=15)):
         session.close()
         return {'Race':race.name, 'status': True}
     session.close()
