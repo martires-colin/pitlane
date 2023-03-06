@@ -1,7 +1,7 @@
 # Functions for managing the database
 # Implemented by Noah Howren unless otherwise stated
 
-from models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
+from .models import Race, Constructor, Constructor_Results, Constructor_Standings, Driver, Driver_Standings, Circuits, Lap_Time, Pit_Stops, Quali, Season, Results, Status, SprintResults, League, Team
 from sqlalchemy import create_engine, desc, update
 from sqlalchemy.orm import sessionmaker
 from datetime import date, datetime, timedelta
@@ -27,7 +27,7 @@ def get_session():
 def getStandings(year):
     session = get_session()
     if year == 0:
-        recentrace = get_recent_race(session)
+        recentrace = get_recent_race()
     else:
         recentrace = getRaceForYear(session, year)
     standings = []
@@ -41,7 +41,7 @@ def getStandings(year):
 # Function for reteiving current constructors' championship standings.
 def con_standings():
     session = get_session()
-    recentrace = get_recent_race(session)
+    recentrace = get_recent_race()
     standings = {}
     for s in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == recentrace.raceid).order_by(Constructor_Standings.position) :
         x = {'constructor':s.Constructor.name, 'points':s.Constructor_Standings.points}
@@ -92,7 +92,7 @@ def create_team(u_id, i_code, dr1, dr2, dr3, dr4, dr5, c_id, t_name, n_f):
     l = (session.query(League).filter(League.invitecode == i_code).first())
     if League == None:
         return False
-    l_id = l.leagueid()
+    l_id = l.leagueid
     session.execute(update(League).where(League.leagueid == l_id).values(members = l.members + 1)) 
     team = Team(userid = u_id, leagueid = l_id, d1 = dr1, d2 = dr2, d3 = dr3, d4 = dr4, d5 = dr5, 
                 constructorid = c_id, teamname = t_name, notifcationflag = n_f, points=0, driver1id=dr1, driver2id=dr2)
