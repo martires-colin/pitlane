@@ -5,6 +5,7 @@ from models import Results, Status, Constructor_Standings
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 import ergast
+import logging
 
 # Function for creating the session object to connect to the PostgreSQL Database
 def get_session():
@@ -49,6 +50,8 @@ def update_c_results(race):
     try:
         res = ergast.cache_con_res(race)['MRData']['ConstructorTable']['Constructors']
     except:
+        info = {'isError': True, 'function': 'update_c_results', 'race': race.name}
+        logging.error(info)
         return False
     for r in res:
         c_id = con_to_id(r['constructorId'], session)
@@ -57,6 +60,8 @@ def update_c_results(race):
         session.add(re)
     session.commit()
     session.close()
+    info = {'isError': False, 'function': 'update_c_standings', 'race': race.name}
+    logging.info(info)
     return True
 
 # Updates driver and results tables
@@ -66,6 +71,8 @@ def update_results(race):
     try:
         res = ergast.cache_results(race)['MRData']['RaceTable']['Races'][0]['Results']
     except:
+        info = {'isError': True, 'function': 'update_results', 'race': race.name}
+        logging.error(info)
         return False
     session = get_session()
     # Check to see if driver list has been updated
@@ -98,6 +105,8 @@ def update_results(race):
         session.add(real)
     session.commit()
     session.close()
+    info = {'isError': False, 'function': 'update_results', 'race': race.name}
+    logging.info(info)
     return True
 
 # Updates driver standings table, returning false if it fails
@@ -106,6 +115,8 @@ def update_standings(race):
     try:
         res = ergast.cache_standings(race.year)['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings']
     except:
+        info = {'isError': True, 'function': 'update_standings', 'race': race.name}
+        logging.error(info)
         return False
     update_drivers(race.year, session)
     for r in res:
@@ -119,6 +130,8 @@ def update_standings(race):
         session.add(real)
     session.commit()
     session.close()
+    info = {'isError': False, 'function': 'update_standings', 'race': race.name}
+    logging.info(info)
     return True
 
 # Updates constructor standings table, returning false if it fails.
@@ -139,4 +152,6 @@ def update_c_standings(race):
         session.add(real)
     session.commit()
     session.close()
+    info = {'isError': False, 'function': 'update_c_standings', 'race': race.name}
+    logging.info(info)
     return True

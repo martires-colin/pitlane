@@ -7,7 +7,6 @@ from sqlalchemy.orm import sessionmaker
 from datetime import date, datetime, timedelta
 import string
 import random
-import requests
 
 def getRaceNamesForYear(year):
     session = get_session()
