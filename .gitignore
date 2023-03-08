@@ -127,9 +127,9 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+server/pitlane-ad39e-firebase-adminsdk-lwgav-6cd3d35bc8.json
 # Pyre type checker
 .pyre/
 app/backend/fantasycache/NextPrevRaces.json
-
+server/firebase_config.py
 todo

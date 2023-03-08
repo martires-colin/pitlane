@@ -3,7 +3,7 @@ from datetime import datetime
 from models import Race, Constructor, Constructor_Results, Driver, Driver_Standings
 from models import Results, Status, Constructor_Standings
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, desc
 import ergast
 import logging
 
@@ -155,3 +155,25 @@ def update_c_standings(race):
     info = {'isError': False, 'function': 'update_c_standings', 'race': race.name}
     logging.info(info)
     return True
+
+def get_notif():
+    session = get_session()
+    now = datetime.utcnow()
+    race = session.query(Race.raceid).filter(Race.date <= now).order_by(desc(Race.date)).first()[0]
+    results = []
+    for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race).order_by(Results.position):
+        results.append({'Position':x.Results.position, 'Driver': x.Driver.forename + ' ' + x.Driver.surname, 'Starting Position': x.Results.grid})
+    standings = []
+    for y in session.query(Driver_Standings, Driver).join(Driver, Driver.driverid == Driver_Standings.driverid).filter(Driver_Standings.raceid == race).order_by(Driver_Standings.position):
+        standings.append({'Position':y.Driver_Standings.position, 'Driver': y.Driver.forename + ' ' + y.Driver.surname, 'Points': y.Driver_Standings.points})
+    constructors = []
+    for z in session.query(Constructor_Standings, Constructor).join(Constructor, Constructor.constructorid == Constructor_Standings.constructorid).filter(Constructor_Standings.raceid == race).order_by(Constructor_Standings.position):
+        constructors.append({'Position':z.Constructor_Standings.position ,'Constructor':z.Constructor.name, 'Points':z.Constructor_Standings.points})
+    session.close()
+    return {'Results':results, 'Standings':standings, 'Constructors':constructors}
+
+def upcoming_race():
+    session = get_session()
+    race = session.query(Race).filter(Race.date >= datetime.utcnow()).order_by(Race.date).first()
+    session.close()
+    return{'Year':race.year, 'Race':race.name, 'Round':race.round, 'Date':race.date.strftime('%m-%d-%Y %H:%M:%S')}
