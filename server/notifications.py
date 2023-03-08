@@ -19,27 +19,27 @@ def postRaceNotifs():
         # Get a reference to the users collection
         users_ref = database.collection('users')
         data = db.get_notif()
+        res = f'PITLANE\n\nRace Results for {data["Race"]}\n'
+        d_s = "PITLANE\n\nDriver's Championship Standings\n"
+        c_s = "PITLANE\n\nConstructor's Championship Standings\n"
+        for x in data["Results"]:
+            res += f'{str(x["Position"]).ljust(3)} {x["Driver"]}\n'
+        for y in data['Standings']:
+            d_s += f'{str(y["Position"]).ljust(3)} {y["Driver"].ljust(17)} {int(y["Points"])}pts\n'
+        for z in data["Constructors"]:
+            c_s += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(12)} {int(z["Points"])}pts\n'
         # Iterate over each user and send message to their number depending on flags they have set.
         for user_doc in users_ref.stream():
             user_data = user_doc.to_dict()
             phoneNumber = user_data.get('phoneNumber')
             if phoneNumber:
                 if user_data.get('completeNotif') == True:
-                    msg_body = f'PITLANE\n\nRace Results for {data["Race"]}\n'
-                    for x in data["Results"]:
-                        msg_body += f'{str(x["Position"]).ljust(3)} {x["Driver"]}\n'
-                    n = notif(msg_body, phoneNumber)
+                    n = notif(res, phoneNumber)
                 if user_data.get('driverStandingsNotif') == True:
-                    msg_body = "PITLANE\n\nDriver's Championship Standings\n"
-                    for z in data['Standings']:
-                        msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(12)} {int(z["Points"])}pts\n'
-                    n = notif(msg_body, phoneNumber)
+                    n = notif(d_s, phoneNumber)
                 if user_data.get('constructorStandingsNotif') == True:
-                    msg_body = "PITLANE\n\nDriver's Championship Standings\n"
-                    for y in data['Standings']:
-                        msg_body += f'{str(y["Position"]).ljust(3)} {y["Driver"].ljust(17)} {int(y["Points"])}pts\n'
-                    n = notif(msg_body, phoneNumber)
-        return {'postRaceNotifs':'SUCCESS!'}
+                    n = notif(c_s, phoneNumber)
+        return {'postRaceNotifs':'SUCCESS!', }
     except Exception as inst:
         return {'postRaceNotifs':'FAILURE!', 'ERROR': inst}
     
