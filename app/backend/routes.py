@@ -19,6 +19,7 @@ from dateutil import tz
 import pytz
 from twilio.rest import Client
 from .twilio_config import *
+# import twilio_config
 import os
 
 main = Blueprint("main", __name__)
@@ -357,10 +358,10 @@ def sendSMS():
 
     # Twilio Client to handle SMS notifications
     print("SENDING SMS via TWILIO")
-    client = Client(twilio_config.account_sid, twilio_config.auth_token)
+    client = Client(account_sid, auth_token)
     message = client.messages.create(
     body=msg_body,
-    from_=twilio_config.twilio_number,
+    from_=twilio_number,
     to=user_phone_number
     )
 
@@ -373,9 +374,10 @@ def sendSMS():
 @main.route("/race_results_notif", methods=["GET"])
 def getRaceResultsNotif():
     msg_body = ''
+    recent_race = get_recent_race().name
     data = notif_res()
 
-    msg_body += f'PITLANE\n\nRace Results for {data["Race"]}\n'
+    msg_body += f'PITLANE\n\nRace Results for {recent_race}\n'
     for x in data["Results"]:
         msg_body += f'{str(x["Position"]).ljust(3)} {x["Driver"]}\n'
 
