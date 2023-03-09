@@ -76,7 +76,7 @@ def nextprev():
 
         # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
         # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
-        with open("backend/fantasycache/NextPrevRaces.json",'r') as file:
+        with open("fantasycache/NextPrevRaces.json",'r') as file:
             fileData = json.load(file)
         newRecentID = get_recent_race().raceid
         if fileData['recentRaceID'] < newRecentID:
@@ -86,7 +86,7 @@ def nextprev():
             nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
             # print(prevRace, nextRace)
             # print(prevFlag, nextFlag)
-            with open("backend/fantasycache/NextPrevRaces.json", "w") as file:
+            with open("fantasycache/NextPrevRaces.json", "w") as file:
                 json.dump({"recentRaceID": newRecentID, "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
                 
             return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})

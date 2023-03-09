@@ -3,9 +3,9 @@ Senior capstone project for CS425/426 @ the University of Nevada, Reno
 
 ## How to run
 ### Backend
-cd app
+cd app/backend
 Install requirements found in requirements.txt
-flask --app backend --debug run --host localhost --port 3001
+flask --app __init__.py --debug run --host localhost --port 3001
 
 ### Frontend
 cd app/frontend
