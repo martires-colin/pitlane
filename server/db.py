@@ -1,9 +1,9 @@
 # Helper functions and main functions for updating the database using data from ERGAST (ses ergast.py)
 from datetime import datetime
-from models import Race, Constructor, Constructor_Results, Driver, Driver_Standings
+from models import Race, Constructor, Constructor_Results, Driver, Driver_Standings, Team
 from models import Results, Status, Constructor_Standings
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, desc
+from sqlalchemy.orm import sessionmaker, desc, update
 import ergast
 import logging
 
@@ -177,3 +177,18 @@ def upcoming_race():
     race = session.query(Race).filter(Race.date >= datetime.utcnow()).order_by(Race.date).first()
     session.close()
     return{'Year':race.year, 'Race':race.name, 'Round':race.round, 'Date':race.date.strftime('%m-%d-%Y %H:%M:%S')}
+
+def score(race):
+    try:
+        session = get_session()
+        for q in session.query(Team.userid, Team.leagueid, Team.driver1id, Team.driver2id, Team.constructorid, Team.points).all():
+            d1 = session.query(Results).filter(Results.raceid == race.raceid, Results.driverid == q.driver1id).first()
+            d2 = session.query(Results).filter(Results.raceid == race.raceid, Results.driverid == q.driver2id).first()
+            c  = session.query(Constructor_Results).filter(Constructor_Results.raceid == race.raceid, Constructor_Results.constructorid == q.constructorid).first()
+            newPoints = d1.points + d2.points + c.points + Team.points
+            session.execute(update(Team).where(Team.userid == q.userid, Team.leagueid == q.leagueid).values(points=newPoints))
+            session.commit()
+        session.close()
+        logging.info({'score':'SUCCESS!'})
+    except Exception as e:
+        logging.info({'score':'FAILURE', 'error':e})
