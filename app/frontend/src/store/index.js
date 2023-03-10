@@ -38,6 +38,9 @@ export default createStore({
         completeNotif: false,
         driverStandingsNotif: false,
         constructorStandingsNotif: false
+      },
+      roles: {
+        leagueOwner: false
       }
     },
     nextRace: null,
@@ -67,6 +70,9 @@ export default createStore({
       state.user.notificationPreferences.completeNotif = data.completeNotif
       state.user.notificationPreferences.driverStandingsNotif = data.driverStandingsNotif
       state.user.notificationPreferences.constructorStandingsNotif = data.constructorStandingsNotif
+    },
+    SET_ROLES(state, data) {
+      state.user.roles.leagueOwner = data.isLeagueOwner
     }
   },
   actions: {
@@ -76,13 +82,15 @@ export default createStore({
         updateProfile(response.user, {
           displayName: name,
           photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png",
+          // photoURL: "https://images.thewest.com.au/publication/C-9915534/b82761c6734744728228f851e6462f98cb2ce788-16x9-x0y131w5186h2917.jpg?imwidth=810&impolicy=wan_v3",
         })
         try {
           await setDoc(doc(db, "users", response.user.uid), {
             username: name,
             email: email,
             phoneNumber: "",
-            uid: response.user.uid
+            uid: response.user.uid,
+            photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png"
           });
           console.log("Document written with ID: ", response.user.uid);
           await new Promise(r => setTimeout(r, 500));
@@ -136,6 +144,31 @@ export default createStore({
         completeNotif: notifPreferences.completeNotif,
         driverStandingsNotif: notifPreferences.driverStandingsNotif,
         constructorStandingsNotif: notifPreferences.constructorStandingsNotif
+      })
+    },
+    // ---------------UPDATE USER ROLES-----------
+    // userRoles will be an object holding booleans for each role
+    async updateRoles({ commit }, userRoles) {
+      const user = auth.currentUser;
+      const docRef = doc(db, "users", user.uid)
+      await updateDoc(docRef, {
+        leagueOwner: userRoles.isLeagueOwner
+      })
+      commit('SET_ROLES', {
+        leagueOwner: userRoles.isLeagueOwner})
+    },
+    // --------------------------------------------
+    async updateProfilePicture({ commit }, img_url) {
+      const user = auth.currentUser;
+      const docRef = doc(db, "users", user.uid)
+      updateProfile(user, {
+        photoURL: img_url.photoURL
+      })
+      await updateDoc(docRef, {
+        photoURL: img_url.photoURL
+      })
+      commit('SET_USER', {
+        photoURL: img_url.photoURL
       })
     },
     async logout({ commit }) {

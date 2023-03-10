@@ -71,7 +71,21 @@
           <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Add Phone Number</button>
         </div>
       </div>
+
+
     </form>
+<!-- ------ update profile pic ----------- -->
+    <form @submit.prevent="updateProfilePicture">
+      <div class="row py-2">
+        <div class="form-group">
+          <label class="pb-1">Update Profile Picture</label>
+          <input type="text" class="form-control" placeholder="Enter image url" v-model="img_url">
+          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Profile Picture</button>
+        </div>
+      </div>
+    </form>
+<!-- ------------------------------------------ -->
+
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
@@ -135,10 +149,24 @@ export default {
         phone: true,
         phoneRegionCode: 'US',
         prefix: "+1"
-      }
+      },
+      img_url: ''
     }
   },
   methods: {
+    updateProfilePicture() {
+      try {
+        this.$store.dispatch('updateProfilePicture', {
+          photoURL: this.img_url
+        })
+        console.log(`Updating Profile Pic to ${this.img_url}`)
+        // this.triggerAlert()
+      }
+      catch (err) {
+        console.log(err)
+        return;
+      }
+    },
   }
 }
 </script>
