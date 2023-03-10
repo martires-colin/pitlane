@@ -1,7 +1,7 @@
 <!-- By Colin Martires -->
 
 <template>
-  <div class="bg-black h-100">
+  <div class="h-100">
 
     <section class="py-5 my-5">
       <div class="container">

@@ -423,15 +423,14 @@ def getUpcomingRaceNotif():
     data = upcoming_race()
 
     race_name = data["Race"]
-    race_date = data["Date"]
-    race_time_UTC = data["Time"]
-    date_time_str = race_date + " " + race_time_UTC
+    date_time_str = data["Date"]
 
-    date_time_format = "%m/%d/%Y %H:%M:%S"
+    date_time_format = "%m-%d-%Y %H:%M:%S"
     date_time_obj = datetime.strptime(date_time_str, date_time_format)
     d_utc = date_time_obj.replace(tzinfo=tz.tzutc())
     d_pst = d_utc.astimezone(tz.tzlocal())
     race_time_formatted = d_pst.time().strftime("%I:%M %p")
+    race_date = date_time_obj.date().strftime("%m-%d-%Y")
 
     msg_body = f"PITLANE\n\nUpcoming Race\n{race_name}\nDate: {race_date}\nTime: {race_time_formatted} PST"
 
