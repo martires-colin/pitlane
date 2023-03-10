@@ -3,7 +3,7 @@
 <template>
   <div class="h-100 w-100 d-flex justify-content-center">
     <div class="pt-1 mb-4 d-flex align-items-center">
-      <button class="btn btn-secondary btn-lg d-flex" id="login-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
+      <button class="btn btn-secondary btn-lg d-flex" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
     </div>
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
