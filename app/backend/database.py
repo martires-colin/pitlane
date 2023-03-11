@@ -25,7 +25,7 @@ def get_session():
 # Function for reteiving current drivers' championship standings.
 def getStandings(year):
     session = get_session()
-    if year == 0:
+    if year == datetime.utcnow().year:
         recentrace = get_recent_race()
     else:
         recentrace = getRaceForYear(session, year)
