@@ -97,14 +97,14 @@ def nextprev():
 @main.route("/standings/<int:Year>")
 def standings(Year):
     if request.method == 'GET':
-        if Year in range(1950, 2023):
+        if Year in range(1950, 2024):
             standings = getStandings(Year)
             return(jsonify({'standings': standings}))
         
 @main.route("/races/<int:Year>")
 def races(Year):
     if request.method == 'GET':
-        if Year in range(1950, 2023):
+        if Year in range(1950, 2024):
             raceNames = getRaceNamesForYear(Year)
             return (jsonify({'status': '200', 'raceNames': raceNames}))
 
