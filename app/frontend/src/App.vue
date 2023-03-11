@@ -1,6 +1,7 @@
 <template>
-  <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800">
-    <div class="relative sidebar overflow-hidden border-r border-slate-500 border-solid" :class="{'w-[170px]': isActive, 'w-[60px]': !isActive}">
+  <!-- <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800"> -->
+  <div class="pitlane-container flex flex-row" style="background-color: #36393e;">
+    <div class="relative sidebar overflow-hidden" :class="{'w-[170px]': isActive, 'w-[60px]': !isActive}">
       <div class="ml-2 flex flex-col justify-start">
         <div class="flex flex-row justify-start">
           <img
@@ -12,7 +13,7 @@
           />
           <h1 class="py-2 pl-[12px] text-2xl fw400">Pitlane</h1>
         </div>
-        <div class="pt-4 flex flex-col text-slate-700">
+        <div class="pt-4 flex flex-col text-white">
           <SidebarLink to="/" icon="fas fa-home">
             Home
           </SidebarLink>
@@ -147,6 +148,7 @@ nav a.router-link-exact-active {
   min-height: 100%;
   max-height: none;
   transition: 0.4s ease;
+  background-color: #282b30;
 }
 .sidebar:hover {
   /* width: 170px; */

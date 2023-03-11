@@ -1,80 +1,78 @@
 <!-- By Colin Martires -->
 
 <template>
-  <div class="bg-black h-100">
 
-    <section class="py-5 my-5">
-      <div class="container">
-        <h1 class="p-5">Account Settings</h1>
-        <div class="rounded-lg d-block bg-dark-300">
-          <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
+  <section class="py-5 my-5">
+    <div class="container">
+      <h1 class="p-5">Account Settings</h1>
+      <div class="rounded-lg d-block bg-dark-300">
+        <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
 
-            <b-tab title="Account" :title-link-class="'btab'" active>
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
+          <b-tab title="Account" :title-link-class="'btab'" active>
+            <div class="container tab-content">
+              <div class="row py-2">
+                <div class="col-4">
+                  <div class="card-body">
+                    <div class="row py-2 text-center">
+                      <div>
+                        <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
                       </div>
-                      <h5 class="user-name">{{ user.displayName }}</h5>
                     </div>
-                  </div>
-
-                  <div class="col-8">
-                    <UserSettings />
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-
-            <b-tab title="Password" :title-link-class="'btab'">
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
-                      </div>
-                      <h5 class="user-name">{{ user.displayName }}</h5>
-                    </div>
-                  </div>
-                  <div class="col-8 text-center">
-                    <PasswordSettings />
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-
-            <b-tab title="Notifications" :title-link-class="'btab'">
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
-                      </div>
                     <h5 class="user-name">{{ user.displayName }}</h5>
                   </div>
-                  </div>
-                  <div class="col-8">
-                    <NotificationSettings />
-                  </div>
+                </div>
+
+                <div class="col-8">
+                  <UserSettings />
                 </div>
               </div>
-            </b-tab>
-          </b-tabs>
-        </div>
-      </div>
-    </section>
+            </div>
+          </b-tab>
 
-  </div>
+          <b-tab title="Password" :title-link-class="'btab'">
+            <div class="container tab-content">
+              <div class="row py-2">
+                <div class="col-4">
+                  <div class="card-body">
+                    <div class="row py-2 text-center">
+                      <div>
+                        <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
+                      </div>
+                    </div>
+                    <h5 class="user-name">{{ user.displayName }}</h5>
+                  </div>
+                </div>
+                <div class="col-8 text-center">
+                  <PasswordSettings />
+                </div>
+              </div>
+            </div>
+          </b-tab>
+
+          <b-tab title="Notifications" :title-link-class="'btab'">
+            <div class="container tab-content">
+              <div class="row py-2">
+                <div class="col-4">
+                  <div class="card-body">
+                    <div class="row py-2 text-center">
+                      <div>
+                        <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
+                      </div>
+                    </div>
+                  <h5 class="user-name">{{ user.displayName }}</h5>
+                </div>
+                </div>
+                <div class="col-8">
+                  <NotificationSettings />
+                </div>
+              </div>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </div>
+    </div>
+  </section>
+
 </template>
 
 <script>
@@ -131,8 +129,8 @@ export default {
 }
 
 .btab {
-  background-color: #4AA3D1 !important;
-  color: white !important;
+  background-color: #00d4ff !important;
+  color: black !important;
   
 }
 
@@ -147,11 +145,13 @@ export default {
 }
 
 #update-btn {
-  background-color: #005b96;
+  background-color: #00d4ff;
+  color: black;
 }
 
 #update-btn:hover {
-  background-color: #03396c;
+  background-color: white;
+  color: black;
 }
 
 #phone {
