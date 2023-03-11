@@ -79,7 +79,7 @@
       <div class="row py-2">
         <div class="form-group">
           <label class="pb-1">Update Profile Picture</label>
-          <input type="text" class="form-control" placeholder="Enter image url" v-model="img_url">
+          <input type="text" class="form-control" placeholder="Enter image url" v-model="img_url" required>
           <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Profile Picture</button>
         </div>
       </div>
@@ -89,8 +89,35 @@
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
-          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showPhoneAlert">
             Updated Phone Number!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showPicSuccess">
+            Updated Profile Picture!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPicFail">
+            Photo URL too long!!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorSomething">
+            Something went wrong!
           </div>
         </transition>
       </div>
@@ -114,7 +141,6 @@ export default {
     const store = useStore()
 
     const phoneNumber = ref('')
-    const showAlert = ref(false)
     
     const user = computed(() => {
       console.log(store.getters.user)
@@ -128,7 +154,7 @@ export default {
           phoneNumber: phoneNumber.value
         })
         console.log("Updated Phone Number")
-        triggerAlert()
+        triggerPhoneAlert()
       }
       catch (err) {
         console.log(err)
@@ -136,12 +162,43 @@ export default {
       }
     }
 
-    const triggerAlert = () => {
-      showAlert.value = true;
-      setTimeout(() => showAlert.value = false, 2000)
+    const showPhoneAlert = ref(false)
+    const triggerPhoneAlert = () => {
+      showPhoneAlert.value = true;
+      setTimeout(() => showPhoneAlert.value = false, 2000)
     }
 
-    return { user, update, phoneNumber, showAlert, triggerAlert }
+    const showPicSuccess = ref(false)
+    const triggerPicSuccess = () => {
+      showPicSuccess.value = true;
+      setTimeout(() => showPicSuccess.value = false, 2000)
+    }
+
+    const showPicFail = ref(false)
+    const triggerPicFail = () => {
+      showPicFail.value = true;
+      setTimeout(() => showPicFail.value = false, 2000)
+    }
+
+    const showErrorSomething = ref(false)
+    const triggerErrorSomething = () => {
+      showErrorSomething.value = true;
+      setTimeout(() => showErrorSomething.value = false, 2000)
+    }
+
+    return {
+      user,
+      update,
+      phoneNumber,
+      showPhoneAlert,
+      triggerPhoneAlert,
+      showPicSuccess,
+      triggerPicSuccess,
+      showPicFail,
+      triggerPicFail,
+      showErrorSomething,
+      triggerErrorSomething
+    }
   },
   data() {
     return {
@@ -153,21 +210,27 @@ export default {
       img_url: ''
     }
   },
-  methods: {
-    updateProfilePicture() {
-      try {
-        this.$store.dispatch('updateProfilePicture', {
-          photoURL: this.img_url
-        })
-        console.log(`Updating Profile Pic to ${this.img_url}`)
-        // this.triggerAlert()
+    methods: {
+    async updateProfilePicture() {
+        try {
+          await this.$store.dispatch('updateProfilePicture', {
+            photoURL: this.img_url
+          })
+          this.triggerPicSuccess()
+        }
+        catch (err) {
+          console.log(err)
+          switch (err.code) {
+            case "auth/invalid-profile-attribute":
+              this.triggerPicFail()
+              break;
+            default:
+              this.triggerErrorSomething()
+          }
+          return;
+        }
       }
-      catch (err) {
-        console.log(err)
-        return;
-      }
-    },
-  }
+    }
 }
 </script>
 

@@ -160,15 +160,19 @@ export default createStore({
     // --------------------------------------------
     async updateProfilePicture({ commit }, img_url) {
       const user = auth.currentUser;
-      const docRef = doc(db, "users", user.uid)
-      updateProfile(user, {
+      await updateProfile(user, {
         photoURL: img_url.photoURL
-      })
-      await updateDoc(docRef, {
-        photoURL: img_url.photoURL
-      })
-      commit('SET_USER', {
-        photoURL: img_url.photoURL
+      }).then(() => {
+        const docRef = doc(db, "users", user.uid)
+        updateDoc(docRef, {
+          photoURL: img_url.photoURL
+        })
+        commit('SET_USER', {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid
+        })
       })
     },
     async logout({ commit }) {
