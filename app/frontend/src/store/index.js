@@ -40,7 +40,9 @@ export default createStore({
         constructorStandingsNotif: false
       },
       roles: {
-        leagueOwner: false
+        leagueOwner: false,
+        teamOwner: false,
+        admin: false
       }
     },
     nextRace: null,
