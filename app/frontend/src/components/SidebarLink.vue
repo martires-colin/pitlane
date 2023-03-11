@@ -66,7 +66,8 @@ export default {
 
 .link:hover {
   /* background-color: var(--sidebar-item-hover); */
-  color: black;
+  /* color: black; */
+  color: #00d4ff;
   font-weight: bold;
 }
 

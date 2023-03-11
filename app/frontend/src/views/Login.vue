@@ -175,11 +175,14 @@ export default {
 <style>
 
 #login-btn {
-  background-color: #005b96;
+  /* background-color: #005b96; */
+  background-color: #00d4ff !important;
+  border: 0;
 }
 
 #login-btn:hover {
-  background-color: #03396c;
+  /* background-color: #03396c; */
+  background-color: #0a2540 !important;
 }
 
 .fade-enter-from {
