@@ -130,6 +130,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-app/backend/fantasycache/NextPrevRaces.json
 
 todo

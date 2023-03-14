@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     getStandings() {
-      const path = "http://localhost:3001/standings/2022";
+      const path = "https://pitlane-api.up.railway.app/standings/2022";
       axios.get(path).then((response) => {
         console.log(response);
         this.standings = response.data.standings;

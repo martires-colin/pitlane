@@ -76,17 +76,21 @@ def nextprev():
 
         # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
         # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
-        with open("backend/fantasycache/NextPrevRaces.json",'r') as file:
+        # print(os.listdir('fantasycache'))
+        # print(os.path.exists('fantasycache/NextPrevRaces.json'))
+        with open("fantasycache/NextPrevRaces.json",'r') as file:
             fileData = json.load(file)
         newRecentID = get_recent_race().raceid
-        if fileData['recentRaceID'] < newRecentID:
+
+        # if fileData['recentRaceID'] < newRecentID:
+        if 1098 < newRecentID:
             prevRace, nextRace = getNextPrevRaces(newRecentID)
             # prevRace, nextRace = getNextPrevRaces()
             prevRace.append(requests.get(f"https://restcountries.com/v3.1/name/{prevRace[2]}?fields=flags").json()[0]['flags']['png'])
             nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
             # print(prevRace, nextRace)
             # print(prevFlag, nextFlag)
-            with open("backend/fantasycache/NextPrevRaces.json", "w") as file:
+            with open("fantasycache/NextPrevRaces.json", "w") as file:
                 json.dump({"recentRaceID": newRecentID, "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
                 
             return jsonify({'status': '200', 'prevRace': prevRace, 'nextRace': nextRace})
@@ -109,7 +113,7 @@ def races(Year):
 
 @main.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
-    fastf1.Cache.enable_cache('backend/cache/')
+    # fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
         post_data = request.get_json()
         print(request.get_json())

@@ -49,7 +49,7 @@ export default {
         },
         async sendTeamInformation(teamInformation) {
             console.log('HELLLOOOOOO')
-            const res = await fetch('http://localhost:3001/fantasy/createTeam', {
+            const res = await fetch('https://pitlane-api.up.railway.app/fantasy/createTeam', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',

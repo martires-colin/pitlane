@@ -159,7 +159,7 @@ export default {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
         }
-        const path = "http://localhost:3001/send_SMS"
+        const path = "https://pitlane-api.up.railway.app/send_SMS"
         axios
           .post(path, payload)
           .then((res) => {
@@ -181,7 +181,7 @@ export default {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
         }
-        const path = "http://localhost:3001/send_SMS"
+        const path = "https://pitlane-api.up.railway.app/send_SMS"
         axios
           .post(path, payload)
           .then((res) => {
@@ -203,7 +203,7 @@ export default {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
         }
-        const path = "http://localhost:3001/send_SMS"
+        const path = "https://pitlane-api.up.railway.app/send_SMS"
         axios
           .post(path, payload)
           .then((res) => {
@@ -225,7 +225,7 @@ export default {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
         }
-        const path = "http://localhost:3001/send_SMS"
+        const path = "https://pitlane-api.up.railway.app/send_SMS"
         axios
           .post(path, payload)
           .then((res) => {
@@ -247,7 +247,7 @@ export default {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
         }
-        const path = "http://localhost:3001/send_SMS"
+        const path = "https://pitlane-api.up.railway.app/send_SMS"
         axios
           .post(path, payload)
           .then((res) => {
@@ -261,31 +261,31 @@ export default {
       }
     },
     async fetchCompleteResults() {
-      const res = await fetch(`http://localhost:3001/race_results_notif`);
+      const res = await fetch(`https://pitlane-api.up.railway.app/race_results_notif`);
       const data = await res.json();
       console.log(data)
       return data
     },
     async fetchDriverStandings() {
-      const res = await fetch(`http://localhost:3001/driver_standings_notif`);
+      const res = await fetch(`https://pitlane-api.up.railway.app/driver_standings_notif`);
       const data = await res.json();
       console.log(data)
       return data
     },
     async fetchConstructorStandings() {
-      const res = await fetch(`http://localhost:3001/constructor_standings_notif`);
+      const res = await fetch(`https://pitlane-api.up.railway.app/constructor_standings_notif`);
       const data = await res.json();
       console.log(data)
       return data
     },
     async fetchUpcomingRace() {
-      const res = await fetch(`http://localhost:3001/upcoming_race_notif`);
+      const res = await fetch(`https://pitlane-api.up.railway.app/upcoming_race_notif`);
       const data = await res.json();
       console.log(data)
       return data
     },
     async fetchLightsOut() {
-      const res = await fetch(`http://localhost:3001/lights_out_notif`);
+      const res = await fetch(`https://pitlane-api.up.railway.app/lights_out_notif`);
       const data = await res.json();
       console.log(data)
       return data

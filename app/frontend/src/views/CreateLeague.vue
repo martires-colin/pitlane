@@ -9,7 +9,7 @@ export default {
     methods: {
         async onSubmit() {
             if (this.leagueName.length > 3) {
-                const res = await fetch('http://localhost:3001/fantasy/createLeague', {
+                const res = await fetch('https://pitlane-api.up.railway.app/fantasy/createLeague', {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json',

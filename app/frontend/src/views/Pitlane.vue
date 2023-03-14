@@ -159,14 +159,14 @@ export default {
   methods: {
     async changeYear(event){
       console.log('event', event)
-      const res = await fetch(`http://localhost:3001/races/${event}`, {
+      const res = await fetch(`https://pitlane-api.up.railway.app/races/${event}`, {
         method: 'GET'
       });
       const data = await res.json();
       this.trackOptions = data.raceNames
     },
     async sendForm(method) {
-      const res = await fetch('http://localhost:3001/pitlane', {
+      const res = await fetch('https://pitlane-api.up.railway.app/pitlane', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
