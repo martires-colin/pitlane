@@ -277,9 +277,11 @@ def fantasy():
 def fantasyLeague():
     if request.method == 'POST':
         leagueid = request.get_json()['leagueid']
-        league = getLeague(leagueid)
+        userid = request.get_json()['userid']
+        league, leaderboard = getLeague(leagueid, userid)
         print(league[0])
-        return jsonify({'status': '200', 'leagueName': league[0]})
+        print(leaderboard)
+        return jsonify({'status': '200', 'leagueName': league[0], 'leaderboard': leaderboard})
 @main.route("/fantasy/team", methods=['POST'])
 def fantasyTeam():
     if request.method == 'POST':

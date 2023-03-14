@@ -60,14 +60,14 @@ def getUserTeams(userid):
 #     teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid, 'points': team.points}
 #     return teamJSON
 
-def getLeague(leagueID):
+def getLeague(leagueID, userid):
     session = get_session()
-    teams = []
-    leagueName = session.query(League).filter(League.leagueid == leagueID).first().name
-    for s in session.query(Team).filter(Team.leagueid == leagueID):
-        teams.append(s)
+    leaderboard = []
+    leagueName = session.query(League.name).filter(League.leagueid == leagueID).first()
+    for s in session.query(Team.teamname, Team.points).filter(Team.leagueid == leagueID).order_by(desc(Team.points)).all():
+        leaderboard.append({'name': s[0], 'points': s[1]})
     session.close()
-    return leagueName, teams
+    return leagueName, leaderboard
 
 def getNextPrevRaces(Date):
     session = get_session()
@@ -126,18 +126,7 @@ def score():
     session.close()
 
 if __name__ == '__main__':
-    # createPointSheet()
-    # User = {
-    #     "name": "Anthony",
-    #     "drivers": {
-    #         "driver1": "hamilton",
-    #         "driver2": "leclerc"
-    #     },
-    #     "constructor": "mercedes",
-    #     "totalPoints": 0
-    # }
     # giveScoreForUser(User=User)
-
     # recent = get_recent_race()
     # print(recent.raceid)
     t1, t2 = getNextPrevRaces(datetime.strptime("2023-03-05 00:00:00", "%Y-%m-%d %H:%M:%S"))

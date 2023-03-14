@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800"> -->
-  <div class="pitlane-container flex flex-row" style="background-color: #36393e;">
+  <div class="pitlane-container flex flex-row bg-[#36393e]">
     <div class="relative sidebar overflow-hidden" :class="{'w-[170px]': isActive, 'w-[60px]': !isActive}">
       <div class="ml-2 flex flex-col justify-start">
         <div class="flex flex-row justify-start">
