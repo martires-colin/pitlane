@@ -270,7 +270,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.5s;
+  transition: 0.35s;
 }
 
 .grid-item:hover {

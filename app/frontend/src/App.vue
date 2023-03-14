@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800"> -->
   <div class="pitlane-container flex flex-row bg-[#36393e]">
-    <div class="relative sidebar overflow-hidden" :class="{'w-[170px]': isActive, 'w-[60px]': !isActive}">
+    <div class="relative sidebar overflow-hidden" :class="{'w-[190px]': isActive, 'w-[58px]': !isActive}">
       <div class="ml-2 flex flex-col justify-start">
         <div class="flex flex-row justify-start">
           <img
@@ -31,10 +31,15 @@
             <SidebarLink class="fantasy-link" v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered" @mouseover="fantasyDropdown = true"
               >Fantasy
             </SidebarLink>
-            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn">
+            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn && isActive">
               <SidebarLink icon="fa-solid fa-plus" v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
               <SidebarLink icon="fa-solid fa-user-plus" v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
               <SidebarLink icon="fa-solid fa-warehouse" v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
+            </div>
+            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn && !isActive">
+              <SidebarLink icon="fa-solid fa-plus" class="" to="/fantasy/createLeague"></SidebarLink>
+              <SidebarLink icon="fa-solid fa-user-plus" class="py-3" to="/fantasy/joinLeague"></SidebarLink>
+              <SidebarLink icon="fa-solid fa-warehouse" to="/fantasy"></SidebarLink>
             </div>
           </div>
           <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
@@ -154,7 +159,7 @@ nav a.router-link-exact-active {
   /* width: 170px; */
 }
 .fantasy-link:hover {
-  width: 180px;
+  /* width: 180px; */
 }
 .fantasyDrop {
   height: 26px;

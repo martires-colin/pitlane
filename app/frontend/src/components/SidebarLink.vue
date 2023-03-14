@@ -22,7 +22,7 @@ export default {
   <div>
     <router-link :to="to" class="link">
       <i class="icon" :class="icon"></i>
-      <span class="pl-[12px]">
+      <span class="pl-[6px]">
         <slot></slot>
       </span>
       <!-- <Transition name="fade"
