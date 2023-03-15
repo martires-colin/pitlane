@@ -33,7 +33,7 @@
               img-top
               tag="article"
               style="max-width: 20rem;"
-              class="mb-2 bg-neutral-200">
+              class="mb-2 bg-[#5b6068]">
               <p v-if="driver1 === ''" class="py-2">Add Driver</p>
               <FantasyModal button-title="+" :all-drivers="driverRoster" @set-driver1="(setDriver1)" v-if="driver1 === ''" />
               <BCardText class="text-xl">{{ driver1.drivername }}</BCardText>
@@ -45,7 +45,7 @@
               img-top
               tag="article"
               style="max-width: 20rem;"
-              class="mb-2 bg-neutral-200">
+              class="mb-2 bg-[#5b6068]">
               <p v-if="driver2 === ''" class="py-2">Add Driver</p>
               <Driver2Modal button-title="+" :all-drivers="driverRoster" @set-driver2="(setDriver2)" v-if="driver2 === ''" />
               <BCardText class="text-xl">{{ driver2.drivername }}</BCardText>
@@ -53,36 +53,30 @@
             </BCard>
           </div>
           <div class="flex flex-row justify-center">
-            <img :src="constructorImage" class="bg-slate-500 rounded-2 max-w-[600px] max-h-[400px]">
+            <img :src="constructorImage" class="bg-[#5b6068] rounded-2 max-w-[600px] max-h-[400px]">
           </div>
           <div class="flex flex-row justify-center" v-if="lineupChanged">
             <button class="hover:bg-slate-400 p-2 rounded-2 text-xl bg-slate-500" @click="sendLineup">Save Lineup</button>
           </div>
         </div>
-          <div v-if="whichSubTable === 0" class="leaderboard bg-sky-100">
-            <div class="grid-item bg-sky-300 border-l-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
-            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
-            <div class="grid-item bg-sky-200 border-r-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-            <div class="grid-item col-span-3">1</div>
-          </div>
-          <div v-if="whichSubTable === 1" class="bg-clip-content driver-grid bg-sky-100">
-            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
-            <div class="grid-item bg-sky-300 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
-            <div class="grid-item bg-sky-200 border-t-2 border-r-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
-            <div class="grid-item col-span-3 border-x-2 border-t-2 border-slate-300" v-for="(driver, index) in allDrivers" :key="index">{{ driver }}</div>
-          </div>
-          <div v-if="whichSubTable === 2" class="bg-clip-content team-grid bg-sky-100">
-            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
-            <div class="grid-item bg-sky-200 border-x-2 border-t-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
-            <div class="grid-item bg-sky-300 border-t-2 border-r-2 border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
-            <div class="grid-item col-span-3 border-x-2 border-t-2 border-slate-300" v-for="(constructor, index) in allConstructors" :key="index">{{ constructor }}</div>
-          </div>
+        <div v-if="whichSubTable === 0" class="leaderboard bg-[#282b30]">
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+          <div class="grid-item col-span-3" v-for="(team, index) in leaderboard" :key="index" >{{ index+1 }}. {{ team.name }} {{ team.points }} points</div>
+        </div>
+        <div v-if="whichSubTable === 1" class="bg-clip-content driver-grid bg-[#282b30]">
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+          <div class="grid-item col-span-3 border-slate-300" v-for="(driver, index) in allDrivers" :key="index">{{ driver }}</div>
+        </div>
+        <div v-if="whichSubTable === 2" class="bg-clip-content team-grid bg-[#282b30]">
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 0">Leaderboard</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 1">Drivers</div>
+          <div class="grid-item border-slate-300 hover:cursor-pointer" @click="whichSubTable = 2">Constructors</div>
+          <div class="grid-item col-span-3 border-slate-300" v-for="(constructor, index) in allConstructors" :key="index">{{ constructor }}</div>
+        </div>
       </div>
   </div>
 </template>
@@ -118,6 +112,7 @@ export default {
       driver1Image: null,
       driver2Image: null,
       constructorImage: null,
+      leaderboard: null,
     }
   },
   methods: {
@@ -177,21 +172,22 @@ export default {
     async setSelectedTeam(teamname, leagueid) {
       console.log(teamname, leagueid)
       this.selectedTeam = teamname;
-      await this.fetchLeague(leagueid);
+      await this.fetchLeague(this.$store.state.user.uid, leagueid);
       await this.fetchTeamJSON(this.$store.state.user.uid, leagueid)
       this.teamSelected = true;
     },
-    async fetchLeague(leagueid) {
+    async fetchLeague(userid, leagueid) {
       const res = await fetch('http://localhost:3001/fantasy/league', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         mode: 'cors',
-        body: JSON.stringify({'leagueid': leagueid})
+        body: JSON.stringify({'leagueid': leagueid, 'userid': userid})
       });
       const data = await res.json();
       console.log('league info', data)
+      this.leaderboard = data.leaderboard;
       this.leagueName = data.leagueName;
       this.leagueid = leagueid;
     },
@@ -270,10 +266,14 @@ export default {
   height: 100%;
 }
 
-.grid-item{
+.grid-item {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.35s;
 }
 
+.grid-item:hover {
+  background-color:#4b515a;
+}
 </style>
