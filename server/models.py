@@ -1,7 +1,7 @@
 # Models for the different database tables to connect to the PITLANE app
 # Noah Howren
-from sqlalchemy import create_engine, Column, Integer, String, Date, Time, Float, ForeignKey, Boolean
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import Column, Integer, String, Date, Time, Float, ForeignKey, Boolean
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -14,16 +14,11 @@ class Race(Base):
     name = Column(String)
     date = Column(Date)
     url = Column(String)
-    fp1_date = Column(Date)
-    fp1_time = Column(Time)
-    fp2_date = Column(Date)
-    fp2_time = Column(Time)
-    fp3_date = Column(Date)
-    fp3_time = Column(Time)
-    quali_date = Column(Date)
-    quali_time = Column(Time)
-    sprint_date = Column(Date)
-    sprint_time = Column(Time)
+    fp1 = Column(Date)
+    fp2 = Column(Date)
+    fp3 = Column(Date)
+    quali = Column(Date)
+    sprint = Column(Date)
 
 class Status(Base):
     __tablename__ = "status"

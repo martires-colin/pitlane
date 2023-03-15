@@ -3,9 +3,8 @@ from datetime import datetime
 from models import Race, Constructor, Constructor_Results, Driver, Driver_Standings, Team
 from models import Results, Status, Constructor_Standings
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, desc, update
+from sqlalchemy.orm import sessionmaker
 import ergast
-import logging
 
 # Function for creating the session object to connect to the PostgreSQL Database
 def get_session():
@@ -51,7 +50,7 @@ def update_c_results(race):
         res = ergast.cache_con_res(race)['MRData']['ConstructorTable']['Constructors']
     except:
         info = {'isError': True, 'function': 'update_c_results', 'race': race.name}
-        logging.error(info)
+        print(info)
         return False
     for r in res:
         c_id = con_to_id(r['constructorId'], session)
@@ -61,7 +60,7 @@ def update_c_results(race):
     session.commit()
     session.close()
     info = {'isError': False, 'function': 'update_c_standings', 'race': race.name}
-    logging.info(info)
+    print(info)
     return True
 
 # Updates driver and results tables
@@ -72,7 +71,7 @@ def update_results(race):
         res = ergast.cache_results(race)['MRData']['RaceTable']['Races'][0]['Results']
     except:
         info = {'isError': True, 'function': 'update_results', 'race': race.name}
-        logging.error(info)
+        print(info)
         return False
     session = get_session()
     # Check to see if driver list has been updated
@@ -106,7 +105,7 @@ def update_results(race):
     session.commit()
     session.close()
     info = {'isError': False, 'function': 'update_results', 'race': race.name}
-    logging.info(info)
+    print(info)
     return True
 
 # Updates driver standings table, returning false if it fails
@@ -116,7 +115,7 @@ def update_standings(race):
         res = ergast.cache_standings(race.year)['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings']
     except:
         info = {'isError': True, 'function': 'update_standings', 'race': race.name}
-        logging.error(info)
+        print(info)
         return False
     update_drivers(race.year, session)
     for r in res:
@@ -131,7 +130,7 @@ def update_standings(race):
     session.commit()
     session.close()
     info = {'isError': False, 'function': 'update_standings', 'race': race.name}
-    logging.info(info)
+    print(info)
     return True
 
 # Updates constructor standings table, returning false if it fails.
@@ -153,13 +152,13 @@ def update_c_standings(race):
     session.commit()
     session.close()
     info = {'isError': False, 'function': 'update_c_standings', 'race': race.name}
-    logging.info(info)
+    print(info)
     return True
 
 def get_notif():
     session = get_session()
     now = datetime.utcnow()
-    race = session.query(Race.raceid).filter(Race.date <= now).order_by(desc(Race.date)).first()[0]
+    race = session.query(Race.raceid).filter(Race.date <= now).order_by(sqlalchemy.desc(Race.date)).first()[0]
     results = []
     for x in session.query(Results, Driver).join(Driver, Driver.driverid == Results.driverid).filter(Results.raceid == race).order_by(Results.position):
         results.append({'Position':x.Results.position, 'Driver': x.Driver.forename + ' ' + x.Driver.surname, 'Starting Position': x.Results.grid})
@@ -186,9 +185,9 @@ def score(race):
             d2 = session.query(Results).filter(Results.raceid == race.raceid, Results.driverid == q.driver2id).first()
             c  = session.query(Constructor_Results).filter(Constructor_Results.raceid == race.raceid, Constructor_Results.constructorid == q.constructorid).first()
             newPoints = d1.points + d2.points + c.points + Team.points
-            session.execute(update(Team).where(Team.userid == q.userid, Team.leagueid == q.leagueid).values(points=newPoints))
+            session.execute(sqlalchemy.update(Team).where(Team.userid == q.userid, Team.leagueid == q.leagueid).values(points=newPoints))
             session.commit()
         session.close()
-        logging.info({'score':'SUCCESS!'})
+        print({'score':'SUCCESS!'})
     except Exception as e:
-        logging.info({'score':'FAILURE', 'error':e})
+        print({'score':'FAILURE', 'error':e})

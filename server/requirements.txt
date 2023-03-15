@@ -1,2 +1,5 @@
+firebase_admin==6.1.0
+python-dotenv==1.0.0
 requests==2.28.1
 SQLAlchemy==1.4.43
+twilio==7.16.4

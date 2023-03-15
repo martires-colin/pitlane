@@ -1,52 +1,50 @@
 # Script for updating database, created by Noah Howren, implementing code developed by Anthony Ganci and Colin Martires
 
 import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
-import logging
 import notifications
 
 def get_info():
     return {'currentTime':datetime.utcnow().strftime("%m/%d/%Y, %H:%M:%S"), 'nextRace':race.name, 'nextRaceDateTime':race.date.strftime("%m/%d/%Y, %H:%M:%S")}
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='pitlane.log', level=logging.INFO)
-    logging.info({'pitlaneScript':datetime.utcnow().strftime("%m/%d/%Y, %H:%M:%S") })
+    print({'pitlaneScript':datetime.utcnow().strftime("%m/%d/%Y, %H:%M:%S") })
     # Saves the race that is coming up next
     x = True
 
     while(x == True):
         race = db.next_race()
-        desired_date = race.date - datetime.timedelta(days = 3)
+        desired_date = race.date - timedelta(days = 3)
         desired_date = desired_date.replace(hour = 12, minute = 0)
-        diff         = desired_date - datetime.now()
+        diff         = (desired_date - datetime.now()).total_seconds()
 
-        while(datetime.now() != desired_date):
-            logging.info(get_info())
+        while(datetime.now() < desired_date):
             if diff > 7200:
+                print(get_info())
                 time.sleep(7200)
-                diff = diff - 7200
+                diff = (desired_date - datetime.now()).total_seconds()
             else:
-                logging.info(get_info())
+                print(get_info())
                 time.sleep(diff)
         
-        logging.info(notifications.upcomingRaceNotifs())
+        print(notifications.upcomingRaceNotifs())
 
         desired_date = race.date - datetime.timedelta(minute = 15)
-        diff         = desired_date - datetime.utcnow()
-        while(datetime.utcnow() != desired_date):
-            logging.info(get_info())
+        diff         = (desired_date - datetime.utcnow()).total_seconds() 
+        while(datetime.utcnow() < desired_date):
+            print(get_info())
             if diff > 7200:
                 time.sleep(7200)
-                diff = diff - 7200
+                diff = (desired_date - datetime.utcnow()).total_seconds()
             else:
                 time.sleep(diff)
         
-        logging.info(notifications.lightsOutNotifs())
+        print(notifications.lightsOutNotifs())
 
         time.sleep(7200)
 
-        logging.info(get_info())
+        print(get_info())
 
         # Results aren't posted right away so if the race results aren't in yet, wait for 10 minutes and check again, repeat for all of the update functions
         r_f = False
@@ -66,5 +64,6 @@ if __name__ == "__main__":
             f_f = db.update_c_standings()
             time.sleep(600)
 
-        logging.info(notifications.postRaceNotifs())
+        print(notifications.postRaceNotifs())
         db.score()
+        print()
