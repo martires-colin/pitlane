@@ -22,7 +22,7 @@
                   </div>
                 </div>
 
-                <div class="col-8">
+                <div class="col-8 px-5">
                   <UserSettings />
                 </div>
               </div>
@@ -42,7 +42,7 @@
                     <h5 class="user-name">{{ user.displayName }}</h5>
                   </div>
                 </div>
-                <div class="col-8 text-center">
+                <div class="col-8 text-center px-5">
                   <PasswordSettings />
                 </div>
               </div>
@@ -62,7 +62,7 @@
                   <h5 class="user-name">{{ user.displayName }}</h5>
                 </div>
                 </div>
-                <div class="col-8">
+                <div class="col-8 px-5">
                   <NotificationSettings />
                 </div>
               </div>

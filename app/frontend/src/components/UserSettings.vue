@@ -3,89 +3,87 @@
 <template>
   <div>
 
-    <form @submit.prevent="update">
-      <div class="row py-2">
-        <div class="form-group">
-          <label class="pb-1">Username</label>
+    <!-- display general account details (email and username) -->
+    <div class="row py-2">
+      <div class="form-group">
+        <label class="pb-1">Username</label>
+        <div class="input-group mb-2">
           <input type="text" class="form-control" :value="user.displayName" :disabled="true">
         </div>
       </div>
-      <div class="row py-2">
+    </div>
+    <div class="row py-2">
+      <div class="col-6">
         <div class="form-group">
           <label class="pb-1">Email</label>
-          <input type="text" class="form-control" :value="user.email" :disabled="true">
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" :value="user.email" :disabled="true">
+          </div>
         </div>
       </div>
-      <div v-if="user.phoneNumber">
-        <div class="row py-2">
-          <div class="form-group">
-            <div class="container">
-              <div class="row">
-                <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
-              </div>
-              <div class="row">
+      <div class="col-6">
+        <label class="pb-1">Forgot your password?</label>
+        <PasswordSettings />
+      </div>
+    </div>
 
+    <!-- Update/Set Phone Number -->
+    <form @submit.prevent="update">
+      <div class="row py-2">
+        <div class="form-group">
+          <div v-if="user.phoneNumber">
+            <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
+            <div class="input-group mb-2">
                 <cleave
-                type="tel"
-                v-model="phoneNumber"
-                :options="phoneOptions"
-                class="form-control"
-                :placeholder="user.phoneNumber"
-                >
+                  type="tel"
+                  v-model="phoneNumber"
+                  :options="phoneOptions"
+                  class="form-control"
+                  id="input-form-border"
+                  :placeholder="user.phoneNumber">
                 </cleave>
-
-              </div>
+                <div class="input-group-append">
+                  <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Update Phone Number</button>
+                </div>
+            </div>
+          </div>
+          <div v-else>
+            <label class="pb-1" for="phone">Phone Number</label>
+              <div class="input-group mb-2">
+                <cleave
+                  type="tel"
+                  v-model="phoneNumber"
+                  :options="phoneOptions"
+                  class="form-control"
+                  id="input-form-border"
+                  :placeholder="12312345678">
+                </cleave>
+                <div class="input-group-append">
+                  <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Add Phone Number</button>
+                </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-else>
-        <div class="row py-2">
-          <div class="form-group">
-            <div class="container">
-              <div class="row">
-                <label class="pb-1" for="phone">Phone Number</label>
-              </div>
-              <div class="row">
-
-                <cleave
-                type="tel"
-                v-model="phoneNumber"
-                :options="phoneOptions"
-                class="form-control"
-                :placeholder="12312345678">
-                </cleave>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="user.phoneNumber">
-        <div class="my-2">
-          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Phone Number</button>
-        </div>
-      </div>
-      <div v-else>
-        <div class="my-2">
-          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Add Phone Number</button>
-        </div>
-      </div>
-
-
     </form>
-<!-- ------ update profile pic ----------- -->
+
+    <!-- ------ update profile pic ----------- -->
     <form @submit.prevent="updateProfilePicture">
       <div class="row py-2">
         <div class="form-group">
           <label class="pb-1">Update Profile Picture</label>
-          <input type="text" class="form-control" placeholder="Enter image url" v-model="img_url" required>
-          <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Profile Picture</button>
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" id="input-form-border" placeholder="Enter image url" v-model="img_url" required>
+            <!-- <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Profile Picture</button> -->
+            <div class="input-group-append">
+                <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Update Profile Picture</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>
-<!-- ------------------------------------------ -->
 
+    <!-- Pop-ip alerts -->
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
@@ -122,6 +120,7 @@
         </transition>
       </div>
     </Teleport>
+
   </div>
 </template>
 
@@ -131,11 +130,14 @@ import {computed} from "vue";
 import { ref } from 'vue'
 import Cleave from "vue-cleave-component"
 import 'cleave.js/dist/addons/cleave-phone.us'
+import PasswordSettings from "@/components/PasswordSettings.vue"
+
 
 export default {
   name: "UserSettings",
   components: {
-    Cleave
+    Cleave,
+    PasswordSettings
   },
   setup() {
     const store = useStore()
@@ -253,4 +255,22 @@ export default {
 .fade-leave-active {
   transition: all 0.5s ease;
 }
+
+#input-group-btn {
+  background-color: #00d4ff;
+  color: black;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: 0px;
+}
+
+#input-group-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+#input-form-border {
+  border: 0px !important;
+}
+
 </style>
