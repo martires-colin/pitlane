@@ -1,25 +1,8 @@
 <!-- By Colin Martires -->
 
 <template>
-  <!-- <div class="h-100 w-100 d-flex justify-content-center">
-    <div class="pt-1 mb-4 d-flex align-items-center">
-      <button class="btn btn-secondary btn-lg d-flex" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
-    </div>
-    <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
-        <transition name="fade">
-          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
-            Password reset email sent!
-          </div>
-        </transition>
-      </div>
-    </Teleport>
-
-  </div> -->
-
-<!-- component as just a button -->
   <div>
-    <button class="btn btn-secondary btn-md" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
+    <button class="btn btn-secondary btn-md w-100" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">

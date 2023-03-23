@@ -3,53 +3,50 @@
 <template>
   <div>
 
-    <!-- display general account details (email and username) -->
+    <!-- display account email and password reset button -->
     <div class="row py-2">
-      <div class="form-group">
-        <label class="pb-1">Username</label>
-        <div class="input-group mb-2">
-          <input type="text" class="form-control" :value="user.displayName" :disabled="true">
-        </div>
-      </div>
-    </div>
-    <div class="row py-2">
-      <div class="col-6">
+      <div class="col-8">
         <div class="form-group">
-          <label class="pb-1">Email</label>
+          <label class="pb-1 w-100 text-left">Email</label>
           <div class="input-group mb-2">
             <input type="text" class="form-control" :value="user.email" :disabled="true">
           </div>
         </div>
       </div>
-      <div class="col-6">
-        <label class="pb-1">Forgot your password?</label>
+      <div class="col-4">
+        <label class="pb-1 w-100 text-left">Forgot your password?</label>
         <PasswordSettings />
+      </div>
+    </div>
+
+    <!-- Update username -->
+    <div class="row py-2">
+      <div class="form-group">
+        <label class="pb-1 w-100 text-left">Username</label>
+        <div class="input-group mb-2">
+          <input type="text" class="form-control" :value="user.displayName" :disabled="true">
+        </div>
       </div>
     </div>
 
     <!-- Update/Set Phone Number -->
     <form @submit.prevent="update">
       <div class="row py-2">
-        <div class="form-group">
-          <div v-if="user.phoneNumber">
-            <label class="pb-1" for="phone">Phone Number: {{ user.phoneNumber }}</label>
+        <label class="pb-1w-100 text-left" for="phone">Phone Number</label>
+        <div class="col-8">
+          <div class="form-group">
             <div class="input-group mb-2">
+              <div v-if="user.phoneNumber" class="w-100">
                 <cleave
                   type="tel"
                   v-model="phoneNumber"
                   :options="phoneOptions"
-                  class="form-control"
+                  class="form-control w-100"
                   id="input-form-border"
                   :placeholder="user.phoneNumber">
                 </cleave>
-                <div class="input-group-append">
-                  <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Update Phone Number</button>
-                </div>
-            </div>
-          </div>
-          <div v-else>
-            <label class="pb-1" for="phone">Phone Number</label>
-              <div class="input-group mb-2">
+              </div>
+              <div v-else>
                 <cleave
                   type="tel"
                   v-model="phoneNumber"
@@ -58,9 +55,17 @@
                   id="input-form-border"
                   :placeholder="12312345678">
                 </cleave>
-                <div class="input-group-append">
-                  <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Add Phone Number</button>
-                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="input-group-append">
+            <div v-if="user.phoneNumber">
+              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Phone Number</button>
+            </div>
+            <div v-else>
+              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Add Phone Number</button>
             </div>
           </div>
         </div>
@@ -70,14 +75,17 @@
     <!-- ------ update profile pic ----------- -->
     <form @submit.prevent="updateProfilePicture">
       <div class="row py-2">
-        <div class="form-group">
-          <label class="pb-1">Update Profile Picture</label>
-          <div class="input-group mb-2">
-            <input type="text" class="form-control" id="input-form-border" placeholder="Enter image url" v-model="img_url" required>
-            <!-- <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Profile Picture</button> -->
-            <div class="input-group-append">
-                <button class="btn btn-secondary btn-md" id="input-group-btn" type="submit">Update Profile Picture</button>
+        <label class="pb-1 w-100 text-left">Update Profile Picture</label>
+        <div class="col-8">
+          <div class="form-group">
+            <div class="input-group mb-2">
+              <input type="text" class="form-control" id="input-form-border" placeholder="Enter image url" v-model="img_url" required>
             </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="input-group-append">
+              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Profile Picture</button>
           </div>
         </div>
       </div>
