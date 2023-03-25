@@ -84,11 +84,10 @@ export default createStore({
         updateProfile(response.user, {
           displayName: name,
           photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png",
-          // photoURL: "https://images.thewest.com.au/publication/C-9915534/b82761c6734744728228f851e6462f98cb2ce788-16x9-x0y131w5186h2917.jpg?imwidth=810&impolicy=wan_v3",
         })
         try {
           await setDoc(doc(db, "users", response.user.uid), {
-            username: name,
+            displayName: name,
             email: email,
             phoneNumber: "",
             uid: response.user.uid,
@@ -168,6 +167,23 @@ export default createStore({
         const docRef = doc(db, "users", user.uid)
         updateDoc(docRef, {
           photoURL: img_url.photoURL
+        })
+        commit('SET_USER', {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid
+        })
+      })
+    },
+    async updateUsername({ commit }, new_displayName) {
+      const user = auth.currentUser;
+      await updateProfile(user, {
+        displayName: new_displayName
+      }).then(() => {
+        const docRef = doc(db, "users", user.uid)
+        updateDoc(docRef, {
+          displayName: new_displayName
         })
         commit('SET_USER', {
           displayName: user.displayName,

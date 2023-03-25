@@ -14,25 +14,35 @@
         </div>
       </div>
       <div class="col-4">
-        <label class="pb-1 w-100 text-left">Forgot your password?</label>
+        <label class="pb-1 w-100 text-center">Forgot your password?</label>
         <PasswordSettings />
       </div>
     </div>
 
-    <!-- Update username -->
-    <div class="row py-2">
-      <div class="form-group">
+    <!-- pdate Username -->
+    <form @submit.prevent="updateUsername">
+      <div class="row py-2">
         <label class="pb-1 w-100 text-left">Username</label>
-        <div class="input-group mb-2">
-          <input type="text" class="form-control" :value="user.displayName" :disabled="true">
+        <div class="col-8">
+          <div class="form-group">
+            <div class="input-group mb-2">
+              <input type="text" class="form-control" id="input-form-border" placeholder="Enter image url" v-model="user.displayName" required>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="input-group-append">
+              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Username</button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
+
 
     <!-- Update/Set Phone Number -->
     <form @submit.prevent="update">
       <div class="row py-2">
-        <label class="pb-1w-100 text-left" for="phone">Phone Number</label>
+        <label class="pb-1 w-100 text-left" for="phone">Phone Number</label>
         <div class="col-8">
           <div class="form-group">
             <div class="input-group mb-2">
@@ -46,12 +56,12 @@
                   :placeholder="user.phoneNumber">
                 </cleave>
               </div>
-              <div v-else>
+              <div v-else class="w-100">
                 <cleave
                   type="tel"
                   v-model="phoneNumber"
                   :options="phoneOptions"
-                  class="form-control"
+                  class="form-control w-100"
                   id="input-form-border"
                   :placeholder="12312345678">
                 </cleave>
@@ -91,7 +101,7 @@
       </div>
     </form>
 
-    <!-- Pop-ip alerts -->
+    <!-- Pop-up alerts -->
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
@@ -114,7 +124,25 @@
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPicFail">
-            Photo URL too long!!
+            Photo URL too long!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showUsernameSuccess">
+            Updated Username!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showUsernameFail">
+            Failed to update username!
           </div>
         </transition>
       </div>
@@ -190,6 +218,18 @@ export default {
       setTimeout(() => showPicFail.value = false, 2000)
     }
 
+    const showUsernameSuccess = ref(false)
+    const triggerUsernameSuccess = () => {
+      showUsernameSuccess.value = true;
+      setTimeout(() => showUsernameSuccess.value = false, 2000)
+    }
+
+    const showUsernameFail = ref(false)
+    const triggerUsernameFail = () => {
+      showUsernameFail.value = true;
+      setTimeout(() => showUsernameFail.value = false, 2000)
+    }
+
     const showErrorSomething = ref(false)
     const triggerErrorSomething = () => {
       showErrorSomething.value = true;
@@ -206,6 +246,10 @@ export default {
       triggerPicSuccess,
       showPicFail,
       triggerPicFail,
+      showUsernameSuccess,
+      triggerUsernameSuccess,
+      showUsernameFail,
+      triggerUsernameFail,
       showErrorSomething,
       triggerErrorSomething
     }
@@ -220,27 +264,47 @@ export default {
       img_url: ''
     }
   },
-    methods: {
+  methods: {
     async updateProfilePicture() {
-        try {
-          await this.$store.dispatch('updateProfilePicture', {
-            photoURL: this.img_url
-          })
-          this.triggerPicSuccess()
+      try {
+        await this.$store.dispatch('updateProfilePicture', {
+          photoURL: this.img_url
+        })
+        this.triggerPicSuccess()
+      }
+      catch (err) {
+        console.log(err)
+        switch (err.code) {
+          case "auth/invalid-profile-attribute":
+            this.triggerPicFail()
+            break;
+          default:
+            this.triggerErrorSomething()
         }
-        catch (err) {
-          console.log(err)
-          switch (err.code) {
-            case "auth/invalid-profile-attribute":
-              this.triggerPicFail()
-              break;
-            default:
-              this.triggerErrorSomething()
-          }
-          return;
+        return;
+      }
+    },
+    async updateUsername() {
+      try {
+        await this.$store.dispatch('updateUsername', 
+          this.user.displayName
+        )
+        this.triggerUsernameSuccess()
+      }
+      catch (err) {
+        console.log(err)
+        switch (err.code) {
+          case "auth/invalid-profile-attribute":
+            this.triggerUsernameFail()
+            break;
+          default:
+            this.triggerErrorSomething()
         }
+        return;
       }
     }
+
+  }
 }
 </script>
 
