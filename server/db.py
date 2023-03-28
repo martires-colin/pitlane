@@ -27,7 +27,7 @@ def status_match(status, session):
 # Returns the next race
 def next_race():
     session = get_session()
-    r = session.query(Race).filter(Race.date >= datetime.utcnow()).order_by(Race.date).first()
+    r = session.query(Race).filter(Race.raceid == 1099).order_by(Race.date).first()
     session.close()
     return r
 

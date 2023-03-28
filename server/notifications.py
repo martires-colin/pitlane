@@ -1,11 +1,11 @@
 import twilio_config
 from twilio.rest import Client
 from firebase_admin import db
-import firebase_config
-import db
+from firebase_config import *
+from db import *
 
 
-def notif(msg_body, phoneNumber):
+def notif(msg_body, phoneNumber, client):
     client = Client(twilio_config.account_sid, twilio_config.auth_token)
     message = client.messages.create(
             body=msg_body,
@@ -13,12 +13,11 @@ def notif(msg_body, phoneNumber):
             to=phoneNumber)
     return message
 
-def postRaceNotifs():
+def postRaceNotifs(database, client):
     try:
-        database = firebase_config.get_firestore()
         # Get a reference to the users collection
         users_ref = database.collection('users')
-        data = db.get_notif()
+        data = get_notif()
         res = f'PITLANE\n\nRace Results for {data["Race"]}\n'
         d_s = "PITLANE\n\nDriver's Championship Standings\n"
         c_s = "PITLANE\n\nConstructor's Championship Standings\n"
@@ -34,45 +33,43 @@ def postRaceNotifs():
             phoneNumber = user_data.get('phoneNumber')
             if phoneNumber:
                 if user_data.get('completeNotif') == True:
-                    n = notif(res, phoneNumber)
+                    n = notif(res, phoneNumber, client)
                 if user_data.get('driverStandingsNotif') == True:
-                    n = notif(d_s, phoneNumber)
+                    n = notif(d_s, phoneNumber, client)
                 if user_data.get('constructorStandingsNotif') == True:
-                    n = notif(c_s, phoneNumber)
+                    n = notif(c_s, phoneNumber, client)
         return {'postRaceNotifs':'SUCCESS!', }
     except Exception as inst:
         return {'postRaceNotifs':'FAILURE!', 'ERROR': inst}
     
-def upcomingRaceNotifs():
+def upcomingRaceNotifs(database, client):
     try:
-        database = firebase_config.get_firestore()
         # Get a reference to the users collection
         users_ref = database.collection('users')
-        race = db.upcoming_race()
-        msg_body = f"PITLANE\n\nUpcoming Race\n{race['Year']}{race['Name']}\nDate: {race['Date']}\n"
+        race = upcoming_race()
+        msg_body = f"PITLANE\n\nUpcoming Race\n{race['Year']}{race['Race']}\nDate: {race['Date']}\n"
         for user_doc in users_ref.stream():
                 user_data = user_doc.to_dict()
                 phoneNumber = user_data.get('phoneNumber')
                 if phoneNumber:
                     if user_data.get('upcomingRacesNotif') == True:
-                        notif(msg_body, phoneNumber)
-        return {'postRaceNotifs':'SUCCESS!'}   
+                        notif(msg_body, phoneNumber, client)
+        return {'upcomingRacesNotif':'SUCCESS!'}   
     except Exception as inst:
-        return {'postRaceNotifs':'FAILURE!', 'ERROR': inst}
+        return {'upcomingRacesNotif':'FAILURE!', 'ERROR': inst}
 
-def lightsOutNotifs():
+def lightsOutNotifs(database, client):
     try:
-        database = firebase_config.get_firestore()
         # Get a reference to the users collection
         users_ref = database.collection('users')
-        race = db.upcoming_race()
-        msg_body = f"PITLANE\n\nThe \n{race['Name']} is starting soon!\n"
+        race = upcoming_race()
+        msg_body = f"PITLANE\n\nThe \n{race['Race']} is starting soon!\n"
         for user_doc in users_ref.stream():
                 user_data = user_doc.to_dict()
                 phoneNumber = user_data.get('phoneNumber')
                 if phoneNumber:
                     if user_data.get('lightsOutNotif') == True:
-                        notif(msg_body, phoneNumber)
+                        notif(msg_body, phoneNumber, client)
         return {'lightsOutNotifs':'SUCCESS!'}   
     except Exception as inst:
         return {'lightsOutNotifs':'FAILURE!', 'ERROR': inst}
