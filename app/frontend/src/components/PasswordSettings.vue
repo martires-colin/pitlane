@@ -1,27 +1,28 @@
 <!-- By Colin Martires -->
 
 <template>
-  <div class="h-100 w-100 d-flex justify-content-center">
-    <div class="pt-1 mb-4 d-flex align-items-center">
-      <button class="btn btn-secondary btn-lg d-flex" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
-    </div>
+  <div>
+    <button class="btn btn-secondary btn-md w-100" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
-            Password reset email sent!
+            Password reset email sent to {{ userEmail }}!
           </div>
         </transition>
       </div>
     </Teleport>
-
   </div>
+
 </template>
 
 <script>
 import { ref } from 'vue'
 import { auth } from "../firebase";
 import { sendPasswordResetEmail } from 'firebase/auth'
+import { useStore} from "vuex";
+import {computed} from "vue";
+
 
 export default {
   name: "PasswordSettings",
@@ -33,7 +34,13 @@ export default {
       showAlert.value = true;
       setTimeout(() => showAlert.value = false, 2000)
     }
-    return { showAlert, triggerAlert }
+
+    const store = useStore()
+    const userEmail = computed(() => {
+      return store.getters.user.email
+    })
+
+    return { showAlert, triggerAlert, userEmail }
   },
   methods: {
     async sendPasswordResetEmail() {

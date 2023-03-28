@@ -22,14 +22,14 @@
                   </div>
                 </div>
 
-                <div class="col-8">
+                <div class="col-8 px-5">
                   <UserSettings />
                 </div>
               </div>
             </div>
           </b-tab>
 
-          <b-tab title="Password" :title-link-class="'btab'">
+          <b-tab title="Roles" :title-link-class="'btab'">
             <div class="container tab-content">
               <div class="row py-2">
                 <div class="col-4">
@@ -42,8 +42,8 @@
                     <h5 class="user-name">{{ user.displayName }}</h5>
                   </div>
                 </div>
-                <div class="col-8 text-center">
-                  <PasswordSettings />
+                <div class="col-8 text-center px-5">
+                  Manage roles here maybe?
                 </div>
               </div>
             </div>
@@ -62,7 +62,7 @@
                   <h5 class="user-name">{{ user.displayName }}</h5>
                 </div>
                 </div>
-                <div class="col-8">
+                <div class="col-8 px-5">
                   <NotificationSettings />
                 </div>
               </div>
@@ -79,14 +79,12 @@
 import { useStore} from "vuex";
 import {computed} from "vue";
 import NotificationSettings from "@/components/NotificationSettings.vue"
-import PasswordSettings from "@/components/PasswordSettings.vue"
 import UserSettings from "@/components/UserSettings.vue"
 
 export default {
   name: "Settings",
   components: {
     NotificationSettings,
-    PasswordSettings,
     UserSettings,
   },
   setup() {

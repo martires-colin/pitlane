@@ -24,7 +24,7 @@ export default {
         router.push({ path: `/standings/${this.season}`})
     },
   },
-  mounted() {
+  created() {
     this.getStandings();
   },
 };

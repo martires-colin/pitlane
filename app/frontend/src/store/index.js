@@ -84,11 +84,10 @@ export default createStore({
         updateProfile(response.user, {
           displayName: name,
           photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png",
-          // photoURL: "https://images.thewest.com.au/publication/C-9915534/b82761c6734744728228f851e6462f98cb2ce788-16x9-x0y131w5186h2917.jpg?imwidth=810&impolicy=wan_v3",
         })
         try {
           await setDoc(doc(db, "users", response.user.uid), {
-            username: name,
+            displayName: name,
             email: email,
             phoneNumber: "",
             uid: response.user.uid,
@@ -154,10 +153,11 @@ export default createStore({
       const user = auth.currentUser;
       const docRef = doc(db, "users", user.uid)
       await updateDoc(docRef, {
-        leagueOwner: userRoles.isLeagueOwner
+        isLeagueOwner: userRoles.isLeagueOwner
       })
       commit('SET_ROLES', {
-        leagueOwner: userRoles.isLeagueOwner})
+        isLeagueOwner: userRoles.isLeagueOwner
+      })
     },
     // --------------------------------------------
     async updateProfilePicture({ commit }, img_url) {
@@ -177,6 +177,23 @@ export default createStore({
         })
       })
     },
+    async updateUsername({ commit }, new_displayName) {
+      const user = auth.currentUser;
+      await updateProfile(user, {
+        displayName: new_displayName
+      }).then(() => {
+        const docRef = doc(db, "users", user.uid)
+        updateDoc(docRef, {
+          displayName: new_displayName
+        })
+        commit('SET_USER', {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid
+        })
+      })
+    },
     async logout({ commit }) {
       await signOut(auth)
       commit('SET_USER', {
@@ -186,6 +203,7 @@ export default createStore({
         photoURL: null
       })
       commit('SET_USER_PHONENUMBER', null)
+      window.localStorage.clear()
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
