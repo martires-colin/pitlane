@@ -153,10 +153,11 @@ export default createStore({
       const user = auth.currentUser;
       const docRef = doc(db, "users", user.uid)
       await updateDoc(docRef, {
-        leagueOwner: userRoles.isLeagueOwner
+        isLeagueOwner: userRoles.isLeagueOwner
       })
       commit('SET_ROLES', {
-        leagueOwner: userRoles.isLeagueOwner})
+        isLeagueOwner: userRoles.isLeagueOwner
+      })
     },
     // --------------------------------------------
     async updateProfilePicture({ commit }, img_url) {
@@ -202,6 +203,7 @@ export default createStore({
         photoURL: null
       })
       commit('SET_USER_PHONENUMBER', null)
+      window.localStorage.clear()
     },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)

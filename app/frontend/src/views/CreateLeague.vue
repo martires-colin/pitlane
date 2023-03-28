@@ -21,6 +21,18 @@ export default {
                 console.log(data)
                 this.inviteCode = data.inviteCode;
             }
+
+            // set isLeague owner user role ~Colin Martires
+            try {
+                await this.$store.dispatch('updateRoles', {
+                    isLeagueOwner: true
+                })
+            }
+            catch (err) {
+                console.log(err)
+            }
+            // //
+
         }
     },
     computed: {
