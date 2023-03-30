@@ -338,6 +338,23 @@ def fantasyCreateTeam():
                     dr4=roster[3], dr5=roster[4], c_id=tInfo['constructorid'], t_name=tInfo['teamname'], n_f=True) 
         print(worked)
         return jsonify({'status': '200', 'success': worked})
+    
+@main.route("/fantasy/leagues/<string:uid>", methods=['GET'])
+def fantasyLeagues(uid):
+    if request.method == 'GET':
+        Page = request.args.get('page', 1, type=int)
+        leagues = fetchLeaguesAdmin(Page)
+        # leagues = fetchLeagues(uid, Page)
+        print(leagues)
+        return(jsonify({'status': '200', 'leagues': leagues}))
+# Ideally want to combine these two and check firebase to see if user is admin 
+@main.route("/admin/leagues/", methods=['GET'])
+def adminLeagues():
+    if request.method == 'GET':
+        Page = request.args.get('page', 1, type=int)
+        leagues, pageCount = fetchLeaguesAdmin(Page)
+        return(jsonify({'status': '200', 'leagues': leagues, 'pages': pageCount}))
+        # return(jsonify({'status': '200'}))
 # @main.route("/fantasy/constructors")
 # def fantasyConstructors():
 #     constructors = getFantasyConstructors()

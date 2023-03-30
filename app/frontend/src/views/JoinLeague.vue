@@ -27,6 +27,7 @@ export default {
             constructorOptions: ['Alfa Romeo', 'AlphaTauri', 'Alpine F1 Team', 'Aston Martin', 'Ferrari', 'Haas F1 Team', 'McLaren', 'Mercedes', 'Red Bull', 'Williams'],
             selectedConstructor: null,
             teamSuccess: false,
+            paramCode: this.$route.params.inviteCode,
         };
     },
     methods: {
@@ -96,6 +97,11 @@ export default {
         },
 
     },
+    mounted() {
+        if (this.paramCode) {
+            this.teamInformation.inviteCode = this.paramCode;
+        }
+    }
 }
 </script>
 

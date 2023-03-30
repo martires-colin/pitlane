@@ -43,6 +43,7 @@
           <b-nav-item href="/schedule">Schedule</b-nav-item>
           <b-nav-item-dropdown text="Fantasy" v-if="user.loggedIn">
             <b-dropdown-item href="/fantasy">My Teams</b-dropdown-item>
+            <b-dropdown-item href="/fantasy/manageLeagues" v-if="user.roles.leagueOwner">Manage Leagues</b-dropdown-item>
             <b-dropdown-item href="/fantasy/createLeague">Create a League</b-dropdown-item>
             <b-dropdown-item href="/fantasy/joinLeague">Join a League</b-dropdown-item>
           </b-nav-item-dropdown>

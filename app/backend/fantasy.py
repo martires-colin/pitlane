@@ -125,6 +125,24 @@ def score():
         # print(q.userid, newPoints)
     session.close()
 
+def fetchLeagues(uid, page):
+    session = get_session()
+    leagues = []
+    pageCount = int((session.query(League).filter(League.creatorid == uid).count())/5) + 1
+    for q in session.query(League).filter(League.creatorid == uid).order_by(League.members).limit(5).offset((page-1)*5):
+        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members})
+    session.close()
+    return leagues, pageCount
+
+def fetchLeaguesAdmin(page):
+    session = get_session()
+    leagues = []
+    pageCount = int((session.query(League).count())/5) + 1
+    for q in session.query(League).order_by(League.members).limit(5).offset((page-1)*5):
+        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members})
+    session.close()
+    return leagues, pageCount
+
 if __name__ == '__main__':
     # giveScoreForUser(User=User)
     # recent = get_recent_race()
