@@ -3,6 +3,8 @@ export default {
     data() {
         return {
             leagues: null,
+            pageCount: null,
+            currentPage: 1,
         };
     },
     methods: {
@@ -29,12 +31,18 @@ export default {
             const data = await res.json();
             console.log(data)
             this.leagues = data.leagues;
+            this.pageCount = data.pages;
         }
     },
     async mounted() {
         //If user is admin run adminfetch
         await this.fetchLeaguesAdmin(1);
         // await this.fetchLeagues();
+    },
+    watch: {
+        currentPage() {
+            this.fetchLeaguesAdmin(this.currentPage);
+        }
     }
 };
 
@@ -44,7 +52,7 @@ export default {
 <p>
     Manage Leagues
 </p>
-<div class="flex justify-center items-center">
+<div class="flex flex-col justify-center items-center">
     <div class="w-[80%]">
         <b-table class="text-white"
           id="my-table"
@@ -53,6 +61,6 @@ export default {
           small
         ></b-table>
     </div>
-    <!-- Pagination toolbar here -->
+    <v-pagination class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
 </div>
 </template>

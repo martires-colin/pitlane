@@ -3,6 +3,7 @@ import json
 from .database import *
 from .models import *
 from sqlalchemy import asc, desc, update
+from math import ceil
 
 def driverlist(list):
     session = get_session()
@@ -137,8 +138,10 @@ def fetchLeagues(uid, page):
 def fetchLeaguesAdmin(page):
     session = get_session()
     leagues = []
-    pageCount = int((session.query(League).count())/5) + 1
-    for q in session.query(League).order_by(League.members).limit(5).offset((page-1)*5):
+    rowTotal = session.query(League).count()
+    pageCount = ceil(rowTotal/5)
+    print(pageCount)
+    for q in session.query(League).order_by(desc(League.members)).limit(5).offset((page-1)*5):
         leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members})
     session.close()
     return leagues, pageCount

@@ -10,5 +10,19 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 import './styles/app.css';
 
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import '@mdi/font/css/materialdesignicons.css' 
 
-createSSRApp(App).use(router).use(store).use(Cleave).use(BootstrapVue3).mount("#app");
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  icons: {
+    defaultSet: 'mdi',
+  },
+})
+
+createSSRApp(App).use(router).use(store).use(vuetify).use(Cleave).use(BootstrapVue3).mount("#app");
