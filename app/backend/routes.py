@@ -425,10 +425,14 @@ def getDriverStandingsNotif():
 def getConstructorStandingsNotif():
     msg_body = ''
     data = notif_res()
+    print(data["Constructors"])
 
     msg_body += "PITLANE\n\nConstructor's Championship Standings\n"
     for z in data["Constructors"]:
-        msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(12)} {int(z["Points"])}pts\n'
+        if z["Constructor"] == "Williams":
+            msg_body += f'{str(z["Position"]).ljust(3)} WilliamsRacing {int(z["Points"])}pts\n'
+        else:
+            msg_body += f'{str(z["Position"]).ljust(3)} {z["Constructor"].ljust(12)} {int(z["Points"])}pts\n'
 
     return(jsonify({
         'results': data,
