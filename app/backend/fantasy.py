@@ -2,7 +2,7 @@ import requests
 import json
 from .database import *
 from .models import *
-from sqlalchemy import asc, desc, update
+from sqlalchemy import asc, desc, update, delete
 from math import ceil
 
 def driverlist(list):
@@ -179,6 +179,14 @@ def fetchManageTeamInfo(leagueID, teamname):
 def updateTeamInfo(leagueid, teamname, updatedInfo):
     session = get_session()
     session.execute(update(Team).where(Team.teamname == teamname, Team.leagueid == leagueid).values(points = int(updatedInfo['points']), teamname = updatedInfo['teamname']))
+    session.commit()
+    session.close()
+
+def deleteTeam(leagueid, teamname):
+    session = get_session()
+    session.execute(delete(Team).where(Team.teamname == teamname, Team.leagueid == leagueid))
+    l = session.query(League).filter(League.leagueid == leagueid).first()
+    session.execute(update(League).where(League.leagueid == leagueid).values(members = l.members - 1))
     session.commit()
     session.close()
 

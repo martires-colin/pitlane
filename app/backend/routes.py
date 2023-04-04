@@ -348,7 +348,7 @@ def fantasyLeagues(uid):
         # print(leagues, pageCount)
         return(jsonify({'status': '200', 'leagues': leagues, 'pages': pageCount}))
     
-@main.route("/fantasy/leagues/<string:uid>/<int:leagueID>", methods=['GET', 'PUT'])
+@main.route("/fantasy/leagues/<string:uid>/<int:leagueID>", methods=['GET', 'PUT', 'DELETE'])
 def viewFantasyLeague(uid, leagueID):
     if request.method == 'GET':
         Name = request.args.get('name', None, type=Boolean)
@@ -374,7 +374,12 @@ def viewFantasyLeague(uid, leagueID):
         print(updatedInfo)
         updateTeamInfo(leagueID, teamname, updatedInfo)
         return(jsonify({'status': '200'}))
-
+    if request.method == 'DELETE':
+        data = request.get_json()
+        leagueID = data['leagueid']
+        teamname = data['teamname']
+        deleteTeam(leagueID, teamname)
+        return(jsonify({'status': '200'}))
 
 # Ideally want to combine these two and check firebase to see if user is admin 
 @main.route("/admin/leagues/", methods=['GET'])

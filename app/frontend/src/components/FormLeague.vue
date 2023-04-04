@@ -38,7 +38,8 @@ export default {
             if (data.status == '200') {
                 this.$router.go(-1)
             }
-        }
+        },
+        
     },
     async mounted() {
         await this.fetchTeamInfo();

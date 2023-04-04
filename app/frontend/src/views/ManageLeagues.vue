@@ -86,18 +86,21 @@ export default {
                 <th class="text-left" v-if="$store.getters.isAdmin">
                 League Owner
                 </th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             <tr
                 v-for="league in leagues"
                 :key="league.name"
-                @click="$router.push(`/fantasy/manage/${league.leagueID}`)"
             >
                 <td class="text-left">{{ league.name }}</td>
                 <td class="text-left">{{ league.members }}</td>
                 <td class="text-left">{{ league.inviteCode }}</td>
                 <td class="text-left" v-if="$store.getters.isAdmin">{{ league.owner }}</td>
+                <td>
+                    <v-btn color="blue" class="mr-4" @click="$router.push(`/fantasy/manage/${league.leagueID}`)">Show</v-btn>
+                </td>
             </tr>
             </tbody>
         </v-table>
