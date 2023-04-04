@@ -79,6 +79,7 @@
               color="grey-darken-1"
               size="48"
               :image="user.photoURL"
+              v-if="user.loggedIn"
             ></v-avatar>
         </div>
 

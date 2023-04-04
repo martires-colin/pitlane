@@ -103,7 +103,7 @@
 
     <!-- Pop-up alerts -->
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showPhoneAlert">
             Updated Phone Number!
@@ -112,7 +112,7 @@
       </div>
     </Teleport>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showPicSuccess">
             Updated Profile Picture!
@@ -121,7 +121,7 @@
       </div>
     </Teleport>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPicFail">
             Photo URL too long!
@@ -130,7 +130,7 @@
       </div>
     </Teleport>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showUsernameSuccess">
             Updated Username!
@@ -139,7 +139,7 @@
       </div>
     </Teleport>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showUsernameFail">
             Failed to update username!
@@ -148,7 +148,7 @@
       </div>
     </Teleport>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorSomething">
             Something went wrong!
@@ -357,4 +357,8 @@ export default {
   border: 0px !important;
 }
 
+/* .alert {
+  position: absolute;
+  z-index: 10000;
+} */
 </style>

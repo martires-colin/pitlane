@@ -55,7 +55,7 @@
       </div>
     </div>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
             Password reset email sent!
@@ -65,7 +65,7 @@
     </Teleport>
 
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showError">
             Email not found!

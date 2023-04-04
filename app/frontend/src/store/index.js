@@ -219,6 +219,7 @@ export default createStore({
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data());
           commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
+          commit('SET_ROLES', docSnap.data())
         } else {
           console.log("No such document")
         }

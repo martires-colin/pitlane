@@ -4,7 +4,7 @@
   <div>
     <button class="btn btn-secondary btn-md w-100" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
     <Teleport to="body">
-      <div class="d-flex justify-content-center w-100">
+      <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showAlert">
             Password reset email sent to {{ userEmail }}!
