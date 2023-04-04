@@ -265,11 +265,11 @@ export default createStore({
     },
     isAdmin(){
       // return state.user.roles.admin
-      return false
-    },
-    isLeagueOwner(){
-      // return state.user.roles.leagueOwner
       return true
+    },
+    isLeagueOwner(state){
+      return state.user.roles.isleagueOwner
+      // return true
     },
     getUpcoming: (state) => {state.nextRace, state.prevRace }
   },

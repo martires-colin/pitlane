@@ -27,7 +27,7 @@
                 <td>
                     <v-btn color="blue" class="mr-4" @click="$router.push(`${$route.path}/edit/${team.teamname}`)">Edit</v-btn>
                     <!-- <FormLeague :teamInfo="team"></FormLeague> -->
-                    <v-btn color="danger">Delete</v-btn>
+                    <v-btn color="danger" @click="deleteTeam(team.teamname)">Delete</v-btn>
                 </td>
             </tr>
             </tbody>
@@ -60,6 +60,21 @@ export default {
             const data = await res.json();
             this.teams = data.teams;
             this.pageCount = data.pages;
+        },
+        async deleteTeam(teamname) {
+            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                body: JSON.stringify({'leagueid': this.$route.params.id, 'teamname': teamname})
+            });
+            const data = await res.json();
+            console.log(data)
+            if (data.status == '200') {
+                this.$router.go(-1)
+            }
         }
     },
     async mounted() {
