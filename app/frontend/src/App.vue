@@ -62,6 +62,9 @@
               </v-list>
             </v-menu>
 
+            <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/admin-console')">
+            Admin
+            </v-btn>
             <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">
             Settings
             </v-btn>

@@ -250,9 +250,10 @@ export default createStore({
     },
     async listUsers() {
       const listUsers = httpsCallable(functions, 'listUsers')
-      listUsers().then(result => {
-        console.log(result)
-      })
+      // listUsers().then(result => {
+      //   console.log(result)
+      // })
+      return listUsers()
     },
   },
   getters: {

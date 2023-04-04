@@ -18,6 +18,7 @@ import ManageLeagues from "../views/ManageLeagues.vue"
 import League from "../components/League.vue"
 import LeagueManage from "../components/LeagueManage.vue"
 import FormLeague from "../components/FormLeague.vue"
+import AdminConsole from "../views/AdminConsole.vue"
 
 import store from "../store/index";
 
@@ -131,6 +132,14 @@ const routes = [
     path: "/forgot-password",
     name: "ForgotPassword",
     component: ForgotPassword,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/admin-console",
+    name: "Admin Console",
+    component: AdminConsole,
     meta: {
       requiresLogin: true,
     },
