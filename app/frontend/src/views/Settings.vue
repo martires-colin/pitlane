@@ -5,7 +5,6 @@
   <section class="py-5 my-5">
     <div class="container">
       <h1 class="p-5">Account Settings</h1>
-      <p>{{ user.roles.leagueOwner }}</p>
       <div class="rounded-lg d-block bg-dark-300">
         <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
 

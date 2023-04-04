@@ -129,9 +129,10 @@ def score():
 def fetchLeagues(uid, page):
     session = get_session()
     leagues = []
-    pageCount = int((session.query(League).filter(League.creatorid == uid).count())/5) + 1
-    for q in session.query(League).filter(League.creatorid == uid).order_by(League.members).limit(5).offset((page-1)*5):
-        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members})
+    rowTotal = session.query(League).filter(League.creatorid == uid).count()
+    pageCount = ceil(rowTotal/10)
+    for q in session.query(League).filter(League.creatorid == uid).order_by(desc(League.members)).limit(10).offset((page-1)*10):
+        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members, 'leagueID': q.leagueid})
     session.close()
     return leagues, pageCount
 
@@ -139,12 +140,47 @@ def fetchLeaguesAdmin(page):
     session = get_session()
     leagues = []
     rowTotal = session.query(League).count()
-    pageCount = ceil(rowTotal/5)
-    print(pageCount)
-    for q in session.query(League).order_by(desc(League.members)).limit(5).offset((page-1)*5):
-        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members})
+    pageCount = ceil(rowTotal/10)
+    for q in session.query(League).order_by(desc(League.members)).limit(10).offset((page-1)*10):
+        leagues.append({'name': q.name, 'inviteCode': q.invitecode, 'members': q.members, 'owner': q.creatorid, 'leagueID': q.leagueid})
     session.close()
     return leagues, pageCount
+
+def fetchLeagueManage(uid, leagueID, page):
+    session = get_session()
+    teams = [] 
+    rowTotal = session.query(Team).filter(Team.leagueid == leagueID).count()
+    pageCount = ceil(rowTotal/10)
+    for q in session.query(Team).filter(Team.leagueid == leagueID).order_by(desc(Team.points)).limit(10).offset((page-1)*10):
+        teams.append({'teamname': q.teamname, 'owner': q.userid, 'points': q.points})
+    session.close()
+    print(teams,pageCount)
+    return teams, pageCount
+
+def fetchLeagueManageTeam(uid, leagueID, teamname):
+    session = get_session()
+    team = session.query(Team.teamname, Team.userid, Team.points).filter(Team.leagueid == leagueID, Team.teamname == teamname).first()
+    session.close()
+    return team
+
+def fetchLeagueName(leagueID):
+    session = get_session()
+    leagueName = session.query(League.name).filter(League.leagueid == leagueID).first()
+    session.close()
+    return leagueName[0]
+
+def fetchManageTeamInfo(leagueID, teamname):
+    session = get_session()
+    q = session.query(Team.teamname, Team.userid, Team.points).filter(Team.leagueid == leagueID, Team.teamname == teamname).first()
+    teamInfo = {'teamname': q[0], 'owner': q[1], 'points': q[2]}
+    session.close()
+    return teamInfo
+
+def updateTeamInfo(leagueid, teamname, updatedInfo):
+    session = get_session()
+    session.execute(update(Team).where(Team.teamname == teamname, Team.leagueid == leagueid).values(points = int(updatedInfo['points']), teamname = updatedInfo['teamname']))
+    session.commit()
+    session.close()
 
 if __name__ == '__main__':
     # giveScoreForUser(User=User)

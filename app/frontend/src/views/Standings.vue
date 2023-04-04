@@ -91,4 +91,5 @@ export default {
         </tr>
     </table>
   </div>
+  {{ $store.getters.isLeagueOwner }}
 </template>

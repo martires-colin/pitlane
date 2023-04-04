@@ -110,7 +110,7 @@ def races(Year):
 
 @main.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
-    fastf1.Cache.enable_cache('backend/cache/')
+    fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
         post_data = request.get_json()
         print(request.get_json())
@@ -343,10 +343,39 @@ def fantasyCreateTeam():
 def fantasyLeagues(uid):
     if request.method == 'GET':
         Page = request.args.get('page', 1, type=int)
-        leagues = fetchLeaguesAdmin(Page)
+        leagues, pageCount = fetchLeagues(uid, Page)
         # leagues = fetchLeagues(uid, Page)
-        print(leagues)
-        return(jsonify({'status': '200', 'leagues': leagues}))
+        # print(leagues, pageCount)
+        return(jsonify({'status': '200', 'leagues': leagues, 'pages': pageCount}))
+    
+@main.route("/fantasy/leagues/<string:uid>/<int:leagueID>", methods=['GET', 'PUT'])
+def viewFantasyLeague(uid, leagueID):
+    if request.method == 'GET':
+        Name = request.args.get('name', None, type=Boolean)
+        TeamName = request.args.get('teamname', None)
+        if Name:
+            leagueName = fetchLeagueName(leagueID)
+            return(jsonify({'status': '200', 'leagueName': leagueName}))
+        if TeamName:
+            print('Type', type(TeamName))
+            print("TeamName:", TeamName)
+            teamInfo = fetchManageTeamInfo(leagueID, TeamName)
+            print(teamInfo)
+            return(jsonify({'status': '200', 'teamInfo': teamInfo}))
+        else:
+            Page = request.args.get('page', 1, type=int)
+            teams, pageCount = fetchLeagueManage(uid, leagueID, Page)
+            return(jsonify({'status': '200', 'teams': teams, 'pages': pageCount}))
+    if request.method == 'PUT':
+        data = request.get_json()
+        leagueID = data['leagueid']
+        teamname = data['teamname']
+        updatedInfo = data['updatedInfo']
+        print(updatedInfo)
+        updateTeamInfo(leagueID, teamname, updatedInfo)
+        return(jsonify({'status': '200'}))
+
+
 # Ideally want to combine these two and check firebase to see if user is admin 
 @main.route("/admin/leagues/", methods=['GET'])
 def adminLeagues():

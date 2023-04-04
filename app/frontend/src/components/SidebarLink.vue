@@ -6,7 +6,7 @@ import { useRoute } from "vue-router";
 export default {
   props: {
     to: { type: String, required: true },
-    icon: { type: String, required: true },
+    // icon: { type: String, required: true },
   },
   setup(props) {
     const route = useRoute();
@@ -18,18 +18,12 @@ export default {
 </script>
 
 <template>
-<!-- Jose flores all of sidebar and sidebarLink-->
   <div>
-    <router-link :to="to" class="link">
-      <i class="icon" :class="icon"></i>
-      <span class="pl-[6px]">
+    <router-link :to="to" >
+      <!-- <i class="icon" :class="icon"></i> -->
+      <span>
         <slot></slot>
       </span>
-      <!-- <Transition name="fade"
-        ><span v-if="!collapsed">
-          <slot></slot>
-        </span>
-      </Transition> -->
     </router-link>
   </div>
 </template>

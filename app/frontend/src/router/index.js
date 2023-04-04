@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import CreateAccount from "../views/CreateAccount.vue";
@@ -13,9 +15,19 @@ import CreateLeague from "../views/CreateLeague.vue"
 import JoinLeague from "../views/JoinLeague.vue"
 import ForgotPassword from "../views/ForgotPassword.vue"
 import ManageLeagues from "../views/ManageLeagues.vue"
+import League from "../components/League.vue"
+import LeagueManage from "../components/LeagueManage.vue"
+import FormLeague from "../components/FormLeague.vue"
 
-// const Year = {
-//   template: '<div> YEAR: {{ $route.params.year }}</div>'
+import store from "../store/index";
+
+
+// try {
+//   console.log(store)
+//   console.log(store.getters.isAdmin)
+// }
+// catch(error) {
+//   console.log(error)
 // }
 
 const routes = [
@@ -23,9 +35,6 @@ const routes = [
     path: "/pitlane",
     name: "Pitlane",
     component: Pitlane,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/login",
@@ -41,9 +50,6 @@ const routes = [
     path: "/standings",
     name: "Standings",
     component: Standings,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/standings/:year",
@@ -53,9 +59,6 @@ const routes = [
     path: "/schedule",
     name: "Schedule",
     component: Schedule,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/schedule/:year",
@@ -65,52 +68,63 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/fantasy",
     name: "Fantasy",
     component: Fantasy,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
     },
   },
   {
-    path: "/fantasy/createLeague",
+    path: "/fantasy/create",
     name: "CreateLeague",
     component: CreateLeague,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
     }
   },
   {
-    path: "/fantasy/joinLeague",
+    path: "/fantasy/join",
     name: "JoinLeague",
     component: JoinLeague,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
     }
   },
   {
-    path: "/fantasy/joinLeague/:inviteCode",
+    path: "/fantasy/join/:inviteCode",
     component: JoinLeague,
   },
   {
-    path: "/fantasy/manageLeagues",
+    path: "/fantasy/manage",
     name: "Manage League",
     component: ManageLeagues,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
+      requiresLeagueOwner: true,
     }
+  },
+  {
+    path: "/fantasy/manage/:id",
+    name: "Manage League ID",
+    component: LeagueManage,
+    meta: {
+      requiresLogin: true,
+      requiresLeagueOwner: true,
+    },
+    children: [
+      { path: '', component: League },
+      { path: 'edit/:tid', component: FormLeague }
+    ]
   },
   {
     path: "/settings",
     name: "Settings",
     component: Settings,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
     },
   },
   {
@@ -118,7 +132,7 @@ const routes = [
     name: "ForgotPassword",
     component: ForgotPassword,
     meta: {
-      requiresAuth: true,
+      requiresLogin: true,
     },
   },
 ];
@@ -127,5 +141,17 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresLeagueOwner && !store.getters.isLeagueOwner){
+    return {name: 'CreateLeague'}
+  }
+  if (to.meta.requiresAuth && !store.getters.isAdmin) {
+    return {name: 'Home'}
+  }
+  if (to.meta.requiresLogin && !store.getters.isLoggedIn) {
+    return {name: 'Login'}
+  }
+})
 
 export default router;

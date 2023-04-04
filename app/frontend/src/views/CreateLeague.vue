@@ -21,7 +21,8 @@ export default {
                 const data = await res.json();
                 console.log(data)
                 this.inviteCode = data.inviteCode;
-                this.inviteLink = `localhost:8080/fantasy/joinLeague/${data.inviteCode}`
+                this.inviteLink = `/fantasy/join/${data.inviteCode}`
+                // this.inviteLink = `localhost:8080/fantasy/join/${data.inviteCode}`
             }
 
             // set isLeague owner user role ~Colin Martires
@@ -56,8 +57,9 @@ export default {
         <div class="py-4" v-if="inviteCode !== ''">
             <p class="text-xl">Invite Code for your League:</p>
             <p class="text-xl text-green-500">{{ inviteCode }}</p>
-            <p class="text-xl text-green-500">{{ inviteLink }}</p>
             <p class="text-md opacity-75">Make sure to copy this!</p>
+            <!-- <p class="text-xl text-green-500">{{ inviteLink }}</p> -->
+            <v-btn @click="$router.push(inviteLink)">Create Team</v-btn>
         </div>
     </div>
 </template>

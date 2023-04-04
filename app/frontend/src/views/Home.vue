@@ -74,7 +74,17 @@ onMounted(() => {
 </script> -->
 
 <style scoped >
-  @media(min-width: 1025px){
+  @media(min-width: 2560px){
+    .pitlane-landing {
+      height: 600px;
+      background-image: url('../assets/PITLANE.jpg');  
+      /* // background-attachment: fixed; */
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center 0px;
+    }
+  } 
+  @media(min-width: 1025px) and (max-width: 2559px){
     .pitlane-landing {
       height: 500px;
       background-image: url('../assets/PITLANE.jpg');  

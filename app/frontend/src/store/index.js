@@ -40,9 +40,9 @@ export default createStore({
         constructorStandingsNotif: false
       },
       roles: {
-        isLeagueOwner: false,
-        isTeamOwner: false,
-        isAdmin: false
+        leagueOwner: false,
+        teamOwner: false,
+        admin: false, 
       }
     },
     nextRace: null,
@@ -248,6 +248,17 @@ export default createStore({
   getters: {
     user(state){
       return state.user
+    },
+    isLoggedIn(state){
+      return state.user.loggedIn
+    },
+    isAdmin(){
+      // return state.user.roles.admin
+      return false
+    },
+    isLeagueOwner(){
+      // return state.user.roles.leagueOwner
+      return true
     },
     getUpcoming: (state) => {state.nextRace, state.prevRace }
   },

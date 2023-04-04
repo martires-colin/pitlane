@@ -23,7 +23,74 @@
         </b-navbar-nav>
       </b-navbar>
     </div> -->
-  <div>
+  <v-app full-height theme="dark">
+    <v-app-bar flat height="80">
+      <img src="@/assets/PL.png" class="d-inline-block align-top ml-2" alt="Pitlane" width="40"
+            height="40">
+      <p class=" px-4 text-3xl">Pitlane</p>
+      <v-container class="fill-height d-flex align-center">
+        
+        <div class="ml-auto">
+          <v-btn variant="text"
+            v-for="link in links"
+            :key="link"
+            @click="$router.push(link[1])">
+            {{ link[0] }}
+            </v-btn>
+
+            <v-menu location="bottom" v-if="$store.getters.isLoggedIn">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                >
+                  Fantasy
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-if="$store.getters.isLeagueOwner" @click="$router.push('/fantasy/manage')">
+                  <v-list-item-title>Manage Leagues</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                  v-for="(item, index) in fantasyLinks"
+                  :key="index"
+                  :value="index"
+                  @click="$router.push(item[1])"
+                >
+                  <v-list-item-title>{{ item[0] }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
+            <v-btn variant="text" @click="$router.push('/settings')">
+            Settings
+            </v-btn>
+            <v-btn v-if="user.loggedIn" variant="text">
+              <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/">
+                Logout
+              </SidebarLink>
+            </v-btn>
+            <v-btn v-else variant="text" @click="$router.push('/login')">
+            Login
+            </v-btn>
+
+            <v-avatar
+              class="me-10 ms-4"
+              color="grey-darken-1"
+              size="48"
+              :image="user.photoURL"
+            ></v-avatar>
+        </div>
+
+      </v-container>
+    </v-app-bar>
+    <v-main class="bg-[#36393e]">
+      <v-container fluid class="p-0">
+        <router-view/>
+      </v-container>
+    </v-main>
+  </v-app>
+  <!-- <div>
     <b-navbar toggleable="lg" dark="true" variant="dark">
       <b-navbar-brand href="/">
         <img src="@/assets/PL.png" class="d-inline-block align-top" alt="Pitlane" width="40"
@@ -34,7 +101,6 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
           <b-nav-item href="/">Home</b-nav-item>
@@ -54,71 +120,13 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-  </div>
-  <div class="pitlane-container flex flex-row bg-[#36393e]">
-    <!-- <div class="relative sidebar overflow-hidden" :class="{'w-[190px]': isActive, 'w-[58px]': !isActive}">
-      <div class="ml-2 flex flex-col justify-start">
-        <div class="flex flex-row justify-start">
-          <img
-            class="pt-2"
-            src="@/assets/PL.png"
-            alt="website logo"
-            width="40"
-            height="40"
-          />
-          <h1 class="py-2 pl-[12px] text-2xl fw400">Pitlane</h1>
-        </div>
-        <div class="pt-4 flex flex-col text-white">
-          <SidebarLink to="/" icon="fas fa-home">
-            Home
-          </SidebarLink>
-          <SidebarLink to="/pitlane" icon="fa-solid fa-square-poll-vertical">
-            Pitlane
-          </SidebarLink>
-          <SidebarLink to="/standings" icon="fa-solid fa-ranking-star">
-            Standings
-          </SidebarLink>
-          <SidebarLink to="/schedule" icon="fa-solid fa-calendar-days">
-            Schedule
-          </SidebarLink>
-          <div v-if="user.loggedIn" class="fantasyDrop text-start">
-            <SidebarLink class="fantasy-link" v-if="user.loggedIn" to="/fantasy" icon="fa-solid fa-flag-checkered" @mouseover="fantasyDropdown = true"
-              >Fantasy
-            </SidebarLink>
-            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn && isActive">
-              <SidebarLink icon="fa-solid fa-plus" v-if="user.loggedIn" class="pb-2" to="/fantasy/createLeague">Create a League</SidebarLink>
-              <SidebarLink icon="fa-solid fa-user-plus" v-if="user.loggedIn" class="py-3" to="/fantasy/joinLeague">Join a League</SidebarLink>
-              <SidebarLink icon="fa-solid fa-warehouse" v-if="user.loggedIn" to="/fantasy">My Teams</SidebarLink>
-            </div>
-            <div class="Drop text-start pt-3 text-sm opacity-75" v-if="fantasyDropdown && user.loggedIn && !isActive">
-              <SidebarLink icon="fa-solid fa-plus" class="" to="/fantasy/createLeague"></SidebarLink>
-              <SidebarLink icon="fa-solid fa-user-plus" class="py-3" to="/fantasy/joinLeague"></SidebarLink>
-              <SidebarLink icon="fa-solid fa-warehouse" to="/fantasy"></SidebarLink>
-            </div>
-          </div>
-          <SidebarLink v-if="user.loggedIn" to="/settings" icon="fa-solid fa-gears">
-            Settings
-          </SidebarLink>
-          <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/" icon="fa-solid fa-right-to-bracket">
-            Logout
-          </SidebarLink>
+  </div> -->
+  <!-- <div class="pitlane-container flex flex-row bg-[#36393e]">
 
-          <SidebarLink v-else to="/login" icon="fa-solid fa-right-to-bracket">
-            Login
-          </SidebarLink>
-        </div>
-        <div class="absolute bottom-3 right-5">
-          <div :class="{'rotate-180': !isActive}" @click="(isActive = !isActive)">
-            <i class="fa-solid fa-angles-left" />
-          </div>
-        </div>
-      </div>
-      
-    </div> -->
     <div class="content">
-      <router-view />
+      
     </div>
-  </div>
+  </div> -->
 </template>
 
 <!-- <script>
@@ -147,12 +155,14 @@ export default {
 <script setup>
 import { onMounted, computed  } from 'vue';
 import { useStore } from 'vuex';
-
+// import { useRouter } from 'vue-router'
+import SidebarLink from "./components/SidebarLink.vue";
 
 const store = useStore();
 
 onMounted(() => {
   store.dispatch("fetchUpcoming");
+  console.log('League owner?:', store.getters.isLeagueOwner)
 })
 
 const user = computed(() => {
@@ -161,9 +171,24 @@ const user = computed(() => {
 
 const signOut = async () => {
   if(confirm("Are you sure you want to logout?")) {
+    // const router = useRouter()
+    // router.push('/')
     await store.dispatch("logout")
   }
 }
+
+const links = [
+  ['Home', '/'],
+  ['Pitlane', '/pitlane'],
+  ['Standings', '/standings'],
+  ['Schedule', '/schedule']
+]
+
+const fantasyLinks = [
+  ['My Teams', '/fantasy'],
+  ['Create a League', '/fantasy/create'],
+  ['Join a League', '/fantasy/join']
+]
 
 </script>
 
@@ -207,9 +232,5 @@ const signOut = async () => {
 }
 .fantasyDrop:hover{
   height: 160px;
-}
-.content {
-  flex-grow: 1;
-  /* text-align: center; */
 }
 </style>

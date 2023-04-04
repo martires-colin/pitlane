@@ -30,9 +30,8 @@ export default {
                   text-xl
                   leading-tight
                   rounded
-                  bg-neutral-400
-                  hover:bg-neutral-500 hover:shadow-lg
-                  active:bg-neutral-500 active:shadow-lg
+                  hover:bg-slate-400 hover:shadow-lg
+                  active:bg-slate-400 active:shadow-lg
                   transition
                   duration-150
                   ease-in-out" data-bs-toggle="modal" data-bs-target="#modal2" @click="load()">
@@ -43,7 +42,7 @@ export default {
       id="modal2" tabindex="-1" aria-labelledby="modal2Label" aria-hidden="true">
       <div class="modal-dialog relative w-auto pointer-events-none">
         <div
-          class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+          class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-[#36393e] bg-clip-padding rounded-md outline-none text-current">
           <div
             class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-slate-900 rounded-t-md">
             <h5 class="text-xl font-medium leading-normal" id="modal2Label">Select your second driver:</h5>
@@ -73,9 +72,9 @@ export default {
               uppercase
               rounded
               shadow-md
-              hover:bg-purple-700 hover:shadow-lg
-              focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
-              active:bg-purple-800 active:shadow-lg
+              hover:bg-red-700 hover:shadow-lg
+              focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0
+              active:bg-red-800 active:shadow-lg
               transition
               duration-150
               ease-in-out" data-bs-dismiss="modal">Cancel</button>
