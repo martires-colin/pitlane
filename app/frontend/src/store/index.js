@@ -3,20 +3,23 @@
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
-import { auth } from "../firebase";
+import { auth, db, functions } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile
 } from "firebase/auth";
-import { db } from "../firebase"
 import {
   doc,
   setDoc,
   getDoc,
   updateDoc
 } from "firebase/firestore";
+import { 
+  httpsCallable
+} from 'firebase/functions';
+
 
 
 const vuexLocal = new VuexPersistence({
@@ -244,6 +247,12 @@ export default createStore({
         alert(error);
         console.log(error);
       }
+    },
+    async listUsers() {
+      const listUsers = httpsCallable(functions, 'listUsers')
+      listUsers().then(result => {
+        console.log(result)
+      })
     },
   },
   getters: {

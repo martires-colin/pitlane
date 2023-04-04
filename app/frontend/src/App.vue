@@ -62,7 +62,7 @@
               </v-list>
             </v-menu>
 
-            <v-btn variant="text" @click="$router.push('/settings')">
+            <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">
             Settings
             </v-btn>
             <v-btn v-if="user.loggedIn" variant="text">

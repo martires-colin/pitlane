@@ -43,7 +43,8 @@
                   </div>
                 </div>
                 <div class="col-8 text-center px-5">
-                  Manage roles here maybe?
+                  <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="listUsers">Get List of Users</button>
+
                 </div>
               </div>
             </div>
@@ -100,8 +101,16 @@ export default {
 
   },
   methods: {
+    async listUsers() {
+      try {
+        await this.$store.dispatch('listUsers')
+      }
+      catch (err) {
+        console.log(err)
+      }
+    }
   }
-};
+}
 </script>
 
 <style>
