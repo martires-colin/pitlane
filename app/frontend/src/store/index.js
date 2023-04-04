@@ -40,9 +40,9 @@ export default createStore({
         constructorStandingsNotif: false
       },
       roles: {
-        leagueOwner: false,
-        teamOwner: false,
-        admin: false
+        isLeagueOwner: false,
+        isTeamOwner: false,
+        isAdmin: false
       }
     },
     nextRace: null,
@@ -74,7 +74,7 @@ export default createStore({
       state.user.notificationPreferences.constructorStandingsNotif = data.constructorStandingsNotif
     },
     SET_ROLES(state, data) {
-      state.user.roles.leagueOwner = data.isLeagueOwner
+      state.user.roles.isLeagueOwner = data.isLeagueOwner
     }
   },
   actions: {
