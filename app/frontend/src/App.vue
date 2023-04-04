@@ -47,7 +47,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item v-if="$store.getters.isLeagueOwner" @click="$router.push('/fantasy/manage')">
+                <v-list-item v-if="$store.state.user.roles.isLeagueOwner" @click="$router.push('/fantasy/manage')">
                   <v-list-item-title>Manage Leagues</v-list-item-title>
                 </v-list-item>
 
@@ -167,6 +167,7 @@ const store = useStore();
 onMounted(() => {
   store.dispatch("fetchUpcoming");
   console.log('League owner?:', store.getters.isLeagueOwner)
+  console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
 })
 
 const user = computed(() => {

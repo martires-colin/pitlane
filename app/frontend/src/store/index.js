@@ -116,6 +116,7 @@ export default createStore({
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data());
           commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
+          commit('SET_ROLES', docSnap.data())
         } else {
           console.log("No such document")
         }
@@ -263,9 +264,9 @@ export default createStore({
     isLoggedIn(state){
       return state.user.loggedIn
     },
-    isAdmin(){
-      // return state.user.roles.admin
-      return true
+    isAdmin(state){
+      return state.user.roles.isAdmin
+      // return true
     },
     isLeagueOwner(state){
       return state.user.roles.isleagueOwner

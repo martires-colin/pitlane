@@ -152,10 +152,10 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  if (to.meta.requiresLeagueOwner && !store.getters.isLeagueOwner){
+  if (to.meta.requiresLeagueOwner && !store.state.user.roles.isLeagueOwner){
     return {name: 'CreateLeague'}
   }
-  if (to.meta.requiresAuth && !store.getters.isAdmin) {
+  if (to.meta.requiresAuth && !store.state.user.roles.isAdmin) {
     return {name: 'Home'}
   }
   if (to.meta.requiresLogin && !store.getters.isLoggedIn) {

@@ -49,8 +49,8 @@ export default {
         //     await this.fetchLeagues(1);
         // }
         // console.log(this.$store.getters.isAdmin, this.$store.getters.isLeagueOwner)
-        if (this.$store.getters.isLeagueOwner) {
-            if (this.$store.getters.isAdmin) {
+        if (this.$store.state.user.roles.isLeagueOwner) {
+            if (this.$store.state.user.roles.isAdmin) {
                 await this.fetchLeaguesAdmin(1);
             }
             else await this.fetchLeagues(1);
