@@ -5,22 +5,14 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 
-require("dotenv").config();
-
 //Firebase configuration
 const firebaseConfig = {
-//   apiKey: process.env.API_KEY,
-//   authDomain: process.env.AUTH_DOMAIN,
-//   projectId: process.env.PROJECT_ID,
-//   storageBucket: process.env.STORAGE_BUCKET,
-//   messagingSenderId: process.env.MESSAGING_SENDER_ID,
-//   appId: process.env.APP_ID,
-  apiKey: "AIzaSyB8fx4XTZBGanb2GzcAyiZDae-6cPe9Yfc",
-  authDomain: "pitlane-ad39e.firebaseapp.com",
-  projectId: "pitlane-ad39e",
-  storageBucket: "pitlane-ad39e.appspot.com",
-  messagingSenderId: "93872254351",
-  appId: "1:93872254351:web:71ae889089a14d5a00affa",
+  apiKey: process.env.VUE_APP_API_KEY,
+  authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_APP_ID,
 };
 
 // Initialize Firebase
