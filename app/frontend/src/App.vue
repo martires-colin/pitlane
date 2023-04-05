@@ -1,34 +1,10 @@
 <template>
-  <!-- <div class="pitlane-container flex flex-row bg-white text-slate-900 dark:bg-slate-800"> -->
-    <!-- <div class="navbar">
-      <b-navbar variant="faded">
-        <b-navbar-brand href="/">
-          <img src="@/assets/PL.png" class="d-inline-block align-top" alt="Pitlane" width="40"
-            height="40">
-          Pitlane
-        </b-navbar-brand>
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item right href="/">Home</b-nav-item>
-
-          <b-nav-item-dropdown text="Fantasy" right>
-            <b-dropdown-item href="/fantasy">My Teams</b-dropdown-item>
-            <b-dropdown-item href="/fantasy/createLeague">Create a League</b-dropdown-item>
-            <b-dropdown-item href="/fantasy/joinLeague">Join a League</b-dropdown-item>
-          </b-nav-item-dropdown>
-
-          <b-nav-item-dropdown text="User" right>
-            <b-dropdown-item href="#">Account</b-dropdown-item>
-            <b-dropdown-item href="#">Settings</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
-      </b-navbar>
-    </div> -->
   <v-app full-height theme="dark">
-    <v-app-bar flat height="80">
+    <v-app-bar flat class="h-[8vh]">
       <img src="@/assets/PL.png" class="d-inline-block align-top ml-2" alt="Pitlane" width="40"
             height="40">
-      <p class=" px-4 text-3xl">Pitlane</p>
-      <v-container class="fill-height d-flex align-center">
+      <p class="px-4 text-3xl">Pitlane</p>
+      <v-container class="fill-height d-flex align-center mr-0">
         
         <div class="ml-auto">
           <v-btn variant="text"
@@ -78,83 +54,22 @@
             </v-btn>
 
             <v-avatar
-              class="me-10 ms-4"
               color="grey-darken-1"
-              size="48"
+              size="40"
               :image="user.photoURL"
               v-if="user.loggedIn"
             ></v-avatar>
-        </div>
+          </div>
 
       </v-container>
     </v-app-bar>
-    <v-main class="bg-[#36393e]">
-      <v-container fluid class="p-0">
+    <v-main class="bg-[#36393e] h-[92vh]">
+      <v-container fluid class="p-0 h-full">
         <router-view/>
       </v-container>
     </v-main>
   </v-app>
-  <!-- <div>
-    <b-navbar toggleable="lg" dark="true" variant="dark">
-      <b-navbar-brand href="/">
-        <img src="@/assets/PL.png" class="d-inline-block align-top" alt="Pitlane" width="40"
-          height="40">
-        Pitlane
-      </b-navbar-brand>
-
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
-
-          <b-nav-item href="/">Home</b-nav-item>
-          <b-nav-item href="/pitlane">Pitlane</b-nav-item>
-          <b-nav-item href="/standings">Standings</b-nav-item>
-          <b-nav-item href="/schedule">Schedule</b-nav-item>
-          <b-nav-item-dropdown text="Fantasy" v-if="user.loggedIn">
-            <b-dropdown-item href="/fantasy">My Teams</b-dropdown-item>
-            <b-dropdown-item href="/fantasy/manageLeagues" v-if="user.roles.leagueOwner">Manage Leagues</b-dropdown-item>
-            <b-dropdown-item href="/fantasy/createLeague">Create a League</b-dropdown-item>
-            <b-dropdown-item href="/fantasy/joinLeague">Join a League</b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item href="/settings" v-if="user.loggedIn">Settings</b-nav-item>
-          <b-nav-item href="/" v-if="user.loggedIn" @click.prevent="signOut">Logout</b-nav-item>
-          <b-nav-item href="/login" v-if="!user.loggedIn">Login</b-nav-item>
-
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </div> -->
-  <!-- <div class="pitlane-container flex flex-row bg-[#36393e]">
-
-    <div class="content">
-      
-    </div>
-  </div> -->
 </template>
-
-<!-- <script>
-// import Sidebar from "./components/Sidebar";
-// import SidebarLink from "./components/SidebarLink.vue";
-// import { sidebarWidth } from "./components/state";
-
-
-export default {
-  components: {
-    SidebarLink
-  },
-  // setup() {
-  //   return { sidebarWidth };
-  // },
-  data() {
-    return {
-      isActive: true,
-      fantasyDropdown: false,
-      button: ">"
-    }
-  }
-};
-</script> -->
 
 <script setup>
 import { onMounted, computed  } from 'vue';
@@ -166,8 +81,8 @@ const store = useStore();
 
 onMounted(() => {
   store.dispatch("fetchUpcoming");
-  console.log('League owner?:', store.getters.isLeagueOwner)
-  console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
+  // console.log('League owner?:', store.getters.isLeagueOwner)
+  // console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
 })
 
 const user = computed(() => {

@@ -1,31 +1,35 @@
 <!-- By Anthony Ganci -->
 <script>
 import router from "@/router";
-import axios from "axios";
 export default {
   data() {
     return {
       season: 2023,
       // standings: [ [ 1, "Max Verstappen", 454 ], [ 2, "Charles Leclerc", 308 ], [ 3, "Sergio Pérez", 305 ], [ 4, "George Russell", 275 ], [ 5, "Carlos Sainz", 246 ], [ 6, "Lewis Hamilton", 240 ], [ 7, "Lando Norris", 122 ], [ 8, "Esteban Ocon", 92 ], [ 9, "Fernando Alonso", 81 ], [ 10, "Valtteri Bottas", 49 ], [ 11, "Daniel Ricciardo", 37 ], [ 12, "Sebastian Vettel", 37 ], [ 13, "Kevin Magnussen", 25 ], [ 14, "Pierre Gasly", 23 ], [ 15, "Lance Stroll", 18 ], [ 16, "Mick Schumacher", 12 ], [ 17, "Yuki Tsunoda", 12 ], [ 18, "Guanyu Zhou", 6 ], [ 19, "Alexander Albon", 4 ], [ 20, "Nicholas Latifi", 2 ], [ 21, "Nyck de Vries", 2 ], [ 22, "Nico Hülkenberg", 0 ] ],
       standings: null,
+      fetching: true,
     };
   },
   methods: {
-    getStandings() {
-      const path = "http://localhost:3001/standings/2023";
-      axios.get(path).then((response) => {
-        console.log(response);
-        this.standings = response.data.standings;
-      });
+    async fetchStandings() {
+      const res = await fetch('http://localhost:3001/standings/2023', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+      })
+      const data = await res.json();
+      this.standings = data.standings;
+      this.fetching = false;
     },
     onSubmitYear(event) {
-        // this.standings = [];
         this.season = parseInt(event);
         router.push({ path: `/standings/${this.season}`})
     },
   },
-  created() {
-    this.getStandings();
+  async mounted() {
+    await this.fetchStandings();
   },
 };
 </script>
@@ -68,6 +72,7 @@ export default {
 </style>
 
 <template>
+<div v-if="!fetching">
   <h2 id="title">Standings for {{ season }} Formula One Season</h2>
   <div class="pt-6 flex flex-row justify-center">
     <div>
@@ -91,5 +96,5 @@ export default {
         </tr>
     </table>
   </div>
-  {{ $store.getters.isLeagueOwner }}
+</div>
 </template>

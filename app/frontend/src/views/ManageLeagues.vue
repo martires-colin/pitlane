@@ -2,10 +2,11 @@
 export default {
     data() {
         return {
-            leagues: null,
+            leagues: [],
             pageCount: null,
             currentPage: 1,
             fetching: false,
+            isAdmin: true,
         };
     },
     methods: {
@@ -19,7 +20,6 @@ export default {
                 mode: 'cors'
             });
             const data = await res.json();
-            console.log(data)
             this.leagues = data.leagues;
             this.pageCount = data.pages;
             this.fetching = false;
@@ -34,23 +34,35 @@ export default {
                 mode: 'cors'
             });
             const data = await res.json();
-            console.log(data)
             this.leagues = data.leagues;
             this.pageCount = data.pages;
             this.fetching = false;
+        },
+        async deleteLeague(leagueid) {
+            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}`, {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'leagueid': leagueid}),
+                mode: 'cors'
+            });
+            const data = await res.json();
+            if (data.status == '200') {
+                if (this.$store.state.user.roles.isLeagueOwner) {
+                    if (this.$store.state.user.roles.isAdmin) {
+                    // if (this.isAdmin) {
+                        await this.fetchLeaguesAdmin(1);
+                    }
+                    else await this.fetchLeagues(1);
+                }
+            }
         }
     },
     async mounted() {
-        //If user is admin run adminfetch
-        // if(this.$store.getters.isAdmin){
-        //     await this.fetchLeaguesAdmin(1);
-        // }
-        // else if (this.$store.getters.isLeagueOwner){
-        //     await this.fetchLeagues(1);
-        // }
-        // console.log(this.$store.getters.isAdmin, this.$store.getters.isLeagueOwner)
         if (this.$store.state.user.roles.isLeagueOwner) {
-            if (this.$store.state.user.roles.isAdmin) {
+            // if (this.$store.state.user.roles.isAdmin) {
+            if (this.isAdmin) {
                 await this.fetchLeaguesAdmin(1);
             }
             else await this.fetchLeagues(1);
@@ -86,7 +98,7 @@ export default {
                 <th class="text-left" v-if="$store.getters.isAdmin">
                 League Owner
                 </th>
-                <th></th>
+                <th class="text-center">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -98,13 +110,15 @@ export default {
                 <td class="text-left">{{ league.members }}</td>
                 <td class="text-left">{{ league.inviteCode }}</td>
                 <td class="text-left" v-if="$store.getters.isAdmin">{{ league.owner }}</td>
-                <td>
-                    <v-btn color="blue" class="mr-4" @click="$router.push(`/fantasy/manage/${league.leagueID}`)">Show</v-btn>
+                <td class="text-center">
+                    <v-btn color="blue" v-if="league.members !== 0" @click="$router.push(`/fantasy/manage/${league.leagueID}`)">Show</v-btn>
+                    <v-btn color="danger" v-if="league.members === 0" @click="deleteLeague(league.leagueID)">Delete</v-btn>
                 </td>
             </tr>
             </tbody>
         </v-table>
     </div>
-    <v-pagination class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
+    <p class="text-amber" v-if="(!fetching && leagues.length === 0)">You are not currently an owner of any leagues!</p>
+    <v-pagination v-if="!(leagues.length === 0)" class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
 </div>
 </template>

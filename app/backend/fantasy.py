@@ -190,6 +190,18 @@ def deleteTeam(leagueid, teamname):
     session.commit()
     session.close()
 
+def deleteLeague(leagueid):
+    session = get_session()
+    l = session.query(League.members).filter(League.leagueid == leagueid).first()
+    if l[0] == 0:
+        session.execute(delete(League).where(League.leagueid == leagueid))
+        # session.execute(update(League).where(League.leagueid == leagueid).values(members = l.members - 1))
+        session.commit()
+        session.close()
+        return '200'
+    else: 
+        return '400'
+
 if __name__ == '__main__':
     # giveScoreForUser(User=User)
     # recent = get_recent_race()

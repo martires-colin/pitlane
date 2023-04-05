@@ -339,7 +339,7 @@ def fantasyCreateTeam():
         print(worked)
         return jsonify({'status': '200', 'success': worked})
     
-@main.route("/fantasy/leagues/<string:uid>", methods=['GET'])
+@main.route("/fantasy/leagues/<string:uid>", methods=['GET', 'DELETE'])
 def fantasyLeagues(uid):
     if request.method == 'GET':
         Page = request.args.get('page', 1, type=int)
@@ -347,6 +347,12 @@ def fantasyLeagues(uid):
         # leagues = fetchLeagues(uid, Page)
         # print(leagues, pageCount)
         return(jsonify({'status': '200', 'leagues': leagues, 'pages': pageCount}))
+    if request.method == 'DELETE':
+        data = request.get_json()
+        leagueID = data['leagueid']
+        # teamname = data['teamname']
+        status = deleteLeague(leagueID)
+        return(jsonify({'status': status}))
     
 @main.route("/fantasy/leagues/<string:uid>/<int:leagueID>", methods=['GET', 'PUT', 'DELETE'])
 def viewFantasyLeague(uid, leagueID):

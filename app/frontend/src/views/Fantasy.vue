@@ -1,10 +1,10 @@
 <!-- Started by Anthony Ganci -->
 
 <template>
-  <div v-if="ready" class="fantasy flex flex-col h-screen">
+  <div v-if="ready" class="fantasy flex flex-col h-full">
     <SelectFantasyTeam v-if="!teamSelected" :user-teams="userTeams" @set-selected-team="(setSelectedTeam)"></SelectFantasyTeam>
     <div v-if="teamSelected">
-      <div class="flex flex-row justify-between p-4">
+      <div class="flex flex-row justify-between p-3">
         <h1>League: {{ leagueName }} </h1>
         <h1>Your Team: {{ selectedTeam }}</h1>
         <h1>Total points: {{ points }}</h1>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-      <div v-if="teamSelected" class="fantasy-grid">
+      <div v-if="teamSelected" class="fantasy-grid h-full">
         <div class="flex flex-col justify-evenly">
           <div class="flex flex-row justify-evenly">
             <BCard
@@ -53,7 +53,7 @@
             </BCard>
           </div>
           <div class="flex flex-row justify-center">
-            <img :src="constructorImage" class="bg-[#5b6068] rounded-2 max-w-[600px] max-h-[400px]">
+            <img :src="constructorImage" class="bg-[#5b6068] rounded-2 max-w-[500px] max-h-[300px]">
           </div>
           <div class="flex flex-row justify-center" v-if="lineupChanged">
             <button class="hover:bg-slate-400 p-2 rounded-2 text-xl bg-slate-500" @click="sendLineup">Save Lineup</button>
@@ -244,7 +244,7 @@ export default {
   display: grid;
   grid-template-columns: minmax(70%, auto) minmax(auto, 600px);
   grid-template-rows: repeat(1, minmax(0, 1fr));
-  height: 100%;
+  /* height: full; */
   /* background-image: url('../assets/fantasy2.jpg');  
   background-repeat: no-repeat;
   background-size: cover;

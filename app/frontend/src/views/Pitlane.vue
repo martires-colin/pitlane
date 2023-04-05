@@ -1,7 +1,7 @@
 <!-- Data Visualization Page Implemented by Anthony Ganci -->
 
 <template>
-  <div flex flex-col justify-center h-screen items-center>
+  <div flex flex-col justify-center h-full items-center>
     <div class="button-group">
       <button  class="fastf1-button" @click="(show = 1), (src = ''), (driverLabel = 'Driver 1')">
         Head-to-Head
@@ -175,7 +175,9 @@ export default {
         body: JSON.stringify({'method': method, 'driver1': this.form.driver1, 'driver2': this.form.driver2, 'year': this.form.year, 'session': this.form.session, 'track': this.form.track})
       });
       const data = await res.json();
+      this.show = 0;
       this.src = data.src;
+
     },
     initialForm() {
       (this.form.driver1 = ""),
