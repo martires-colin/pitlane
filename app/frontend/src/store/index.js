@@ -3,7 +3,6 @@
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
-// import { auth, db, functions } from "../firebase";
 import { auth, db } from "../firebase";
 import {
   createUserWithEmailAndPassword,
@@ -17,10 +16,6 @@ import {
   getDoc,
   updateDoc
 } from "firebase/firestore";
-// import { 
-//   httpsCallable
-// } from 'firebase/functions';
-
 
 
 const vuexLocal = new VuexPersistence({
@@ -265,16 +260,6 @@ export default createStore({
         console.log(error);
       }
     },
-    // async listUsers() {
-    //   const listUsers = httpsCallable(functions, 'listUsers')
-    //   return listUsers()
-    // },
-    // async addAdminRole( userEmail ) {
-    //   console.log("wwewew")
-    //   console.log(userEmail.userEmail)
-    //   // const addAdminRole = httpsCallable(functions, 'addAdminRole')
-    //   // return addAdminRole(userEmail)
-    // },
   },
   getters: {
     user(state){

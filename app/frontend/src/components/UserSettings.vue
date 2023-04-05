@@ -302,19 +302,6 @@ export default {
         }
         return;
       }
-
-      // 
-      // try {
-      //           await this.$store.dispatch('updateRoles', {
-      //               isLeagueOwner: true
-      //           })
-      //       }
-      //       catch (err) {
-      //           console.log(err)
-      //       }
-      // 
-
-
     }
   }
 }
