@@ -5,10 +5,23 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 exports.listUsers = functions.https.onCall((data, context) => {
-    //list all registered users
     return admin.auth().listUsers().then(users => {
         return {
             listOfUsers: users
+        }
+    }).catch(err => {
+        return err
+    });
+});
+
+exports.addAdminRole = functions.https.onCall((data, context) => {
+    return admin.auth().getUserByEmail(data).then(user => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+            isAdmin: true
+        });
+    }).then(() => {
+        return {
+            message: `${data} has been granted admin privileges`
         }
     }).catch(err => {
         return err

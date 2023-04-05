@@ -133,7 +133,7 @@ const routes = [
     name: "ForgotPassword",
     component: ForgotPassword,
     meta: {
-      requiresLogin: true,
+      requiresLogin: false,
     },
   },
   {

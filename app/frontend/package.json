@@ -18,6 +18,7 @@
     "bootstrap-vue-3": "^0.5.1",
     "core-js": "^3.8.3",
     "firebase": "^9.14.0",
+    "firebase-tools": "^11.25.2",
     "flush-promises": "^1.0.2",
     "vue": "^3.2.13",
     "vue-cleave-component": "^3.0.2",

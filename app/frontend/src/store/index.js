@@ -251,10 +251,12 @@ export default createStore({
     },
     async listUsers() {
       const listUsers = httpsCallable(functions, 'listUsers')
-      // listUsers().then(result => {
-      //   console.log(result)
-      // })
       return listUsers()
+    },
+    async addAdminRole(userEmail) {
+      console.log(userEmail)
+      // const addAdminRole = httpsCallable(functions, 'addAdminRole')
+      // return addAdminRole(userEmail)
     },
   },
   getters: {
