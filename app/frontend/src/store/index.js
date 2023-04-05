@@ -3,7 +3,8 @@
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
-import { auth, db, functions } from "../firebase";
+// import { auth, db, functions } from "../firebase";
+import { auth, db } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -16,9 +17,9 @@ import {
   getDoc,
   updateDoc
 } from "firebase/firestore";
-import { 
-  httpsCallable
-} from 'firebase/functions';
+// import { 
+//   httpsCallable
+// } from 'firebase/functions';
 
 
 
@@ -78,6 +79,9 @@ export default createStore({
     },
     SET_ROLES(state, data) {
       state.user.roles.isLeagueOwner = data.isLeagueOwner
+    },
+    SET_ADMIN_ROLE(state, data) {
+      state.user.roles.isAdmin = data
     }
   },
   actions: {
@@ -117,6 +121,7 @@ export default createStore({
           console.log("Document data:", docSnap.data());
           commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
           commit('SET_ROLES', docSnap.data())
+          commit('SET_ADMIN_ROLE', docSnap.data())
         } else {
           console.log("No such document")
         }
@@ -124,6 +129,17 @@ export default createStore({
       } else {
         throw new Error('Login Failed')
       }
+
+      const user = auth.currentUser
+      user.getIdTokenResult().then(idTokenResult => {
+        console.log(idTokenResult.claims)
+        commit('SET_ADMIN_ROLE', idTokenResult.claims.admin)
+        const docRef = doc(db, "users", user.uid)
+        updateDoc(docRef, {
+          isAdmin: idTokenResult.claims.admin
+        })
+      })
+
     },
     async updatePhoneNumber({ commit }, { phoneNumber }) {
       const user = auth.currentUser;
@@ -151,8 +167,6 @@ export default createStore({
         constructorStandingsNotif: notifPreferences.constructorStandingsNotif
       })
     },
-    // ---------------UPDATE USER ROLES-----------
-    // userRoles will be an object holding booleans for each role
     async updateRoles({ commit }, userRoles) {
       const user = auth.currentUser;
       const docRef = doc(db, "users", user.uid)
@@ -163,7 +177,9 @@ export default createStore({
         isLeagueOwner: userRoles.isLeagueOwner
       })
     },
-    // --------------------------------------------
+    async updateAdminRole({ commit }) {
+      commit('SET_ADMIN_ROLE', true)
+    },
     async updateProfilePicture({ commit }, img_url) {
       const user = auth.currentUser;
       await updateProfile(user, {
@@ -249,15 +265,16 @@ export default createStore({
         console.log(error);
       }
     },
-    async listUsers() {
-      const listUsers = httpsCallable(functions, 'listUsers')
-      return listUsers()
-    },
-    async addAdminRole(userEmail) {
-      console.log(userEmail)
-      // const addAdminRole = httpsCallable(functions, 'addAdminRole')
-      // return addAdminRole(userEmail)
-    },
+    // async listUsers() {
+    //   const listUsers = httpsCallable(functions, 'listUsers')
+    //   return listUsers()
+    // },
+    // async addAdminRole( userEmail ) {
+    //   console.log("wwewew")
+    //   console.log(userEmail.userEmail)
+    //   // const addAdminRole = httpsCallable(functions, 'addAdminRole')
+    //   // return addAdminRole(userEmail)
+    // },
   },
   getters: {
     user(state){

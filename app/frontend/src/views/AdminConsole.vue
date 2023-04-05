@@ -29,7 +29,7 @@
                     <td class="text-left">{{ user.email }}</td>
                     <td class="text-left">
                       <div class="d-flex justify-content-around">
-                        <button class="btn btn-secondary btn-sm" id="promote-btn" @click="makeAdmin(user.email)">Promote</button>
+                        <button class="btn btn-secondary btn-sm" id="promote-btn" @click="addAdminRole(user.email)">Promote</button>
                         <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="deleteUser(user.email)">Delete</button>
                       </div>
                     </td>
@@ -43,52 +43,38 @@
 </template>
 
 <script>
+import { functions } from "../firebase";
+import { httpsCallable } from 'firebase/functions';
+
 export default {
   name: "AdminConsole",
   data() {
     return {
         users: null,
-        user_email: null
     };
   },
   methods: {
     async deleteUser(userEmail) {
       console.log(`Deleting ${userEmail}`)
     },
-    // makeAdmin(userEmail) {
-    //   console.log(`Promoting ${userEmail}`)
-      
-    //   try {
-    //     this.$store.dispatch('addAdminRole', {
-    //       userEmail: userEmail
-    //     }).then(results => {
-    //       console.log(results)
-    //     })
-    //   }
-    //   catch (err) {
-    //     console.log(err)
-    //   }
-    // },
-
-
-    async makeAdmin(userEmail) {
-      console.log(`Promoting ${userEmail}`)
-      this.user_email = userEmail
-      try {
-        await this.$store.dispatch('addAdminRole', "penis")
-      }
-      catch (err) {
+    async addAdminRole(userEmail) {
+      console.log(`Promoting ${userEmail} to admin ...`)
+      const addAdminRole = httpsCallable(functions, 'addAdminRole')
+      addAdminRole(userEmail).then(results => {
+        console.log(results.data.message)
+        this.$store.dispatch('updateAdminRole')
+      }).catch(err => {
         console.log(err)
-        return;
-      }
+      })
     },
   },
   async mounted() {
     try {
-        await this.$store.dispatch('listUsers').then(results => {
-          console.log(results)
-          this.users = results.data.listOfUsers.users
-        })
+      const listUsers = httpsCallable(functions, 'listUsers')
+      listUsers().then(results => {
+        console.log(results)
+        this.users = results.data.listOfUsers.users
+      })
       }
       catch (err) {
         console.log(err)
