@@ -30,7 +30,7 @@
                     <td class="text-left">
                       <div class="d-flex justify-content-around">
                         <button class="btn btn-secondary btn-sm" id="promote-btn" @click="addAdminRole(user.email)">Promote</button>
-                        <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="deleteUser(user.email)">Delete</button>
+                        <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="deleteUser(user.email, user.uid)">Delete</button>
                       </div>
                     </td>
                 </tr>
@@ -43,8 +43,13 @@
 </template>
 
 <script>
-import { functions } from "../firebase";
+import { functions, db } from "../firebase";
+// import { functions } from "../firebase";
 import { httpsCallable } from 'firebase/functions';
+import {
+  doc,
+  deleteDoc
+} from "firebase/firestore";
 
 export default {
   name: "AdminConsole",
@@ -54,8 +59,33 @@ export default {
     };
   },
   methods: {
-    async deleteUser(userEmail) {
+    async deleteUser(userEmail, user_uid) {
       console.log(`Deleting ${userEmail}`)
+      const deleteUser = httpsCallable(functions, 'deleteUser')
+      deleteUser(userEmail).then(results => {
+        console.log(results.data.message)
+        console.log(results.data.results)
+      }).catch(err => {
+        console.log(err)
+      })
+      // remove user from Firestore
+      console.log(user_uid)
+      const docRef = doc(db, "users", user_uid)
+      // const docSnap = await deleteDoc(docRef)
+      // if (docSnap.exists()) {
+      //   console.log("Deleted User Document", docSnap.data());
+      // } else {
+      //   console.log("No such document")
+      // }
+
+      try {
+        await deleteDoc(docRef);
+        console.log("Deleted User Document", user_uid);
+      } catch (e) {
+        console.error("Error deleting document: ", e);
+      }
+
+
     },
     async addAdminRole(userEmail) {
       console.log(`Promoting ${userEmail} to admin ...`)

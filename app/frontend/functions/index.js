@@ -27,3 +27,16 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
         return err
     });
 });
+
+exports.deleteUser = functions.https.onCall((data, context) => {
+    return admin.auth().getUserByEmail(data).then(user => {
+        return admin.auth().deleteUser(user.uid)
+    }).then((res) => {
+        return {
+            message: `${data} has been deleted`,
+            results: res
+        }
+    }).catch(err => {
+        return err
+    });
+});
