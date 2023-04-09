@@ -14,16 +14,6 @@ exports.listUsers = functions.https.onCall((data, context) => {
     });
 });
 
-// exports.listUsers = functions.https.onCall((data, context) => {
-//     return admin.auth().listUsers().then(users => {
-//         return {
-//             listOfUsers: users
-//         }
-//     }).catch(err => {
-//         return err
-//     });
-// });
-
 exports.addAdminRole = functions.https.onCall((data, context) => {
     return admin.auth().getUserByEmail(data).then(user => {
         return admin.auth().setCustomUserClaims(user.uid, {

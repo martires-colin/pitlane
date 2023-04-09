@@ -181,7 +181,6 @@ export default {
     const phoneNumber = ref('')
     
     const user = computed(() => {
-      console.log(store.getters.user)
       return store.getters.user
     })
     
@@ -344,8 +343,4 @@ export default {
   border: 0px !important;
 }
 
-/* .alert {
-  position: absolute;
-  z-index: 10000;
-} */
 </style>

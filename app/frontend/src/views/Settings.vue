@@ -21,7 +21,6 @@
                     <h5 class="user-name">{{ user.displayName }}</h5>
                   </div>
                 </div>
-
                 <div class="col-8 px-5">
                   <UserSettings />
                 </div>
@@ -43,6 +42,7 @@
                   </div>
                 </div>
                 <div class="col-8 text-center px-5">
+                  
                   <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="listUsers">Get List of Users</button>
 
                 </div>

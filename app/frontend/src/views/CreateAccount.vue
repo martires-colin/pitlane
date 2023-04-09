@@ -28,7 +28,6 @@
                   <h5 class="fw-normal mb-0 pb-3" style="letter-spacing: 1px;">Create an account</h5>
 
                   <div class="form-outline mb-4">
-                    <!-- <label class="form-label">Name</label> -->
                     <input
                       type="text"
                       placeholder="Username"
@@ -38,7 +37,6 @@
                   </div>
 
                   <div class="form-outline mb-4">
-                    <!-- <label class="form-label">Email address</label> -->
                     <input
                       type="email"
                       placeholder="Email"
@@ -48,7 +46,6 @@
                   </div>
 
                   <div class="form-outline mb-4">
-                    <!-- <label class="form-label">Password</label> -->
                     <input
                     type="password"
                     placeholder="Password"
@@ -58,7 +55,6 @@
                   </div>
 
                   <div class="form-outline mb-4">
-                    <!-- <label class="form-label">Password</label> -->
                     <input
                     type="password"
                     placeholder="Reenter Password"
@@ -69,14 +65,13 @@
 
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
-                    <!-- <a href="/" class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</a> -->
                   </div>
 
-                  <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a href="/login"
-                      style="color: #393f81;">Login here</a></p>
-                  <!-- <a href="#!" class="small text-muted">Terms of use.</a>
-                  <a href="#!" class="small text-muted">Privacy policy</a> -->
+                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account?
+                    <a href="/login"
+                      style="color: #393f81;">Login here
+                    </a>
+                  </p>
                 </form>
 
               </div>
@@ -122,7 +117,6 @@ export default {
         })
         console.log("Registered User")
 
-        // await store.dispatch('fetchUser')
         router.push("/")
       }
       catch (err) {

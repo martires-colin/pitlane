@@ -9,7 +9,7 @@
     </p>
     <div class="flex flex-col justify-center items-center">
         <div class="w-[60%] transition-opacity duration-400 ease-in ease-out pb-2" :class="{'opacity-30': fetching}">
-            <v-table hover>
+            <v-table fixed-header height="75vh">
                 <thead>
                 <tr>
                     <th class="text-left">
@@ -37,8 +37,7 @@
                 </tr>
                 </tbody>
             </v-table>
-        </div>
-        <v-pagination class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
+        </div>    
     </div>
 
     <!-- Pop-up validators -->
@@ -117,7 +116,8 @@ export default {
   },
   data() {
     return {
-        users: null
+        users: null,
+        fetching: false,
     };
   },
   methods: {
@@ -155,10 +155,12 @@ export default {
   },
   async mounted() {
     try {
+      this.fetching = true
       const listUsers = httpsCallable(functions, 'listUsers')
       listUsers().then(results => {
         console.log(results)
         this.users = results.data.listOfUsers.users
+        this.fetching = false
       })
     }
     catch (err) {
