@@ -93,7 +93,8 @@ export default createStore({
             email: email,
             phoneNumber: "",
             uid: response.user.uid,
-            photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png"
+            photoURL: "https://cdn-icons-png.flaticon.com/512/2266/2266048.png",
+            isAdmin: false
           });
           console.log("Document written with ID: ", response.user.uid);
           await new Promise(r => setTimeout(r, 500));

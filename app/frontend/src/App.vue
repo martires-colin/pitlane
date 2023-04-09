@@ -38,7 +38,7 @@
               </v-list>
             </v-menu>
 
-            <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/admin-console')">
+            <v-btn v-if="user.loggedIn && user.roles.isAdmin" variant="text" @click="$router.push('/admin-console')">
             Admin
             </v-btn>
             <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">

@@ -29,8 +29,9 @@
                     <td class="text-left">{{ user.email }}</td>
                     <td class="text-left">
                       <div class="d-flex justify-content-around">
-                        <button class="btn btn-secondary btn-sm" id="promote-btn" @click="addAdminRole(user.email)">Promote</button>
-                        <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="deleteUser(user.email, user.uid)">Delete</button>
+                        <v-btn v-if="user.hasOwnProperty('customClaims')" color="green" width="100" id="disabled">Admin</v-btn>
+                        <v-btn v-else color="blue" @click="addAdminRole(user.email)">Promote</v-btn>
+                        <v-btn color="danger" @click="deleteUser(user.email, user.uid)">Delete</v-btn>        
                       </div>
                     </td>
                 </tr>
@@ -39,12 +40,45 @@
         </div>
         <v-pagination class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
     </div>
+
+    <!-- Pop-up validators -->
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showErrorSomething">
+            Something went wrong!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showDelete">
+            User deleted!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showPromote">
+            User granted admin privileges!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import { functions, db } from "../firebase";
-// import { functions } from "../firebase";
 import { httpsCallable } from 'firebase/functions';
 import {
   doc,
@@ -53,9 +87,37 @@ import {
 
 export default {
   name: "AdminConsole",
+  setup() {
+    const showErrorSomething = ref(false)
+    const triggerErrorSomething = () => {
+      showErrorSomething.value = true;
+      setTimeout(() => showErrorSomething.value = false, 2000)
+    }
+
+    const showDelete = ref(false)
+    const triggerDelete = () => {
+      showDelete.value = true;
+      setTimeout(() => showDelete.value = false, 2000)
+    }
+
+    const showPromote = ref(false)
+    const triggerPromote = () => {
+      showPromote.value = true;
+      setTimeout(() => showPromote.value = false, 2000)
+    }
+
+    return {
+      showErrorSomething,
+      triggerErrorSomething,
+      showDelete,
+      triggerDelete,
+      showPromote,
+      triggerPromote
+    }
+  },
   data() {
     return {
-        users: null,
+        users: null
     };
   },
   methods: {
@@ -64,36 +126,29 @@ export default {
       const deleteUser = httpsCallable(functions, 'deleteUser')
       deleteUser(userEmail).then(results => {
         console.log(results.data.message)
-        console.log(results.data.results)
+        this.triggerDelete()
       }).catch(err => {
         console.log(err)
       })
-      // remove user from Firestore
       console.log(user_uid)
       const docRef = doc(db, "users", user_uid)
-      // const docSnap = await deleteDoc(docRef)
-      // if (docSnap.exists()) {
-      //   console.log("Deleted User Document", docSnap.data());
-      // } else {
-      //   console.log("No such document")
-      // }
-
       try {
         await deleteDoc(docRef);
         console.log("Deleted User Document", user_uid);
       } catch (e) {
+        this.triggerErrorSomething()
         console.error("Error deleting document: ", e);
       }
-
-
     },
     async addAdminRole(userEmail) {
       console.log(`Promoting ${userEmail} to admin ...`)
       const addAdminRole = httpsCallable(functions, 'addAdminRole')
       addAdminRole(userEmail).then(results => {
+        this.triggerPromote()
         console.log(results.data.message)
         this.$store.dispatch('updateAdminRole')
       }).catch(err => {
+        this.triggerErrorSomething()
         console.log(err)
       })
     },
@@ -105,10 +160,11 @@ export default {
         console.log(results)
         this.users = results.data.listOfUsers.users
       })
-      }
-      catch (err) {
-        console.log(err)
-      }
+    }
+    catch (err) {
+      console.log(err)
+      this.triggerErrorSomething()
+    }
   }
 }
 </script>
@@ -118,6 +174,10 @@ export default {
 #promote-btn {
   color: white;
   background-color: rgb(19, 160, 54);
+}
+
+#disabled {
+  pointer-events: none;
 }
 
 </style>
