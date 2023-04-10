@@ -30,14 +30,43 @@
                     <td class="text-left">
                       <div class="d-flex justify-content-around">
                         <v-btn v-if="user.hasOwnProperty('customClaims')" color="green" width="100" id="disabled">Admin</v-btn>
-                        <v-btn v-else color="blue" @click="addAdminRole(user.email)">Promote</v-btn>
-                        <v-btn color="danger" @click="deleteUser(user.email, user.uid)">Delete</v-btn>        
+                        <v-btn v-else color="blue" @click="targetUserEmail = user.email, targetUserUid = user.uid, admin_dialog = true">Promote</v-btn>
+                        <v-btn color="danger" @click="targetUserEmail = user.email, targetUserUid = user.uid, delete_dialog = true">Delete</v-btn>
                       </div>
                     </td>
                 </tr>
                 </tbody>
             </v-table>
         </div>    
+
+      <v-dialog v-model="delete_dialog" width="auto">
+        <v-card>
+          <v-card-text>
+            Are you sure you want to delete {{this.targetUserEmail}}?
+          </v-card-text>
+          <div class="d-flex justify-content-center">
+            <v-card-actions>
+              <v-btn color="blue" variant="outlined" @click="delete_dialog = false">No</v-btn>
+              <v-btn color="blue" variant="tonal" @click="deleteUser(this.targetUserEmail, this.targetUserUid), delete_dialog = false">Yes, I'm sure</v-btn>
+            </v-card-actions>
+          </div>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="admin_dialog" width="auto">
+        <v-card>
+          <v-card-text>
+            Are you sure you want to make {{this.targetUserEmail}} an admin?
+          </v-card-text>
+          <div class="d-flex justify-content-center">
+            <v-card-actions>
+              <v-btn color="blue" variant="outlined" @click="admin_dialog = false">No</v-btn>
+              <v-btn color="blue" variant="tonal" @click="addAdminRole(this.targetUserEmail), admin_dialog = false">Yes, I'm sure</v-btn>
+            </v-card-actions>
+          </div>
+        </v-card>
+      </v-dialog>
+
     </div>
 
     <!-- Pop-up validators -->
@@ -55,7 +84,7 @@
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showDelete">
-            User deleted!
+            {{ this.targetUserEmail }} deleted!
           </div>
         </transition>
       </div>
@@ -65,7 +94,7 @@
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showPromote">
-            User granted admin privileges!
+            {{ this.targetUserEmail }} granted admin privileges!
           </div>
         </transition>
       </div>
@@ -118,11 +147,19 @@ export default {
     return {
         users: null,
         fetching: false,
+        delete_dialog: false,
+        admin_dialog: false,
+        targetUserEmail: null,
+        targetUserUid: null,
     };
   },
   methods: {
     async deleteUser(userEmail, user_uid) {
-      console.log(`Deleting ${userEmail}`)
+      this.delete_dialog = true
+      this.targetUserEmail = userEmail
+      this.targetUserUid = user_uid
+      console.log(`Deleting ${userEmail} ${user_uid}`)
+
       const deleteUser = httpsCallable(functions, 'deleteUser')
       deleteUser(userEmail).then(results => {
         console.log(results.data.message)
@@ -141,6 +178,9 @@ export default {
       }
     },
     async addAdminRole(userEmail) {
+      this.admin_dialog = true
+      this.targetUserEmail = userEmail
+
       console.log(`Promoting ${userEmail} to admin ...`)
       const addAdminRole = httpsCallable(functions, 'addAdminRole')
       addAdminRole(userEmail).then(results => {
