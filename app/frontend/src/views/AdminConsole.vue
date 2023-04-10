@@ -4,7 +4,7 @@
 <template>
 
   <div>
-    <p class="text-xl text-[#00d4ff] py-4">
+    <p class="text-xl text-[#00d4ff] pb-4 pt-10">
         Admin Console
     </p>
     <div class="flex flex-col justify-center items-center">

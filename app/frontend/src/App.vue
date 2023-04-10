@@ -44,10 +44,8 @@
             <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">
             Settings
             </v-btn>
-            <v-btn v-if="user.loggedIn" variant="text">
-              <SidebarLink v-if="user.loggedIn" @click.prevent="signOut" to="/">
-                Logout
-              </SidebarLink>
+            <v-btn v-if="user.loggedIn" variant="text" @click="logout_dialog = true">
+            Logout
             </v-btn>
             <v-btn v-else variant="text" @click="$router.push('/login')">
             Login
@@ -68,14 +66,30 @@
         <router-view/>
       </v-container>
     </v-main>
+
+    <!-- logout dialog -->
+    <v-dialog v-model="logout_dialog" width="auto">
+      <v-card>
+        <v-card-text>
+          Are you sure you want to logout?
+        </v-card-text>
+        <div class="d-flex justify-content-center">
+          <v-card-actions>
+            <v-btn color="blue" variant="outlined" @click="logout_dialog = false">No</v-btn>
+            <v-btn color="blue" variant="tonal" @click="signOut(), logout_dialog = false, $router.push('/')">Yes, I'm sure</v-btn>
+          </v-card-actions>
+        </div>
+      </v-card>
+    </v-dialog>
+
   </v-app>
+
+
 </template>
 
 <script setup>
-import { onMounted, computed  } from 'vue';
+import { onMounted, computed, ref  } from 'vue';
 import { useStore } from 'vuex';
-// import { useRouter } from 'vue-router'
-import SidebarLink from "./components/SidebarLink.vue";
 
 const store = useStore();
 
@@ -85,16 +99,15 @@ onMounted(() => {
   // console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
 })
 
+
 const user = computed(() => {
   return store.getters.user
 })
 
+const logout_dialog = ref(false)
 const signOut = async () => {
-  if(confirm("Are you sure you want to logout?")) {
-    // const router = useRouter()
-    // router.push('/')
-    await store.dispatch("logout")
-  }
+  console.log("Logging out!")
+  await store.dispatch("logout")
 }
 
 const links = [

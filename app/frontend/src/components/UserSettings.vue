@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <!-- pdate Username -->
+    <!-- Update Username -->
     <form @submit.prevent="updateUsername">
       <div class="row py-2">
         <label class="pb-1 w-100 text-left">Username</label>

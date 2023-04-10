@@ -2,14 +2,14 @@
 
 <template>
 
-  <div class="container  h-100">
+  <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-12">
-        <div class="card m-5" style="border-radius: 1rem; border: none;">
+        <div class="card mx-5 mt-4" style="border-radius: 1rem 1rem 1rem 1rem; border: none;">
           <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
+            <div class="h-[85vh] col-md-6 col-lg-5 d-md-block overflow-hidden" style="border-radius: 1rem 0 0 1rem; border: none;">
               <img src="../assets/forgot-password-pic.jpg"
-                alt="login form" class="h-100 img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                alt="login form" class="" style="border-radius: 1rem 0 0 1rem;" />
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">

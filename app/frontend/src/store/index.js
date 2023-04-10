@@ -2,6 +2,7 @@
 
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
+import { useRouter } from 'vue-router'
 import axios from "axios";
 import { auth, db } from "../firebase";
 import {
@@ -211,7 +212,7 @@ export default createStore({
       })
     },
     async logout({ commit }) {
-      await signOut(auth)
+      await signOut(auth).then()
       commit('SET_USER', {
         loggedIn: false,
         displayName: null,
@@ -220,7 +221,22 @@ export default createStore({
       })
       commit('SET_USER_PHONENUMBER', null)
       window.localStorage.clear()
+      const router = useRouter()
+      router.push('/')
     },
+    // async logout({ commit }) {
+    //   await signOut(auth)
+    //   commit('SET_USER', {
+    //     loggedIn: false,
+    //     displayName: null,
+    //     email: null,
+    //     photoURL: null
+    //   })
+    //   commit('SET_USER_PHONENUMBER', null)
+    //   window.localStorage.clear()
+    //   const router = useRouter()
+    //   router.push('/')
+    // },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
       if (user) {
