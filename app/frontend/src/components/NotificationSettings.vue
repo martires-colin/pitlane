@@ -20,6 +20,27 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Lights Out!" disabled></b-form-input>
+
+          <b-input-group-append>
+            <v-menu v-model="lightsOutPopUp" :close-on-content-click="false" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                  <v-icon size="large" icon="mdi-information"></v-icon>
+                </v-btn>
+              </template>
+              <v-card min-width="300">
+                <div class="container p-3 text-center">
+                  <div class="d-block">
+                    <p>Recieve a notification 15 minutes before a race starts!</p>
+                  </div>
+                  <div class="d-block pt-2">
+                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
+                  </div>
+                </div>
+              </v-card>
+            </v-menu>
+          </b-input-group-append>
+
         </b-input-group>
       </div>
 
@@ -31,6 +52,27 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Upcoming Race" disabled></b-form-input>
+
+          <b-input-group-append>
+            <v-menu v-model="upcomingRacePopUp" :close-on-content-click="false" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                  <v-icon size="large" icon="mdi-information"></v-icon>
+                </v-btn>
+              </template>
+              <v-card min-width="300">
+                <div class="container p-3 text-center">
+                  <div class="d-block">
+                    <p>Recieve a notification of the next race!</p>
+                  </div>
+                  <div class="d-block pt-2">
+                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
+                  </div>
+                </div>
+              </v-card>
+            </v-menu>
+          </b-input-group-append>
+
         </b-input-group>
       </div>
 
@@ -42,6 +84,27 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Race Results" disabled></b-form-input>
+
+          <b-input-group-append>
+            <v-menu v-model="raceResultsPopUp" :close-on-content-click="false" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                  <v-icon size="large" icon="mdi-information"></v-icon>
+                </v-btn>
+              </template>
+              <v-card min-width="300">
+                <div class="container p-3 text-center">
+                  <div class="d-block">
+                    <p>Recieve a notification of the most recent race results!</p>
+                  </div>
+                  <div class="d-block pt-2">
+                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
+                  </div>
+                </div>
+              </v-card>
+            </v-menu>
+          </b-input-group-append>
+
         </b-input-group>
       </div>
 
@@ -53,6 +116,27 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Driver's Championship Standings" disabled></b-form-input>
+
+          <b-input-group-append>
+            <v-menu v-model="driversPopUp" :close-on-content-click="false" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                  <v-icon size="large" icon="mdi-information"></v-icon>
+                </v-btn>
+              </template>
+              <v-card min-width="300">
+                <div class="container p-3 text-center">
+                  <div class="d-block">
+                    <p>Recieve a notification of the current Driver's Championship standings!</p>
+                  </div>
+                  <div class="d-block pt-2">
+                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
+                  </div>
+                </div>
+              </v-card>
+            </v-menu>
+          </b-input-group-append>
+
         </b-input-group>
       </div>
 
@@ -64,6 +148,27 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Constructor's Championship Standings" disabled></b-form-input>
+
+          <b-input-group-append>
+            <v-menu v-model="constructorsPopUp" :close-on-content-click="false" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                  <v-icon size="large" icon="mdi-information"></v-icon>
+                </v-btn>
+              </template>
+              <v-card min-width="300">
+                <div class="container p-3 text-center">
+                  <div class="d-block">
+                    <p>Recieve a notification of the current Constructor's Championship standings!</p>
+                  </div>
+                  <div class="d-block pt-2">
+                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
+                  </div>
+                </div>
+              </v-card>
+            </v-menu>
+          </b-input-group-append>
+
         </b-input-group>
       </div>
 
@@ -73,30 +178,6 @@
 
     </form>
 
-    
-    <div class="container my-2">
-      <div class="row mb-2">
-        <div class="col-sm">
-          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
-        </div>
-        <div class="col-sm">
-          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm">
-          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
-        </div>
-        <div class="col-sm">
-          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm">
-          <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
-        </div>
-      </div>
-    </div>
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
@@ -129,7 +210,12 @@ export default {
       upcomingRacesNotif: this.$store.state.user.notificationPreferences.upcomingRacesNotif,
       completeNotif: this.$store.state.user.notificationPreferences.completeNotif,
       driverStandingsNotif: this.$store.state.user.notificationPreferences.driverStandingsNotif,
-      constructorStandingsNotif: this.$store.state.user.notificationPreferences.constructorStandingsNotif
+      constructorStandingsNotif: this.$store.state.user.notificationPreferences.constructorStandingsNotif,
+      lightsOutPopUp: false,
+      upcomingRacePopUp: false,
+      raceResultsPopUp: false,
+      driversPopUp: false,
+      constructorsPopUp: false
     }
   },
   methods: {
@@ -318,6 +404,10 @@ export default {
 }
 .fade-leave-active {
   transition: all 0.5s ease;
+}
+
+.mr-n2 {
+  cursor: pointer;
 }
 
 </style>

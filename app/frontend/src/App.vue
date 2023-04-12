@@ -132,8 +132,9 @@
                   :image="user.photoURL"
                   v-if="user.loggedIn"
                   v-bind="props"
-                  class="mx-3"
-                  id="avatar"
+                  class="avatar mx-3"
+                  
+                  :id="user.roles.isAdmin ? 'avatar-admin' : 'avatar'"
                 ></v-avatar>
               </template>
               <v-list>
@@ -149,6 +150,7 @@
               </v-list>
             </v-menu>
 
+            
             <!-- <v-avatar
               color="grey-darken-1"
               size="40"
@@ -272,6 +274,19 @@ const fantasyLinks = [
 
 .pitlane-nav {
 
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+  transition: all .1s ease-in-out;
+}
+
+#avatar-admin {
+  cursor: pointer;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) padding-box,
+  radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
+  border-radius: 50em;
+  border: 2px solid transparent;
 }
 
 #avatar {
