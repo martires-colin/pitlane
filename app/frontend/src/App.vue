@@ -114,9 +114,6 @@
               </v-list>
             </v-menu>
 
-            <v-btn v-if="user.loggedIn && user.roles.isAdmin" variant="text" @click="$router.push('/admin-console')">
-            Admin
-            </v-btn>
             <!-- <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">
             Settings
             </v-btn>
@@ -135,14 +132,19 @@
                   :image="user.photoURL"
                   v-if="user.loggedIn"
                   v-bind="props"
+                  class="mx-3"
+                  id="avatar"
                 ></v-avatar>
               </template>
               <v-list>
                 <v-list-item v-if="user.loggedIn" @click="$router.push('/settings')">
                   <v-list-item-title>Settings</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="user.loggedIn">
-                  <v-list-item-title @click="logout_dialog = true">Logout</v-list-item-title>
+                <v-list-item v-if="user.loggedIn && user.roles.isAdmin" @click="$router.push('/admin-console')">
+                  <v-list-item-title>Admin</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="user.loggedIn" @click="logout_dialog = true">
+                  <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -272,6 +274,9 @@ const fantasyLinks = [
 
 }
 
+#avatar {
+  cursor: pointer;
+}
 
 @media(min-width: 2560px){
     .pitlane-nav {
