@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <button class="btn btn-secondary btn-md w-100" id="update-btn" @click="sendPasswordResetEmail">Send Password Reset Email</button>
+    <v-btn @click="sendPasswordResetEmail" color="blue-accent-2" class="w-100 p-2">Reset Password</v-btn>
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">

@@ -32,12 +32,11 @@
         </div>
         <div class="col-4">
           <div class="input-group-append">
-              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Username</button>
+            <v-btn type="submit" color="blue-accent-2" class="w-100">Update Username</v-btn>
           </div>
         </div>
       </div>
     </form>
-
 
     <!-- Update/Set Phone Number -->
     <form @submit.prevent="update">
@@ -72,10 +71,10 @@
         <div class="col-4">
           <div class="input-group-append">
             <div v-if="user.phoneNumber">
-              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Phone Number</button>
+              <v-btn type="submit" color="blue-accent-2" class="w-100">Update Phone Number</v-btn>
             </div>
             <div v-else>
-              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Add Phone Number</button>
+              <v-btn type="submit" color="blue-accent-2" class="w-100">Add Phone Number</v-btn>
             </div>
           </div>
         </div>
@@ -95,7 +94,7 @@
         </div>
         <div class="col-4">
           <div class="input-group-append">
-              <button class="btn btn-secondary btn-md w-100" id="update-btn" type="submit">Update Profile Picture</button>
+            <v-btn type="submit" color="blue-accent-2" class="w-100">Update Profile Picture</v-btn>
           </div>
         </div>
       </div>
@@ -327,8 +326,8 @@ export default {
 }
 
 #input-group-btn {
-  background-color: #00d4ff;
-  color: black;
+  background-color: #448AFF;
+  color: white;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border: 0px;

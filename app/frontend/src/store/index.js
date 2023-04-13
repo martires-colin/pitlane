@@ -119,6 +119,7 @@ export default createStore({
           commit('SET_USER_PHONENUMBER', docSnap.data().phoneNumber)
           commit('SET_ROLES', docSnap.data())
           commit('SET_ADMIN_ROLE', docSnap.data())
+          commit('SET_NOTIFICATION_PREFERENCES', docSnap.data())
         } else {
           console.log("No such document")
         }

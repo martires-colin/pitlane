@@ -2,80 +2,70 @@
 
 <template>
 
-  <v-container class="h-100">
-    <section class="pt-5 mt-5">
-      <div class="container">
-        <p class="text-xl text-[#00d4ff] py-4">
-            Account Settings
-        </p>
-        <div class="rounded-lg d-block bg-dark-300">
-          <b-tabs content-class="mt-0" align="center" no-fade="true" :active-nav-item-class="'btab-active'" no-nav-style="true">
-
-            <b-tab title="Account" :title-link-class="'btab'" active>
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
-                      </div>
-                      <h5 class="user-name">{{ user.displayName }}</h5>
-                    </div>
-                  </div>
-                  <div class="col-8 px-5">
-                    <UserSettings />
-                  </div>
-                </div>
+  <v-container>
+    <v-card>
+      <v-toolbar color="blue-accent-2">
+        <v-toolbar-title>Account Settings</v-toolbar-title>
+      </v-toolbar>
+      <div class="d-flex flex-row">
+        <v-tabs
+          v-model="tab"
+          direction="vertical"
+          color="blue-accent-2"
+          grow
+          tab-max-width="140px"
+        >
+          <v-tab value="user-settings">
+            <v-icon
+              size="large"
+              color="blue-accent-2"
+              icon="mdi-account"
+            ></v-icon>
+          </v-tab>
+          <v-tab value="notification-settings">
+            <v-icon
+              size="large"
+              color="blue-accent-2"
+              icon="mdi-message-text"
+            ></v-icon>
+          </v-tab>
+        </v-tabs>
+          <v-card class="mx-auto">
+            <v-card-item>
+              <div class="py-4">
+                <img :class="user.roles.isAdmin ? 'profile-pic-admin' : 'profile-pic'" :src="user.photoURL" alt="Profile Picture">
               </div>
-            </b-tab>
-
-            <b-tab title="Roles" :title-link-class="'btab'">
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
-                      </div>
-                      <h5 class="user-name">{{ user.displayName }}</h5>
-                    </div>
-                  </div>
-                  <div class="col-8 text-center px-5">
-                    
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="listUsers">Get List of Users</button>
-
-                  </div>
-                </div>
+              <v-divider></v-divider>
+              <v-list>
+                <v-list-item prepend-icon="mdi-account">
+                  {{ user.displayName }}
+                </v-list-item>
+                <v-divider inset></v-divider>
+                <v-list-item prepend-icon="mdi-phone">
+                  {{ user.phoneNumber }}
+                </v-list-item>
+                <v-divider inset></v-divider>
+                <v-list-item prepend-icon="mdi-email">
+                  {{ user.email }}
+                </v-list-item>
+                <v-divider inset></v-divider>
+              </v-list>
+            </v-card-item>
+          </v-card>
+        <v-window v-model="tab">
+          <v-window-item value="user-settings">
+            <div class="container tab-content">
+              <UserSettings />
+            </div>
+          </v-window-item>
+          <v-window-item value="notification-settings">
+            <div class="container tab-content">
+                <NotificationSettings />
               </div>
-            </b-tab>
-
-            <b-tab title="Notifications" :title-link-class="'btab'">
-              <div class="container tab-content">
-                <div class="row py-2">
-                  <div class="col-4">
-                    <div class="card-body">
-                      <div class="row py-2 text-center">
-                        <div>
-                          <img class="profile-pic" :src="user.photoURL" alt="Profile Picture">
-                        </div>
-                      </div>
-                    <h5 class="user-name">{{ user.displayName }}</h5>
-                  </div>
-                  </div>
-                  <div class="col-8 px-5">
-                    <NotificationSettings />
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-          </b-tabs>
-        </div>
+          </v-window-item>       
+        </v-window>
       </div>
-    </section>
+    </v-card>
   </v-container>
 
 </template>
@@ -90,7 +80,7 @@ export default {
   name: "Settings",
   components: {
     NotificationSettings,
-    UserSettings,
+    UserSettings
   },
   setup() {
     const store = useStore()
@@ -102,7 +92,9 @@ export default {
     return { user }
   },
   data() {
-
+    return {
+      tab: 'user-settings'
+    }
   },
   methods: {
     async listUsers() {
@@ -139,24 +131,57 @@ export default {
   object-fit: cover;
 }
 
+.profile-pic-admin {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  border-radius: 50em;
+  border: 3px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255)) padding-box,
+  radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
+  
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  object-fit: cover;
+}
+
 .btab {
-  background-color: #00d4ff !important;
-  color: black !important;
+  background-color: #448AFF !important;
+  color: white !important;
   
 }
 
 .btab-active {
-  background-color:slategrey !important;
+  background-color:#212121 !important;
   color: white !important;
 
 }
 
 .tab-content {
-  background-color: slategrey;
+  background-color: #212121;
+
+}
+
+.settings {
+  border-radius: 50em;
+  border: 3px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: linear-gradient(#212121, #212121) padding-box,
+  radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
+}
+
+.side-card {
+  border-radius: 10px;
+  border: 1px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: linear-gradient(#212121, #212121) padding-box,
+  radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
 }
 
 #update-btn {
-  background-color: #00d4ff;
+  background-color: #90CAF9;
   color: black;
 }
 

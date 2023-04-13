@@ -283,7 +283,7 @@ const fantasyLinks = [
 
 #avatar-admin {
   cursor: pointer;
-  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) padding-box,
+  background: linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255)) padding-box,
   radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
   border-radius: 50em;
   border: 2px solid transparent;

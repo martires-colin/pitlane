@@ -20,11 +20,10 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Lights Out!" disabled></b-form-input>
-
           <b-input-group-append>
             <v-menu v-model="lightsOutPopUp" :close-on-content-click="false" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                <v-btn color="blue-accent-2" v-bind="props" height="auto"  class="elevation-0">
                   <v-icon size="large" icon="mdi-information"></v-icon>
                 </v-btn>
               </template>
@@ -33,14 +32,21 @@
                   <div class="d-block">
                     <p>Recieve a notification 15 minutes before a race starts!</p>
                   </div>
-                  <div class="d-block pt-2">
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
+
+                  <div class="container my-3 p-3 text-center rounded-lg message-example">
+                    PITLANE<br>
+                    Lights Out!<br>
+                    The Bahrain Grand Prix starts in 15 minutes!
                   </div>
+
+                  <div class="d-block pt-2">
+                    <button class="btn btn-danger btn-sm" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
+                  </div>
+
                 </div>
               </v-card>
             </v-menu>
           </b-input-group-append>
-
         </b-input-group>
       </div>
 
@@ -52,11 +58,10 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Upcoming Race" disabled></b-form-input>
-
           <b-input-group-append>
             <v-menu v-model="upcomingRacePopUp" :close-on-content-click="false" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                <v-btn color="blue-accent-2" v-bind="props" height="auto"  class="elevation-0">
                   <v-icon size="large" icon="mdi-information"></v-icon>
                 </v-btn>
               </template>
@@ -65,14 +70,23 @@
                   <div class="d-block">
                     <p>Recieve a notification of the next race!</p>
                   </div>
-                  <div class="d-block pt-2">
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
+
+                  <div class="container my-3 p-3 text-center rounded-lg message-example">
+                    PITLANE<br>
+                    Upcoming Race!<br>
+                    Azerbaijan Grand Prix<br>
+                    Date: 04-30-2023<br>
+                    Time: 04:00 AM PST
                   </div>
+
+                  <div class="d-block pt-2">
+                    <button class="btn btn-danger btn-sm" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
+                  </div>
+
                 </div>
               </v-card>
             </v-menu>
           </b-input-group-append>
-
         </b-input-group>
       </div>
 
@@ -84,11 +98,10 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Race Results" disabled></b-form-input>
-
           <b-input-group-append>
             <v-menu v-model="raceResultsPopUp" :close-on-content-click="false" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                <v-btn color="blue-accent-2" v-bind="props" height="auto"  class="elevation-0">
                   <v-icon size="large" icon="mdi-information"></v-icon>
                 </v-btn>
               </template>
@@ -97,14 +110,39 @@
                   <div class="d-block">
                     <p>Recieve a notification of the most recent race results!</p>
                   </div>
+
+                  <div class="container my-3 p-3 text-center rounded-lg message-example">
+                    PITLANE<br>
+                    Race Results for Australian Grand Prix<br>
+                    1   Max Verstappen<br>
+                    2   Lewis Hamilton<br>
+                    3   Fernando Alonso<br>
+                    4   Lance Stroll<br>
+                    5   Sergio Pérez<br>
+                    6   Lando Norris<br>
+                    7   Nico Hülkenberg<br>
+                    8   Oscar Piastri<br>
+                    9   Guanyu Zhou<br>
+                    10  Yuki Tsunoda<br>
+                    11  Valtteri Bottas<br>
+                    12  Carlos Sainz<br>
+                    13  Pierre Gasly<br>
+                    14  Esteban Ocon<br>
+                    15  Nyck de Vries<br>
+                    16  Logan Sargeant<br>
+                    17  Kevin Magnussen<br>
+                    18  George Russell<br>
+                    19  Alexander Albon<br>
+                    20  Charles Leclerc
+                  </div>
+
                   <div class="d-block pt-2">
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
+                    <button class="btn btn-danger btn-sm" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
                   </div>
                 </div>
               </v-card>
             </v-menu>
           </b-input-group-append>
-
         </b-input-group>
       </div>
 
@@ -116,11 +154,10 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Driver's Championship Standings" disabled></b-form-input>
-
           <b-input-group-append>
             <v-menu v-model="driversPopUp" :close-on-content-click="false" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                <v-btn color="blue-accent-2" v-bind="props" height="auto"  class="elevation-0">
                   <v-icon size="large" icon="mdi-information"></v-icon>
                 </v-btn>
               </template>
@@ -129,14 +166,39 @@
                   <div class="d-block">
                     <p>Recieve a notification of the current Driver's Championship standings!</p>
                   </div>
+
+                  <div class="container my-3 p-3 text-center rounded-lg message-example">
+                    PITLANE<br>
+                    Driver's Championship Standings<br>
+                    1   Max Verstappen    69pts<br>
+                    2   Sergio Pérez      54pts<br>
+                    3   Fernando Alonso   45pts<br>
+                    4   Lewis Hamilton    38pts<br>
+                    5   Carlos Sainz      20pts<br>
+                    6   Lance Stroll      20pts<br>
+                    7   George Russell    18pts<br>
+                    8   Lando Norris      8pts<br>
+                    9   Nico Hülkenberg   6pts<br>
+                    10  Charles Leclerc   6pts<br>
+                    11  Valtteri Bottas   4pts<br>
+                    12  Esteban Ocon      4pts<br>
+                    13  Oscar Piastri     4pts<br>
+                    14  Pierre Gasly      4pts<br>
+                    15  Guanyu Zhou       2pts<br>
+                    16  Yuki Tsunoda      1pts<br>
+                    17  Kevin Magnussen   1pts<br>
+                    18  Alexander Albon   1pts<br>
+                    19  Logan Sargeant    0pts<br>
+                    20  Nyck de Vries     0pts
+                  </div>
+
                   <div class="d-block pt-2">
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
+                    <button class="btn btn-danger btn-sm" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
                   </div>
                 </div>
               </v-card>
             </v-menu>
           </b-input-group-append>
-
         </b-input-group>
       </div>
 
@@ -148,11 +210,10 @@
             </b-form-checkbox>
           </b-input-group-prepend>
           <b-form-input aria-label="Text input with switch" placeholder="Constructor's Championship Standings" disabled></b-form-input>
-
           <b-input-group-append>
             <v-menu v-model="constructorsPopUp" :close-on-content-click="false" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn color="#00d4ff" v-bind="props" height="auto"  class="elevation-0">
+                <v-btn color="blue-accent-2" v-bind="props" height="auto"  class="elevation-0">
                   <v-icon size="large" icon="mdi-information"></v-icon>
                 </v-btn>
               </template>
@@ -161,19 +222,35 @@
                   <div class="d-block">
                     <p>Recieve a notification of the current Constructor's Championship standings!</p>
                   </div>
+
+                  <div class="container my-3 p-3 text-center rounded-lg message-example">
+                    PITLANE<br>
+                    Constructor's Championship Standings<br>
+                    1   Red Bull     123pts<br>
+                    2   Aston Martin 65pts<br>
+                    3   Mercedes     56pts<br>
+                    4   Ferrari      26pts<br>
+                    5   McLaren      12pts<br>
+                    6   Alpine F1 Team 8pts<br>
+                    7   Haas F1 Team 7pts<br>
+                    8   Alfa Romeo   6pts<br>
+                    9   AlphaTauri   1pts<br>
+                    10  WilliamsRacing 1pts
+                  </div>
+
+
                   <div class="d-block pt-2">
-                    <button class="btn btn-secondary btn-sm" id="simulate-btn" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
+                    <button class="btn btn-danger btn-sm" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
                   </div>
                 </div>
               </v-card>
             </v-menu>
           </b-input-group-append>
-
         </b-input-group>
       </div>
 
       <div class="my-2">
-        <button class="btn btn-secondary btn-md" id="update-btn" type="submit">Update Notification Preferences</button>
+          <v-btn type="submit" color="blue-accent-2">Update Notification Preferences</v-btn>
       </div>
 
     </form>
@@ -187,6 +264,27 @@
         </transition>
       </div>
     </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showError">
+            User is not subscribed to this notification!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-primary text-center w-25" role="alert" v-if="showSending">
+            Sending notification!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
   </div>
 </template>
 
@@ -202,7 +300,19 @@ export default {
       showAlert.value = true;
       setTimeout(() => showAlert.value = false, 2000)
     }
-    return { showAlert, triggerAlert }
+
+    const showError = ref(false)
+    const triggerError = () => {
+      showError.value = true;
+      setTimeout(() => showError.value = false, 2000)
+    }
+
+    const showSending = ref(false)
+    const triggerSending = () => {
+      showSending.value = true;
+      setTimeout(() => showSending.value = false, 2000)
+    }
+    return { showAlert, triggerAlert, showError, triggerError, showSending, triggerSending }
   },
   data() {
     return {
@@ -212,10 +322,15 @@ export default {
       driverStandingsNotif: this.$store.state.user.notificationPreferences.driverStandingsNotif,
       constructorStandingsNotif: this.$store.state.user.notificationPreferences.constructorStandingsNotif,
       lightsOutPopUp: false,
+      lightsOutExample: false,
       upcomingRacePopUp: false,
+      upcomingRaceExample: false,
       raceResultsPopUp: false,
+      raceResultsExample: false,
       driversPopUp: false,
-      constructorsPopUp: false
+      driversExample: false,
+      constructorsPopUp: false,
+      constructorsExample: false
     }
   },
   methods: {
@@ -241,6 +356,7 @@ export default {
         const data = await this.fetchLightsOut()
         console.log(data)
         console.log("Sending 'Lights Out!' Notification")
+        this.triggerSending()
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
@@ -256,6 +372,7 @@ export default {
           })
       } else {
         console.log("User not subscribed to 'Lights Out' Notifications")
+        this.triggerError()
       }
     },
     async simulateUpcomingRaceNotif() {      
@@ -263,6 +380,7 @@ export default {
         const data = await this.fetchUpcomingRace()
         console.log(data)
         console.log("Sending 'Upcoming Race!' Notification")
+        this.triggerSending()
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
@@ -278,6 +396,7 @@ export default {
           })
       } else {
         console.log("User not subscribed to 'Upcoming Race' Notifications")
+        this.triggerError()
       }
     },
     async simulateCompleteResultsNotif() {
@@ -285,6 +404,7 @@ export default {
         const data = await this.fetchCompleteResults()
         console.log(data)
         console.log("Sending 'Complete Race Results!' Notification")
+        this.triggerSending()
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
@@ -300,6 +420,7 @@ export default {
           })
       } else {
         console.log("User not subscribed to 'Complete Race Results' Notifications")
+        this.triggerError()
       }
     },
     async simulateDriverChampionshipStandingsNotif() {
@@ -307,6 +428,7 @@ export default {
         const data = await this.fetchDriverStandings()
         console.log(data)
         console.log("Sending 'Driver's Championship Standings!' Notification")
+        this.triggerSending()
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
@@ -322,6 +444,7 @@ export default {
           })
       } else {
         console.log("User not subscribed to 'Driver's Championship Standings' Notifications")
+        this.triggerError()
       }
     },
     async simulateConstructorChampionshipStandingsNotif() {
@@ -329,6 +452,7 @@ export default {
         const data = await this.fetchConstructorStandings()
         console.log(data)
         console.log("Sending 'Constructor's Championship Standings!' Notification")
+        this.triggerSending()
         const payload = {
           phoneNumber: this.$store.state.user.phoneNumber,
           msg_body : data.msg_body
@@ -344,6 +468,7 @@ export default {
           })
       } else {
         console.log("User not subscribed to 'Constructor's Championship Standings' Notifications")
+        this.triggerError()
       }
     },
     async fetchCompleteResults() {
@@ -382,11 +507,6 @@ export default {
 
 <style>
 
-#simulate-btn {
-  color: white;
-  background-color: rgb(160, 19, 19);
-}
-
 .fade-enter-from {
   opacity: 0;
 }
@@ -408,6 +528,14 @@ export default {
 
 .mr-n2 {
   cursor: pointer;
+}
+
+.message-example {
+  border-radius: 50em;
+  border: 2px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: linear-gradient(#212121, #212121) padding-box,
+  radial-gradient( circle farthest-corner at 10% 20%,  rgba(97,186,255,1) 0%, rgba(166,239,253,1) 90.1% ) border-box;
 }
 
 </style>
