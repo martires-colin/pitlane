@@ -141,7 +141,7 @@
                 <v-list-item v-if="user.loggedIn" @click="$router.push('/settings')">
                   <v-list-item-title>Settings</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="user.loggedIn && user.roles.isAdmin" @click="$router.push('/admin-console')">
+                <v-list-item v-if="user.loggedIn && $store.state.user.roles.isAdmin" @click="$router.push('/admin-console')">
                   <v-list-item-title>Admin</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="user.loggedIn" @click="logout_dialog = true">
@@ -200,7 +200,6 @@ onMounted(() => {
   window.onresize = () => {
     windowWidth.value = window.innerWidth
   }
-  // console.log('League owner?:', store.getters.isLeagueOwner)
   // console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
 })
 

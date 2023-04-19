@@ -118,9 +118,9 @@ onMounted(() => {
     <div class="pitlane-landing flex justify-center">
     </div>
 
-    <div v-if="user.loggedIn">
+    <!-- <div v-if="user.loggedIn">
       <p class="pt-3">Welcome, {{ user.displayName }}</p>
-    </div>
+    </div> -->
 
     <div class="py-2 flex flex-row justify-evenly">
       <div class="previous-race">

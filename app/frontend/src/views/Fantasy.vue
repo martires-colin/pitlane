@@ -5,9 +5,31 @@
     <SelectFantasyTeam v-if="!teamSelected" :user-teams="userTeams" @set-selected-team="(setSelectedTeam)"></SelectFantasyTeam>
     <div v-if="teamSelected">
       <div class="flex flex-row justify-between p-3">
-        <h1>League: {{ leagueName }} </h1>
-        <h1>Your Team: {{ selectedTeam }}</h1>
-        <h1>Total points: {{ points }}</h1>
+        <div class="rounded px-2">League: {{ leagueName }} </div>
+        <div class="rounded px-2 flex flex-row">
+          <p>Your Team: </p>
+          <p class="pl-2 hover:underline underline-offset-4 cursor-pointer" @click="newNameDialog = true">{{ selectedTeam }}</p>
+          <v-dialog v-model="newNameDialog" width="640px">
+            <v-card>
+              <v-card-title class="text-2xl">
+                Change Team Name
+              </v-card-title>
+              <v-text-field
+                class="w-[80%]"
+                label="Team name"
+                required
+                v-model="newTeamName"
+              ></v-text-field>
+              <div class="d-flex justify-content-center">
+                <v-card-actions>
+                  <v-btn color="red" variant="tonal" @click="newNameDialog = false">Cancel</v-btn>
+                  <v-btn color="blue" variant="tonal" @click=" newNameDialog = false">Save</v-btn>
+                </v-card-actions>
+              </div>
+            </v-card>
+          </v-dialog>
+        </div>
+        <div class="rounded px-2">Total points: {{ points }}</div>
       </div>
       <div class="flex flex-row justify-evenly px-10 py-2 pb-2 border-y border-gray-500">
         <div class="flex flex-row">
@@ -113,6 +135,8 @@ export default {
       driver2Image: null,
       constructorImage: null,
       leaderboard: null,
+      newTeamName: '',
+      newNameDialog: false,
     }
   },
   methods: {
@@ -172,6 +196,7 @@ export default {
     async setSelectedTeam(teamname, leagueid) {
       console.log(teamname, leagueid)
       this.selectedTeam = teamname;
+      this.newTeamName = teamname;
       await this.fetchLeague(this.$store.state.user.uid, leagueid);
       await this.fetchTeamJSON(this.$store.state.user.uid, leagueid)
       this.teamSelected = true;
@@ -211,7 +236,10 @@ export default {
       this.constructor = data.constructorName;
       this.constructorImage = require(`@/assets/constructorimages/${this.constructor.constructorid}.png`)
       this.points = data.points;
-    }
+    },
+    // async setNewName(userid, leagueid, teamname, newTeamName) {
+
+    // }
   },
   async mounted() {
     await this.fetchUserTeams();

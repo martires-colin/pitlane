@@ -6,7 +6,6 @@ export default {
             pageCount: null,
             currentPage: 1,
             fetching: false,
-            isAdmin: true,
         };
     },
     methods: {
@@ -61,8 +60,8 @@ export default {
     },
     async mounted() {
         if (this.$store.state.user.roles.isLeagueOwner) {
-            // if (this.$store.state.user.roles.isAdmin) {
-            if (this.isAdmin) {
+            if (this.$store.state.user.roles.isAdmin) {
+            // if (this.isAdmin) {
                 await this.fetchLeaguesAdmin(1);
             }
             else await this.fetchLeagues(1);
