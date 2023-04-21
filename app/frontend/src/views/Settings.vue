@@ -2,7 +2,7 @@
 
 <template>
 
-  <v-container>
+  <v-container class="m-5 p-5">
     <v-card>
       <v-toolbar color="blue-accent-2">
         <v-toolbar-title>Account Settings</v-toolbar-title>
@@ -14,6 +14,7 @@
           color="blue-accent-2"
           grow
           tab-max-width="140px"
+          
         >
           <v-tab value="user-settings">
             <v-icon
@@ -30,7 +31,7 @@
             ></v-icon>
           </v-tab>
         </v-tabs>
-          <v-card class="mx-auto">
+          <v-card class="mx-auto" width="40%">
             <v-card-item>
               <div class="py-4">
                 <img :class="user.roles.isAdmin ? 'profile-pic-admin' : 'profile-pic'" :src="user.photoURL" alt="Profile Picture">
@@ -52,7 +53,7 @@
               </v-list>
             </v-card-item>
           </v-card>
-        <v-window v-model="tab">
+        <v-window v-model="tab" width="40%">
           <v-window-item value="user-settings">
             <div class="container tab-content">
               <UserSettings />
