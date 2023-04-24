@@ -18,7 +18,6 @@ import {
   updateDoc
 } from "firebase/firestore";
 
-
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage
 })
@@ -225,19 +224,6 @@ export default createStore({
       const router = useRouter()
       router.push('/')
     },
-    // async logout({ commit }) {
-    //   await signOut(auth)
-    //   commit('SET_USER', {
-    //     loggedIn: false,
-    //     displayName: null,
-    //     email: null,
-    //     photoURL: null
-    //   })
-    //   commit('SET_USER_PHONENUMBER', null)
-    //   window.localStorage.clear()
-    //   const router = useRouter()
-    //   router.push('/')
-    // },
     async fetchUser({ commit }, user) {
       commit('SET_LOGGED_IN', user !== null)
       if (user) {

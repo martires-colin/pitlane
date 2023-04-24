@@ -13,9 +13,7 @@
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
-
                 <form class="login" @submit.prevent="register">
-
                   <div class="d-flex align-items-center justify-content-center mb-3 pb-1">
                     <img
                       src="@/assets/PL.png"
@@ -24,9 +22,7 @@
                       height="150"
                     />
                   </div>
-
                   <h5 class="fw-normal mb-0 pb-3" style="letter-spacing: 1px;">Create an account</h5>
-
                   <div class="form-outline mb-4">
                     <input
                       type="text"
@@ -35,7 +31,6 @@
                       v-model="name"
                       required/>
                   </div>
-
                   <div class="form-outline mb-4">
                     <input
                       type="email"
@@ -44,7 +39,6 @@
                       v-model="email"
                       required/>
                   </div>
-
                   <div class="form-outline mb-4">
                     <input
                     type="password"
@@ -53,7 +47,6 @@
                     v-model="password"
                     required/>
                   </div>
-
                   <div class="form-outline mb-4">
                     <input
                     type="password"
@@ -62,28 +55,74 @@
                     v-model="password2"
                     required/>
                   </div>
-
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
                   </div>
-
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account?
                     <a href="/login"
                       style="color: #393f81;">Login here
                     </a>
                   </p>
                 </form>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Alerts -->
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showEmailError">
+            Email already in use!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showEmailInvalid">
+            Please enter a valid email!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPasswordError">
+            Use a stronger password!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPasswordMismatch">
+            Passwords do not match!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showSomethingError">
+            Something went wrong, try again later!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
   </div>
-
-
-
 </template>
 
 <script>
@@ -105,7 +144,7 @@ export default {
 
     const register = async () => {
       if (password.value !== password2.value) {
-        alert("Passwords do not match")
+        triggerPasswordMismatch()
         return
       }
 
@@ -123,28 +162,75 @@ export default {
         console.log(err)
         switch (err.code) {
           case "auth/email-already-in-use":
-            alert("Email already in use");
+            triggerEmailError()
             break;
           case "auth/invalid-email":
             alert("Invalid email");
+            triggerEmailInvalid()
             break;
           case "auth/operation-not-allowed":
             alert("Operation not allowed");
             break;
           case "auth/weak-password":
-            alert("Weak password");
+            triggerPasswordError()
             break;
           default:
-            alert("Something went wrong");
+            triggerSomethingError()
         }
         return;
       }
     }
 
-    return { register, name, email, password, password2, error }
+    // Trigger Alerts
+    const showEmailError = ref(false)
+    const triggerEmailError = () => {
+      showEmailError.value = true;
+      setTimeout(() => showEmailError.value = false, 2000)
+    }
 
+    const showEmailInvalid = ref(false)
+    const triggerEmailInvalid = () => {
+      showEmailInvalid.value = true;
+      setTimeout(() => showEmailInvalid.value = false, 2000)
+    }
+
+    const showPasswordError = ref(false)
+    const triggerPasswordError = () => {
+      showPasswordError.value = true;
+      setTimeout(() => showPasswordError.value = false, 2000)
+    }
+
+    const showPasswordMismatch = ref(false)
+    const triggerPasswordMismatch = () => {
+      showPasswordMismatch.value = true;
+      setTimeout(() => showPasswordMismatch.value = false, 2000)
+    }
+
+    const showSomethingError = ref(false)
+    const triggerSomethingError = () => {
+      showSomethingError.value = true;
+      setTimeout(() => showSomethingError.value = false, 2000)
+    }
+
+    return {
+      register,
+      name,
+      email,
+      password,
+      password2,
+      error,
+      showEmailError,
+      triggerEmailError,
+      showEmailInvalid,
+      triggerEmailInvalid,
+      showPasswordError,
+      triggerPasswordError,
+      showPasswordMismatch,
+      triggerPasswordMismatch,
+      showSomethingError,
+      triggerSomethingError
+    }
   }
-
 };
 
 </script>

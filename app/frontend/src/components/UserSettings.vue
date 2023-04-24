@@ -26,13 +26,13 @@
         <div class="col-8">
           <div class="form-group">
             <div class="input-group mb-2">
-              <input type="text" class="form-control" id="input-form-border" placeholder="Enter image url" v-model="user.displayName" required>
+              <input type="text" class="form-control" id="input-form-border" placeholder="Enter username" v-model="user.displayName" required>
             </div>
           </div>
         </div>
         <div class="col-4">
           <div class="input-group-append">
-            <v-btn type="submit" color="blue-accent-2" class="w-100">Update Username</v-btn>
+            <v-btn type="submit" color="blue-accent-2" class="w-100">Save</v-btn>
           </div>
         </div>
       </div>
@@ -71,10 +71,10 @@
         <div class="col-4">
           <div class="input-group-append">
             <div v-if="user.phoneNumber">
-              <v-btn type="submit" color="blue-accent-2" class="w-100">Update Phone Number</v-btn>
+              <v-btn type="submit" color="blue-accent-2" class="w-100">Save</v-btn>
             </div>
             <div v-else>
-              <v-btn type="submit" color="blue-accent-2" class="w-100">Add Phone Number</v-btn>
+              <v-btn type="submit" color="blue-accent-2" class="w-100">Add</v-btn>
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@
         </div>
         <div class="col-4">
           <div class="input-group-append">
-            <v-btn type="submit" color="blue-accent-2" class="w-100">Update Profile Picture</v-btn>
+            <v-btn type="submit" color="blue-accent-2" class="w-100">Save</v-btn>
           </div>
         </div>
       </div>
@@ -166,7 +166,6 @@ import { ref } from 'vue'
 import Cleave from "vue-cleave-component"
 import 'cleave.js/dist/addons/cleave-phone.us'
 import PasswordSettings from "@/components/PasswordSettings.vue"
-
 
 export default {
   name: "UserSettings",

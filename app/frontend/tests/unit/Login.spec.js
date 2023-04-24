@@ -1,3 +1,5 @@
+// By Colin Martires
+
 import Login from "@/views/Login.vue"
 import { mount } from "@vue/test-utils"
 
