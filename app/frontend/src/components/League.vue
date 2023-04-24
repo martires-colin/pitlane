@@ -25,9 +25,9 @@
                 <td class="text-left">{{ team.owner }}</td>
                 <td class="text-left">{{ team.points }}</td>
                 <td>
-                    <v-btn color="blue" class="mr-4" @click="$router.push(`${$route.path}/edit/${team.teamname}`)">Edit</v-btn>
+                    <v-btn color="blue" variant="tonal" class="mr-4" @click="$router.push(`${$route.path}/edit/${team.teamname}`)">Edit</v-btn>
                     <!-- <FormLeague :teamInfo="team"></FormLeague> -->
-                    <v-btn color="danger" @click="deleteTeam(team.teamname)">Delete</v-btn>
+                    <v-btn color="danger" variant="tonal" @click="deleteTeam(team.teamname)">Delete</v-btn>
                 </td>
             </tr>
             </tbody>

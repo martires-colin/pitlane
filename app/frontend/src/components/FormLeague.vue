@@ -97,14 +97,14 @@ export default {
           <v-spacer></v-spacer>
           <v-btn
             color="danger"
-            variant="text"
+            variant="tonal"
             @click="$router.go(-1)"
           >
             Cancel
           </v-btn>
           <v-btn
             color="blue"
-            variant="text"
+            variant="tonal"
             @click="updateTeamInfo"
           >
             Update

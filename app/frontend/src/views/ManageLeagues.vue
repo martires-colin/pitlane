@@ -6,6 +6,7 @@ export default {
             pageCount: null,
             currentPage: 1,
             fetching: false,
+            newNameDialog: false,
         };
     },
     methods: {
@@ -56,6 +57,20 @@ export default {
                     else await this.fetchLeagues(1);
                 }
             }
+        },
+        async updateLeagueName() {
+            this.newNameDialog = false;
+            const res = await fetch('http://localhost:3001/fantasy/league', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                body: JSON.stringify({'leagueid': this.leagueid, 'newLeaguename': this.newLeaguename})
+            });
+            const data = await res.json();
+            this.selectedTeam = this.newTeamName;
+            console.log(data)
         }
     },
     async mounted() {
@@ -94,7 +109,7 @@ export default {
                 <th class="text-left">
                 Invite Code
                 </th>
-                <th class="text-left" v-if="$store.getters.isAdmin">
+                <th class="text-left" v-if="$store.state.user.roles.isAdmin">
                 League Owner
                 </th>
                 <th class="text-center">Actions</th>
@@ -105,10 +120,10 @@ export default {
                 v-for="league in leagues"
                 :key="league.name"
             >
-                <td class="text-left">{{ league.name }}</td>
+                <td class="text-left" @click="newNameDialog = true">{{ league.name }}</td>
                 <td class="text-left">{{ league.members }}</td>
                 <td class="text-left">{{ league.inviteCode }}</td>
-                <td class="text-left" v-if="$store.getters.isAdmin">{{ league.owner }}</td>
+                <td class="text-left" v-if="$store.state.user.roles.isAdmin">{{ league.owner }}</td>
                 <td class="text-center">
                     <v-btn color="blue" v-if="league.members !== 0" @click="$router.push(`/fantasy/manage/${league.leagueID}`)">Show</v-btn>
                     <v-btn color="danger" v-if="league.members === 0" @click="deleteLeague(league.leagueID)">Delete</v-btn>

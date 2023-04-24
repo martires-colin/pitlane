@@ -273,7 +273,7 @@ def fantasy():
             teamsJSON.append([teams[i].teamname, teams[i].leagueid])
         return jsonify({'status': '200', 'teams': teamsJSON})
     
-@main.route("/fantasy/league", methods=['POST'])
+@main.route("/fantasy/league", methods=['POST', 'PUT'])
 def fantasyLeague():
     if request.method == 'POST':
         leagueid = request.get_json()['leagueid']
@@ -282,7 +282,13 @@ def fantasyLeague():
         print(league[0])
         print(leaderboard)
         return jsonify({'status': '200', 'leagueName': league[0], 'leaderboard': leaderboard})
-@main.route("/fantasy/team", methods=['POST'])
+    if request.method == 'PUT':
+        data = request.get_json()
+        leagueID = data['leagueid']
+        newLeaguename = data['newLeaguename']
+        updateLeagueName(leagueID, newLeaguename)
+        return(jsonify({'status': '200'}))   
+@main.route("/fantasy/team", methods=['POST', 'PUT'])
 def fantasyTeam():
     if request.method == 'POST':
         userid = request.get_json()['userid']
@@ -294,7 +300,14 @@ def fantasyTeam():
             print({'status': '200', 'driverRoster': driverRoster, 'constructorName': constructorName, 'points': points, 'driver1': driverRoster[0], 'driver2': driverRoster[1]})
         else:    
             return jsonify({'status': '200', 'driverRoster': driverRoster, 'constructorName': constructorName, 'points': points, 'driver1': currentLineup[0], 'driver2': currentLineup[1]})
-            
+    if request.method == 'PUT':
+        data = request.get_json()
+        userid = data['userid']
+        leagueID = data['leagueid']
+        teamname = data['teamname']
+        newTeamname = data['newTeamname']
+        updateTeamName(userid, leagueID, teamname, newTeamname)
+        return(jsonify({'status': '200'}))    
 
 @main.route("/fantasy/lineup", methods=['POST'])
 def fantasyLineup():

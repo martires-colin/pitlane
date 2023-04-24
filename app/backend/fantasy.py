@@ -176,6 +176,18 @@ def fetchManageTeamInfo(leagueID, teamname):
     session.close()
     return teamInfo
 
+def updateLeagueName(leagueid, newLeaguename):
+    session = get_session()
+    session.execute(update(League).where(League.leagueid == leagueid).values(name = newLeaguename))
+    session.commit()
+    session.close()
+
+def updateTeamName(userid, leagueid, teamname, newTeamname):
+    session = get_session()
+    session.execute(update(Team).where(Team.teamname == teamname, Team.leagueid == leagueid, Team.userid == userid).values(teamname = newTeamname))
+    session.commit()
+    session.close()
+
 def updateTeamInfo(leagueid, teamname, updatedInfo):
     session = get_session()
     session.execute(update(Team).where(Team.teamname == teamname, Team.leagueid == leagueid).values(points = int(updatedInfo['points']), teamname = updatedInfo['teamname']))

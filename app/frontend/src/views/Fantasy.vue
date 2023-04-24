@@ -12,20 +12,28 @@
           <v-dialog v-model="newNameDialog" width="640px">
             <v-card>
               <v-card-title class="text-2xl">
-                Change Team Name
+                <span class="text-h5">Change Team Name</span>
               </v-card-title>
-              <v-text-field
-                class="w-[80%]"
-                label="Team name"
-                required
-                v-model="newTeamName"
-              ></v-text-field>
-              <div class="d-flex justify-content-center">
-                <v-card-actions>
-                  <v-btn color="red" variant="tonal" @click="newNameDialog = false">Cancel</v-btn>
-                  <v-btn color="blue" variant="tonal" @click=" newNameDialog = false">Save</v-btn>
-                </v-card-actions>
-              </div>
+              <v-container>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    md="12"
+                  >
+                    <v-text-field
+                      label="Team name"
+                      v-model="newTeamName"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-actions >
+                <v-spacer></v-spacer>
+                <v-btn color="red" variant="tonal" @click="newNameDialog = false">Cancel</v-btn>
+                <v-btn color="blue" variant="tonal" @click="updateTeamName">Save</v-btn>
+              </v-card-actions>
             </v-card>
           </v-dialog>
         </div>
@@ -237,9 +245,21 @@ export default {
       this.constructorImage = require(`@/assets/constructorimages/${this.constructor.constructorid}.png`)
       this.points = data.points;
     },
-    // async setNewName(userid, leagueid, teamname, newTeamName) {
-
-    // }
+    async updateTeamName() {
+      this.newNameDialog = false;
+      const res = await fetch('http://localhost:3001/fantasy/team', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify({'leagueid': this.leagueid, 'userid': this.$store.state.user.uid,
+         'teamname': this.selectedTeam, 'newTeamname': this.newTeamName})
+      });
+      const data = await res.json();
+      this.selectedTeam = this.newTeamName;
+      console.log(data)
+    }
   },
   async mounted() {
     await this.fetchUserTeams();
