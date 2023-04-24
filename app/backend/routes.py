@@ -19,7 +19,6 @@ from dateutil import tz
 import pytz
 from twilio.rest import Client
 from .twilio_config import *
-# import twilio_config
 import os
 
 main = Blueprint("main", __name__)
@@ -430,6 +429,7 @@ def sendSMS():
     })
 
 # Colin Martires - retrieve race results from database
+# notif_res() by Noah Howren
 @main.route("/race_results_notif", methods=["GET"])
 def getRaceResultsNotif():
     msg_body = ''
@@ -446,6 +446,7 @@ def getRaceResultsNotif():
     }))
 
 # Colin Martires - retreive driver standings from database
+# notif_res() by Noah Howren
 @main.route("/driver_standings_notif", methods=["GET"])
 def getDriverStandingsNotif():
     msg_body = ''
@@ -461,11 +462,11 @@ def getDriverStandingsNotif():
     }))
 
 # Colin Martires - retreive constructor standings from database
+# notif_res() by Noah Howren
 @main.route("/constructor_standings_notif", methods=["GET"])
 def getConstructorStandingsNotif():
     msg_body = ''
     data = notif_res()
-    print(data["Constructors"])
 
     msg_body += "PITLANE\n\nConstructor's Championship Standings\n"
     for z in data["Constructors"]:
@@ -480,6 +481,7 @@ def getConstructorStandingsNotif():
     }))
 
 # Colin Martires - retreive upcoming race from database
+# upcoming_race() by Noah Howren
 @main.route("/upcoming_race_notif", methods=["GET"])
 def getUpcomingRaceNotif():
     msg_body = ''
@@ -502,6 +504,8 @@ def getUpcomingRaceNotif():
         'msg_body': msg_body
     }))
 
+# Colin Martires - send notification 15 mins before race start
+# is_lights_out() by Noah Howren
 @main.route("/lights_out_notif", methods=["GET"])
 def getLightsOutNotif():
     msg_body = ''
@@ -522,6 +526,7 @@ def getLightsOutNotif():
 
     # simulated response
     msg_body = f"PITLANE\n\nThe Bahrain Grand Prix starts in 15 minutes!"
+
     return(jsonify({
         'results': True,
         'msg_body': msg_body

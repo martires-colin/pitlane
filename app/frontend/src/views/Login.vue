@@ -64,6 +64,7 @@
       </div>
     </div>
 
+    <!-- Alerts -->
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">

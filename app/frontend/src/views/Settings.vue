@@ -2,36 +2,36 @@
 
 <template>
 
-  <v-container class="m-5 p-5">
-    <v-card>
-      <v-toolbar color="blue-accent-2">
-        <v-toolbar-title>Account Settings</v-toolbar-title>
-      </v-toolbar>
-      <div class="d-flex flex-row">
-        <v-tabs
-          v-model="tab"
-          direction="vertical"
-          color="blue-accent-2"
-          grow
-          tab-max-width="140px"
-          
-        >
-          <v-tab value="user-settings">
-            <v-icon
-              size="large"
-              color="blue-accent-2"
-              icon="mdi-account"
-            ></v-icon>
-          </v-tab>
-          <v-tab value="notification-settings">
-            <v-icon
-              size="large"
-              color="blue-accent-2"
-              icon="mdi-message-text"
-            ></v-icon>
-          </v-tab>
-        </v-tabs>
-          <v-card class="mx-auto" width="40%">
+  <v-container fluid fill-height>
+    <v-row class="my-5" align="center" justify="center">
+      <v-card width="80%">
+        <v-toolbar color="blue-accent-2">
+          <v-toolbar-title>Account Settings</v-toolbar-title>
+        </v-toolbar>
+        <div class="d-flex flex-row">
+          <v-tabs
+            v-model="tab"
+            direction="vertical"
+            color="blue-accent-2"
+            width="20%"
+            grow
+          >
+            <v-tab value="user-settings" width="20%">
+              <v-icon
+                size="large"
+                color="blue-accent-2"
+                icon="mdi-account"
+              ></v-icon>
+            </v-tab>
+            <v-tab value="notification-settings" width="20%">
+              <v-icon
+                size="large"
+                color="blue-accent-2"
+                icon="mdi-message-text"
+              ></v-icon>
+            </v-tab>
+          </v-tabs>
+          <v-card width="40%">
             <v-card-item>
               <div class="py-4">
                 <img :class="user.roles.isAdmin ? 'profile-pic-admin' : 'profile-pic'" :src="user.photoURL" alt="Profile Picture">
@@ -53,20 +53,23 @@
               </v-list>
             </v-card-item>
           </v-card>
-        <v-window v-model="tab" width="40%">
-          <v-window-item value="user-settings">
-            <div class="container tab-content">
-              <UserSettings />
-            </div>
-          </v-window-item>
-          <v-window-item value="notification-settings">
-            <div class="container tab-content">
-                <NotificationSettings />
-              </div>
-          </v-window-item>       
-        </v-window>
-      </div>
-    </v-card>
+          <v-container fluid>
+            <v-window v-model="tab">
+              <v-window-item value="user-settings">
+                <div class="container tab-content">
+                  <UserSettings />
+                </div>
+              </v-window-item>
+              <v-window-item value="notification-settings">
+                <div class="container tab-content">
+                  <NotificationSettings />
+                </div>
+              </v-window-item>       
+            </v-window>
+          </v-container>
+        </div>
+      </v-card>
+    </v-row>
   </v-container>
 
 </template>

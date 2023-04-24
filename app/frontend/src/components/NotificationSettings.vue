@@ -2,16 +2,13 @@
 
 <template>
   <div class="row py-2">
-
     <div class="mb-3">
       <h1>Receive notifications from PITLANE!</h1>
       <div v-if="this.$store.state.user.phoneNumber">
         <h1>Messages will be sent to {{ this.$store.state.user.phoneNumber }}</h1>
       </div>
     </div>
-
     <form @submit.prevent="updateNotificationPreferences">
-
       <div v-b-tooltip.hover title="Recieve a notification 15 minutes before a race starts!">
         <b-input-group class="mb-4">
           <b-input-group-prepend is-text>
@@ -32,17 +29,14 @@
                   <div class="d-block">
                     <p>Recieve a notification 15 minutes before a race starts!</p>
                   </div>
-
                   <div class="container my-3 p-3 text-center rounded-lg message-example">
                     PITLANE<br>
                     Lights Out!<br>
                     The Bahrain Grand Prix starts in 15 minutes!
                   </div>
-
                   <div class="d-block pt-2">
                     <button class="btn btn-danger btn-sm" @click="simulateLightsOutNotif">Simulate "Lights Out!" Notification</button>
                   </div>
-
                 </div>
               </v-card>
             </v-menu>
@@ -70,7 +64,6 @@
                   <div class="d-block">
                     <p>Recieve a notification of the next race!</p>
                   </div>
-
                   <div class="container my-3 p-3 text-center rounded-lg message-example">
                     PITLANE<br>
                     Upcoming Race!<br>
@@ -78,11 +71,9 @@
                     Date: 04-30-2023<br>
                     Time: 04:00 AM PST
                   </div>
-
                   <div class="d-block pt-2">
                     <button class="btn btn-danger btn-sm" @click="simulateUpcomingRaceNotif">Simulate "Upcoming Race" Notification</button>
                   </div>
-
                 </div>
               </v-card>
             </v-menu>
@@ -110,7 +101,6 @@
                   <div class="d-block">
                     <p>Recieve a notification of the most recent race results!</p>
                   </div>
-
                   <div class="container my-3 p-3 text-center rounded-lg message-example">
                     PITLANE<br>
                     Race Results for Australian Grand Prix<br>
@@ -135,7 +125,6 @@
                     19  Alexander Albon<br>
                     20  Charles Leclerc
                   </div>
-
                   <div class="d-block pt-2">
                     <button class="btn btn-danger btn-sm" @click="simulateCompleteResultsNotif">Simulate "Race Results" Notification</button>
                   </div>
@@ -166,7 +155,6 @@
                   <div class="d-block">
                     <p>Recieve a notification of the current Driver's Championship standings!</p>
                   </div>
-
                   <div class="container my-3 p-3 text-center rounded-lg message-example">
                     PITLANE<br>
                     Driver's Championship Standings<br>
@@ -191,7 +179,6 @@
                     19  Logan Sargeant    0pts<br>
                     20  Nyck de Vries     0pts
                   </div>
-
                   <div class="d-block pt-2">
                     <button class="btn btn-danger btn-sm" @click="simulateDriverChampionshipStandingsNotif">Simulate "Driver Standings" Notification</button>
                   </div>
@@ -222,7 +209,6 @@
                   <div class="d-block">
                     <p>Recieve a notification of the current Constructor's Championship standings!</p>
                   </div>
-
                   <div class="container my-3 p-3 text-center rounded-lg message-example">
                     PITLANE<br>
                     Constructor's Championship Standings<br>
@@ -237,8 +223,6 @@
                     9   AlphaTauri   1pts<br>
                     10  WilliamsRacing 1pts
                   </div>
-
-
                   <div class="d-block pt-2">
                     <button class="btn btn-danger btn-sm" @click="simulateConstructorChampionshipStandingsNotif">Simulate "Constructor Standings" Notification</button>
                   </div>
@@ -252,9 +236,9 @@
       <div class="my-2">
           <v-btn type="submit" color="blue-accent-2">Update Notification Preferences</v-btn>
       </div>
-
     </form>
 
+    <!-- Alerts -->
     <Teleport to="body">
       <div class="d-flex justify-content-center w-100 fixed-top">
         <transition name="fade">
