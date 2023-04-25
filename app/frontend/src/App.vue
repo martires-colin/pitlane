@@ -29,7 +29,7 @@
                 </v-list-item>
               </template>
               <v-list>
-                <v-list-item v-if="$store.state.user.roles.isLeagueOwner" @click="$router.push('/fantasy/manage')">
+                <v-list-item v-if="$store.state.user.roles.isLeagueOwner || $store.state.user.roles.isAdmin" @click="$router.push('/fantasy/manage')">
                   <v-list-item-title>Manage Leagues</v-list-item-title>
                 </v-list-item>
 
@@ -99,7 +99,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item v-if="$store.state.user.roles.isLeagueOwner" @click="$router.push('/fantasy/manage')">
+                <v-list-item v-if="$store.state.user.roles.isLeagueOwner || $store.state.user.roles.isAdmin" @click="$router.push('/fantasy/manage')">
                   <v-list-item-title>Manage Leagues</v-list-item-title>
                 </v-list-item>
 

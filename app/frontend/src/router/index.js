@@ -152,12 +152,14 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  if (to.meta.requiresLeagueOwner && !store.state.user.roles.isLeagueOwner){
+  if ((to.meta.requiresLeagueOwner && (!store.state.user.roles.isLeagueOwner && !store.state.user.roles.isAdmin))){
+    console.log((!store.state.user.roles.isLeagueOwner))
+    console.log((store.state.user.roles.isAdmin))
     return {name: 'CreateLeague'}
   }
-  if (to.meta.requiresLeagueOwner && !store.state.user.roles.isAdmin) {
-    return {name: 'CreateLeague'}
-  }
+  // if (to.meta.requiresLeagueOwner && !store.state.user.roles.isAdmin) {
+  //   return {name: 'CreateLeague'}
+  // }
   if (to.meta.requiresAuth && !store.state.user.roles.isAdmin) {
     return {name: 'Home'}
   }
