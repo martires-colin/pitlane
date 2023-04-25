@@ -1,0 +1,1 @@
+web: flask --app __init__.py --debug run --host=0.0.0.0 --port=${PORT:-5000}
