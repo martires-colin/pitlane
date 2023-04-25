@@ -59,7 +59,7 @@
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
                   </div>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account?
-                    <a href="/login"
+                    <a @click="$router.push('/login')"
                       style="color: #393f81;">Login here
                     </a>
                   </p>
