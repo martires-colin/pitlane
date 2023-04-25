@@ -22,6 +22,17 @@ export default {
             const data = await res.json();
             this.leagues = data.leagues;
             this.pageCount = data.pages;
+            if (data.leagues.length === 0) {
+                try {
+                await this.$store.dispatch('updateRoles', {
+                    isLeagueOwner: false
+                })
+                }
+                catch (err) {
+                    console.log(err)
+                }  
+                this.$router.push('/') 
+            }
             this.fetching = false;
         },
         async fetchLeaguesAdmin(page) {
