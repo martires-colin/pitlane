@@ -64,10 +64,13 @@ export default {
                 this.teamInformation.constructorid = this.selectedConstructor
                 await this.sendTeamInformation(this.teamInformation)
             }
+            if (this.selected.length !== 5) {
+                this.triggerDriversError()
+            }
         },
         async sendTeamInformation(teamInformation) {
             console.log('HELLLOOOOOO')
-            const res = await fetch('http://localhost:3001/fantasy/createTeam', {
+            const res = await fetch('https://pitlane-api.up.railway.app/fantasy/createTeam', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -105,8 +108,10 @@ export default {
         },
         invalidLineup() {
             if (this.selected.length < 5) {
-                this.triggerDriversError();
                 return `Select ${5- this.selected.length} more drivers.` 
+            }
+            if (this.selected.length > 5) {
+                return 'Select ONLY 5 drivers!'
             }
             return 'Select 5 more drivers.'
         },

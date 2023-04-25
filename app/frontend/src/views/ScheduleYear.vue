@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async fetchSchedule(year) {
-        const res = await fetch(`http://localhost:3001/schedule/${year}`);
+        const res = await fetch(`https://pitlane-api.up.railway.app/schedule/${year}`);
         const data = await res.json();
         console.log(data)
         this.schedule = data.schedule;
@@ -75,7 +75,7 @@ export default {
 import { ref } from 'vue';
 console.log(this.$route.params.year)
 const year = this.$route.params.year;
-const res = await fetch(`http://localhost:3001/schedule/${year}`);
+const res = await fetch(`https://pitlane-api.up.railway.app/schedule/${year}`);
 const data = await res.json();
 
 const schedule = ref(data.schedule);
