@@ -155,6 +155,9 @@ router.beforeEach(async (to) => {
   if (to.meta.requiresLeagueOwner && !store.state.user.roles.isLeagueOwner){
     return {name: 'CreateLeague'}
   }
+  if (to.meta.requiresLeagueOwner && !store.state.user.roles.isAdmin) {
+    return {name: 'CreateLeague'}
+  }
   if (to.meta.requiresAuth && !store.state.user.roles.isAdmin) {
     return {name: 'Home'}
   }
