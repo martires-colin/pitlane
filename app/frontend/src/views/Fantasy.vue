@@ -109,6 +109,42 @@
         </div>
       </div>
   </div>
+  <Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showLineupError">
+          Cannot have the same driver twice!
+        </div>
+      </transition>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showLineupSuccess">
+          Lineup saved.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showNameError">
+          Name must be a least 4 characters.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
+  <Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-success text-center w-25" role="alert" v-if="showNameSuccess">
+          Team name changed.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
 </template>
 
 <script>
@@ -145,6 +181,10 @@ export default {
       leaderboard: null,
       newTeamName: '',
       newNameDialog: false,
+      showLineupError: false,
+      showLineupSuccess: false,
+      showNameError: false,
+      showNameSuccess: false,
     }
   },
   methods: {
@@ -160,7 +200,29 @@ export default {
       });
       const data = await res.json();
       console.log(data)
-      this.lineupChanged = false;
+      if (data.status == '200') {
+        this.lineupChanged = false;
+        this.triggerLineupSuccess();
+      }
+      if (data.status == '204') {
+        this.triggerLineupError();
+      }
+    },
+    triggerLineupError() {
+      this.showLineupError = true;
+      setTimeout(() => this.showLineupError = false, 2000)
+    },
+    triggerNameError() {
+      this.showNameError = true;
+      setTimeout(() => this.showNameError = false, 2000)
+    },
+    triggerNameSuccess() {
+      this.showNameSuccess = true;
+      setTimeout(() => this.showNameSuccess = false, 2000)
+    },
+    triggerLineupSuccess() {
+      this.showLineupSuccess = true;
+      setTimeout(() => this.showLineupSuccess = false, 2000)
     },
     setDriver1(obj) {
       console.log(obj)  
@@ -249,19 +311,27 @@ export default {
       this.points = data.points;
     },
     async updateTeamName() {
-      this.newNameDialog = false;
-      const res = await fetch('http://localhost:3001/fantasy/team', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        body: JSON.stringify({'leagueid': this.leagueid, 'userid': this.$store.state.user.uid,
-         'teamname': this.selectedTeam, 'newTeamname': this.newTeamName})
-      });
-      const data = await res.json();
-      this.selectedTeam = this.newTeamName;
-      console.log(data)
+      if (this.newTeamName.length > 3) {
+        this.newNameDialog = false;
+        const res = await fetch('http://localhost:3001/fantasy/team', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+          body: JSON.stringify({'leagueid': this.leagueid, 'userid': this.$store.state.user.uid,
+           'teamname': this.selectedTeam, 'newTeamname': this.newTeamName})
+        });
+        const data = await res.json();
+        this.selectedTeam = this.newTeamName;
+        console.log(data)
+        if (data.status === '200') {
+          this.triggerNameSuccess();
+        }
+      }
+      else {
+        this.triggerNameError();
+      }
     }
   },
   async mounted() {

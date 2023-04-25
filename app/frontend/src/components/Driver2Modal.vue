@@ -53,11 +53,13 @@ export default {
           </div>
           <div class="modal-body relative p-4">
             <div class="flex flex-col items-start text-xl">
+              <form class="flex flex-col items-start text-xl">
+                <div v-for="(driver2, index) in allDrivers" :key="index">
+                  <input type="radio" :id="driver2.drivername + '2'" :value="driver2" v-model="driverTwo">
+                  <label class="pl-2" :for="driver2.drivername + '2'">{{ driver2.drivername }}</label>
+                </div>
+              </form>
               <!-- <div v-for="(driver, index) in allDrivers" :key="index" @click="$emit('setDriver1', buttonTitle[1], s`driver`)"> {{ driver }}</div> -->
-              <div v-for="(driver2, index) in allDrivers" :key="index">
-                <input type="checkbox" :id="driver2.drivername + '2'" :value="driver2" v-model="driverTwo">
-                <label class="pl-2" :for="driver2.drivername + '2'">{{ driver2.drivername }}</label>
-              </div>
             </div>
           </div>
           <div
@@ -96,7 +98,7 @@ export default {
               duration-150
               ease-in-out
               ml-1"
-              @click="$emit('setDriver2', driverTwo[0])"
+              @click="$emit('setDriver2', driverTwo)"
               data-bs-dismiss="modal"
               >Save</button>
           </div>

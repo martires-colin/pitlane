@@ -9,9 +9,19 @@ export default {
             },
             id: this.$route.params.id,
             tid: this.$route.params.tid,
+            showNameError: false,
+            showPointsError: false,
         }
     },
     methods: {
+        triggerNameError() {
+          this.showNameError = true;
+          setTimeout(() => this.showNameError = false, 2000)
+        },
+        triggerPointsError() {
+          this.showPointsError = true;
+          setTimeout(() => this.showPointsError = false, 2000)
+        },
         async fetchTeamInfo() {
             const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?teamname=${this.tid}`, {
                 method: 'GET',
@@ -25,18 +35,28 @@ export default {
             this.teamInfo = data.teamInfo;
         },
         async updateTeamInfo() {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                mode: 'cors',
-                body: JSON.stringify({'leagueid': this.id, 'teamname': this.tid, 'updatedInfo': this.teamInfo})
-            });
-            const data = await res.json();
-            console.log(data)
-            if (data.status == '200') {
-                this.$router.go(-1)
+            if (this.teamInfo.teamname.length > 3) {
+              if (this.teamInfo.points >= 0) {
+                const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
+                    method: 'PUT',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({'leagueid': this.id, 'teamname': this.tid, 'updatedInfo': this.teamInfo})
+                });
+                const data = await res.json();
+                console.log(data)
+                if (data.status == '200') {
+                    this.$router.go(-1)
+                }
+              }
+              else {
+                this.triggerPointsError();
+              }
+            }
+            else {
+              this.triggerNameError();
             }
         },
         
@@ -112,4 +132,22 @@ export default {
         </v-card-actions>
       </v-card>
 </v-row>
+<Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showNameError">
+          Name must be a least 4 characters.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
+<Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showPointsError">
+          Points must be at least 0.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
 </template>

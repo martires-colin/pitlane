@@ -9,6 +9,7 @@ export default {
             newLeaguename: "",
             newNameDialog: false,
             selectedLeague: {},
+            showNameError: false,
         };
     },
     methods: {
@@ -66,19 +67,28 @@ export default {
             }
         },
         async updateLeagueName() {
-            this.newNameDialog = false;
-            const res = await fetch('http://localhost:3001/fantasy/league', {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                mode: 'cors',
-                body: JSON.stringify({'leagueid': this.selectedLeague.leagueID, 'newLeaguename': this.newLeaguename})
-            });
-            const data = await res.json();
-            this.selectedTeam = this.newTeamName;
-            console.log(data)
-            await this.whichFetch();
+            if (this.newLeaguename.length > 3) {
+                this.newNameDialog = false;
+                const res = await fetch('http://localhost:3001/fantasy/league', {
+                    method: 'PUT',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({'leagueid': this.selectedLeague.leagueID, 'newLeaguename': this.newLeaguename})
+                });
+                const data = await res.json();
+                this.selectedTeam = this.newTeamName;
+                console.log(data)
+                await this.whichFetch();
+            }
+            else {
+                this.triggerNameError();
+            }
+        },
+        triggerNameError() {
+          this.showNameError = true;
+          setTimeout(() => this.showNameError = false, 2000)
         },
         async whichFetch() {
             if (this.$store.state.user.roles.isLeagueOwner) {
@@ -176,4 +186,13 @@ export default {
             </v-card>
           </v-dialog>
 </div>
+<Teleport to="body">
+    <div class="d-flex justify-content-center w-100 fixed-top">
+      <transition name="fade">
+        <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showNameError">
+          Name must be a least 4 characters.
+        </div>
+      </transition>
+    </div>
+  </Teleport>
 </template>

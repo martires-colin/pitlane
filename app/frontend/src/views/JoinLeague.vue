@@ -40,13 +40,18 @@ export default {
             selectedConstructor: null,
             teamSuccess: false,
             paramCode: this.$route.params.inviteCode,
-            showDriversError: false
+            showDriversError: false,
+            showCreateError: false
         };
     },
     methods: {
         triggerDriversError() {
             this.showDriversError = true;
             setTimeout(() => this.showDriversError = false, 2000)
+        },
+        triggerCreateError() {
+            this.showCreateError = true;
+            setTimeout(() => this.showCreateError = false, 2000)
         },
         enterDraft() {
             if (this.teamInformation.inviteCode.length === 5 && this.teamInformation.teamname.length > 3) {
@@ -83,6 +88,9 @@ export default {
             this.teamSuccess = data.success;
             if (this.teamSuccess === true) {
                 router.push("/fantasy")
+            }
+            else {
+                this.triggerCreateError();
             }
             // then redirect them to fantasy team page.
         }
@@ -189,6 +197,15 @@ export default {
       </div>
     </Teleport>
 
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showCreateError">
+            Error! Please try again.
+          </div>
+        </transition>
+      </div>
+    </Teleport>
 </div>
 </template>
 
