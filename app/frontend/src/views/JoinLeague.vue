@@ -4,6 +4,18 @@ import router from '@/router';
 
 // import { useStore} from "vuex";
 export default {
+    // setup() {
+    //     const showDriversError = ref(false)
+    //     const triggerDriversError= () => {
+    //     showDriversError.value = true;
+    //     setTimeout(() => showDriversError.value = false, 2000)
+
+    //     return {
+    //         showDriversError,
+    //         triggerDriversError
+    //     }
+    // }
+    // },
     data() {
         return {
             teamInformation: {
@@ -28,9 +40,14 @@ export default {
             selectedConstructor: null,
             teamSuccess: false,
             paramCode: this.$route.params.inviteCode,
+            showDriversError: false
         };
     },
     methods: {
+        triggerDriversError() {
+            this.showDriversError = true;
+            setTimeout(() => this.showDriversError = false, 2000)
+        },
         enterDraft() {
             if (this.teamInformation.inviteCode.length === 5 && this.teamInformation.teamname.length > 3) {
                 this.draftVisible = true;
@@ -88,6 +105,7 @@ export default {
         },
         invalidLineup() {
             if (this.selected.length < 5) {
+                this.triggerDriversError();
                 return `Select ${5- this.selected.length} more drivers.` 
             }
             return 'Select 5 more drivers.'
@@ -155,6 +173,17 @@ export default {
     <div v-if="teamSuccess">
         <p class="text-xl text-green-500">Team created!</p>
     </div>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showDriversError">
+            You can only choose 5 drivers!
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
 </div>
 </template>
 
