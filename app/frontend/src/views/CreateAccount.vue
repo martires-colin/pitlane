@@ -8,7 +8,7 @@
         <div class="card mx-5 mt-4" style="border-radius: 1rem 1rem 1rem 1rem; border: none;">
           <div class="row g-0">
             <div class="h-[85vh] col-md-6 col-lg-5 d-md-block overflow-hidden" style="border-radius: 1rem 0 0 1rem; border: none;">
-              <img src="../assets/create-account-pic.jpg"
+              <img src="@/assets/create-account-pic.jpg"
                 alt="login form" class="" style="border-radius: 1rem 0 0 1rem;" />
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
