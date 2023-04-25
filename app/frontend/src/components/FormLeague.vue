@@ -13,7 +13,7 @@ export default {
     },
     methods: {
         async fetchTeamInfo() {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?teamname=${this.tid}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?teamname=${this.tid}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export default {
             this.teamInfo = data.teamInfo;
         },
         async updateTeamInfo() {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',

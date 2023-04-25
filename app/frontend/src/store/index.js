@@ -255,7 +255,7 @@ export default createStore({
     },
     async fetchUpcoming({ commit }) {
       try {
-        const path = "http://localhost:3001/schedule/nextprev";
+        const path = "https://pitlane-api.up.railway.app/schedule/nextprev";
         await axios.get(path).then((response) => {
           commit('SET_UPCOMING', response.data);
         })

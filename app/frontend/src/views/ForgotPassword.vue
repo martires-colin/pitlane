@@ -8,7 +8,7 @@
         <div class="card mx-5 mt-4" style="border-radius: 1rem 1rem 1rem 1rem; border: none;">
           <div class="row g-0">
             <div class="h-[85vh] col-md-6 col-lg-5 d-md-block overflow-hidden" style="border-radius: 1rem 0 0 1rem; border: none;">
-              <img src="../assets/forgot-password-pic.jpg"
+              <img :src="`${publicPath}forgot-password-pic.jpg`"
                 alt="login form" class="" style="border-radius: 1rem 0 0 1rem;" />
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
@@ -18,7 +18,7 @@
 
                   <div class="d-flex align-items-center justify-content-center mb-3 pb-1">
                     <img
-                      src="@/assets/PL.png"
+                    :src="`${publicPath}PL.png`"
                       alt="Website logo"
                       width="150"
                       height="150"
@@ -41,10 +41,10 @@
                     <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Send Password Reset Email</button>
                   </div>
 
-                  <p class=" py-lg-2" style="color: #393f81;">Ready to try again? <a href="/login"
-                      style="color: #393f81;">Login here</a></p>
-                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <a href="/create-account"
-                      style="color: #393f81;">Register here</a></p>
+                  <p class=" py-lg-2" style="color: #393f81;">Ready to try again? <span class="hover:cursor-pointer" @click="$router.push('/login')"
+                      style="color: #393f81;">Login here</span></p>
+                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <span class="hover:cursor-pointer" @click="$router.push('/create-account')"
+                      style="color: #393f81;">Register here</span></p>
 
                 </form>
 
@@ -85,6 +85,8 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 export default {
   name: "ForgotPassword",
   setup() {
+    const publicPath = ref(process.env.BASE_URL)
+
     const email = ref('')
 
     const sendPasswordReset = async () => {
@@ -115,7 +117,7 @@ export default {
       setTimeout(() => showError.value = false, 2000)
     }
 
-    return { sendPasswordReset, email, showAlert, triggerAlert, showError, triggerError }
+    return { sendPasswordReset, email, showAlert, triggerAlert, showError, triggerError, publicPath }
 
   }
 }

@@ -6,13 +6,15 @@ export default {
             pageCount: null,
             currentPage: 1,
             fetching: false,
+            newLeaguename: "",
             newNameDialog: false,
+            selectedLeague: {},
         };
     },
     methods: {
         async fetchLeagues(page) {
             this.fetching = true;
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}?page=${page}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}?page=${page}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +39,7 @@ export default {
         },
         async fetchLeaguesAdmin(page) {
             this.fetching = true;
-            const res = await fetch(`http://localhost:3001/admin/leagues/?page=${page}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/admin/leagues/?page=${page}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +52,7 @@ export default {
             this.fetching = false;
         },
         async deleteLeague(leagueid) {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}`, {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
@@ -60,41 +62,39 @@ export default {
             });
             const data = await res.json();
             if (data.status == '200') {
-                if (this.$store.state.user.roles.isLeagueOwner) {
-                    if (this.$store.state.user.roles.isAdmin) {
-                    // if (this.isAdmin) {
-                        await this.fetchLeaguesAdmin(1);
-                    }
-                    else await this.fetchLeagues(1);
-                }
+                await this.whichFetch();
             }
         },
         async updateLeagueName() {
             this.newNameDialog = false;
-            const res = await fetch('http://localhost:3001/fantasy/league', {
+            const res = await fetch('https://pitlane-api.up.railway.app/fantasy/league', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
                 },
                 mode: 'cors',
-                body: JSON.stringify({'leagueid': this.leagueid, 'newLeaguename': this.newLeaguename})
+                body: JSON.stringify({'leagueid': this.selectedLeague.leagueID, 'newLeaguename': this.newLeaguename})
             });
             const data = await res.json();
             this.selectedTeam = this.newTeamName;
             console.log(data)
+            await this.whichFetch();
+        },
+        async whichFetch() {
+            if (this.$store.state.user.roles.isLeagueOwner) {
+                if (this.$store.state.user.roles.isAdmin) {
+                // if (this.isAdmin) {
+                    await this.fetchLeaguesAdmin(1);
+                }
+                else await this.fetchLeagues(1);
+            }
+            if (this.$store.state.user.roles.isAdmin) {
+                await this.fetchLeaguesAdmin(1);
+            }
         }
     },
     async mounted() {
-        if (this.$store.state.user.roles.isLeagueOwner) {
-            if (this.$store.state.user.roles.isAdmin) {
-            // if (this.isAdmin) {
-                await this.fetchLeaguesAdmin(1);
-            }
-            else await this.fetchLeagues(1);
-        }
-        if (this.$store.state.user.roles.isAdmin) {
-            await this.fetchLeaguesAdmin(1);
-        }
+        await this.whichFetch();
     },
     watch: {
         currentPage() {
@@ -134,7 +134,7 @@ export default {
                 v-for="league in leagues"
                 :key="league.name"
             >
-                <td class="text-left" @click="newNameDialog = true">{{ league.name }}</td>
+                <td class="text-left hover:underline underline-offset-4 cursor-pointer" @click="(newNameDialog = true), (selectedLeague = league), (newLeaguename = league.name)">{{ league.name }}</td>
                 <td class="text-left">{{ league.members }}</td>
                 <td class="text-left">{{ league.inviteCode }}</td>
                 <td class="text-left" v-if="$store.state.user.roles.isAdmin">{{ league.owner }}</td>
@@ -148,5 +148,32 @@ export default {
     </div>
     <p class="text-amber" v-if="(!fetching && leagues.length === 0)">You are not currently an owner of any leagues!</p>
     <v-pagination v-if="!(leagues.length === 0)" class="text-white" v-model="currentPage" :length="pageCount"></v-pagination>
+    <v-dialog v-model="newNameDialog" width="640px">
+            <v-card>
+              <v-card-title class="text-2xl">
+                <span class="text-h5">Change League Name</span>
+              </v-card-title>
+              <v-container>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    md="12"
+                  >
+                    <v-text-field
+                      label="Team name"
+                      v-model="newLeaguename"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-actions >
+                <v-spacer></v-spacer>
+                <v-btn color="red" variant="tonal" @click="newNameDialog = false">Cancel</v-btn>
+                <v-btn color="blue" variant="tonal" @click="updateLeagueName">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 </div>
 </template>

@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         async fetchLeague() {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?page=1`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?page=1`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default {
             this.pageCount = data.pages;
         },
         async deleteTeam(teamname) {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}`, {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',

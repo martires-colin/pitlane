@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         async fetchLeagueName() {
-            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?name=true`, {
+            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}/${this.$route.params.id}?name=true`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
