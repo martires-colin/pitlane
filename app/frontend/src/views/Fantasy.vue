@@ -200,6 +200,9 @@ export default {
       const data = await res.json();
       console.log(data)
       this.userTeams = data.teams;
+      if (data.teams.length === 0) {
+        this.$router.push('/fantasy/create')
+      }
     },
     async setSelectedTeam(teamname, leagueid) {
       console.log(teamname, leagueid)

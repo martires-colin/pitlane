@@ -92,6 +92,9 @@ export default {
             }
             else await this.fetchLeagues(1);
         }
+        if (this.$store.state.user.roles.isAdmin) {
+            await this.fetchLeaguesAdmin(1);
+        }
     },
     watch: {
         currentPage() {
