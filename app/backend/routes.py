@@ -109,7 +109,7 @@ def races(Year):
 
 @main.route("/pitlane", methods=['GET', 'POST'])
 def pitlane():
-    # fastf1.Cache.enable_cache('cache/')
+    fastf1.Cache.enable_cache('cache/')
     if request.method == 'POST':
         post_data = request.get_json()
         print(request.get_json())

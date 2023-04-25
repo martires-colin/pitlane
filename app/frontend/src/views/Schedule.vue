@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     getSchedule() {
-      const path = "https://pitlane-api.up.railway.app/schedule/2023";
+      const path = "http://localhost:3001/schedule/2023";
       axios.get(path).then((response) => {
         console.log(response);
         this.schedule = response.data.schedule;

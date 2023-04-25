@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     async fetchStandings(year) {
-        const res = await fetch(`https://pitlane-api.up.railway.app/standings/${year}`);
+        const res = await fetch(`http://localhost:3001/standings/${year}`);
         const data = await res.json();
         console.log(data)
         this.standings = data.standings;

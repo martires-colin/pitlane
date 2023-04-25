@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     async fetchStandings() {
-      const res = await fetch('https://pitlane-api.up.railway.app/standings/2023', {
+      const res = await fetch('http://localhost:3001/standings/2023', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
