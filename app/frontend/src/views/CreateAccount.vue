@@ -58,8 +58,8 @@
                   <div class="pt-1 mb-4">
                     <button class="btn btn-dark btn-lg btn-block" id="createAcc-btn" type="submit">Create Account</button>
                   </div>
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account?
-                    <a @click="$router.push('/login')"
+                  <p class="mb-5 pb-lg-2 hover:cursor-pointer" style="color: #393f81;">Already have an account?
+                    <a @click="$router.push('/login')" class="hover:cursor-pointer"
                       style="color: #393f81;">Login here
                     </a>
                   </p>

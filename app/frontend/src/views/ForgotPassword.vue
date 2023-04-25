@@ -41,10 +41,10 @@
                     <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Send Password Reset Email</button>
                   </div>
 
-                  <p class=" py-lg-2" style="color: #393f81;">Ready to try again? <a @click="$router.push('/login')"
-                      style="color: #393f81;">Login here</a></p>
-                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <a @click="$router.push('/create-account')"
-                      style="color: #393f81;">Register here</a></p>
+                  <p class=" py-lg-2" style="color: #393f81;">Ready to try again? <span class="hover:cursor-pointer" @click="$router.push('/login')"
+                      style="color: #393f81;">Login here</span></p>
+                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <span class="hover:cursor-pointer" @click="$router.push('/create-account')"
+                      style="color: #393f81;">Register here</span></p>
 
                 </form>
 

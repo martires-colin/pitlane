@@ -51,9 +51,9 @@
                     <button class="btn btn-secondary btn-lg" id="login-btn" type="submit">Login</button>
                   </div>
 
-                  <a @click="$router.push('/forgot-password')" style="color: #393f81;">Forgot Password?</a>
-                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <a @click="$router.push('/create-account')"
-                      style="color: #393f81;">Register here</a></p>
+                  <span class="hover:cursor-pointer"  @click="$router.push('/forgot-password')" style="color: #393f81;">Forgot Password?</span>
+                  <p class=" py-lg-2" style="color: #393f81;">Don't have an account? <span class="hover:cursor-pointer" @click="$router.push('/create-account')"
+                      style="color: #393f81;">Register here</span></p>
 
                 </form>
 
