@@ -70,7 +70,7 @@ export default {
         },
         async sendTeamInformation(teamInformation) {
             console.log('HELLLOOOOOO')
-            const res = await fetch('https://pitlane-api.up.railway.app/fantasy/createTeam', {
+            const res = await fetch('http://localhost:3001/fantasy/createTeam', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export default {
 </script>
 
 <template>
-<div class="flex flex-col items-center min-h-screen justify-center">
+<div class="flex flex-col items-center h-full justify-center">
     <p v-if="!teamSuccess" class="text-xl pb-2">Join a League</p>
     <BForm @submit="enterDraft" class="flex flex-col items-center text-center" v-if="!draftVisible">
         <BFormInput class="w-[200px] mt-4 mb-2" :state="inviteState" required v-model="teamInformation.inviteCode" placeholder="Invite Code"></BFormInput>

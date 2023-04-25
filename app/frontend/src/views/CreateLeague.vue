@@ -10,7 +10,7 @@ export default {
     methods: {
         async onSubmit() {
             if (this.leagueName.length > 3) {
-                const res = await fetch('https://pitlane-api.up.railway.app/fantasy/createLeague', {
+                const res = await fetch('http://localhost:3001/fantasy/createLeague', {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default {
 </script>
 
 <template>
-    <div class="flex flex-col items-center h-screen justify-center">
+    <div class="flex flex-col items-center h-full justify-center">
         <p class="text-xl">Create a League</p>
         <BForm @submit="onSubmit">
             <BFormInput class="w-[400px]" :state="nameState" v-model="leagueName" placeholder="Choose a name for your league"></BFormInput>

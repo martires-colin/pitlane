@@ -14,7 +14,7 @@ export default {
     methods: {
         async fetchLeagues(page) {
             this.fetching = true;
-            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}?page=${page}`, {
+            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}?page=${page}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export default {
         },
         async fetchLeaguesAdmin(page) {
             this.fetching = true;
-            const res = await fetch(`https://pitlane-api.up.railway.app/admin/leagues/?page=${page}`, {
+            const res = await fetch(`http://localhost:3001/admin/leagues/?page=${page}`, {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export default {
             this.fetching = false;
         },
         async deleteLeague(leagueid) {
-            const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/leagues/${this.$store.state.user.uid}`, {
+            const res = await fetch(`http://localhost:3001/fantasy/leagues/${this.$store.state.user.uid}`, {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default {
         },
         async updateLeagueName() {
             this.newNameDialog = false;
-            const res = await fetch('https://pitlane-api.up.railway.app/fantasy/league', {
+            const res = await fetch('http://localhost:3001/fantasy/league', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',

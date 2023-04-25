@@ -150,7 +150,7 @@ export default {
   methods: {
     async sendLineup() {
       console.log('hello')
-      const res = await fetch('https://pitlane-api.up.railway.app/fantasy/lineup', {
+      const res = await fetch('http://localhost:3001/fantasy/lineup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -176,20 +176,20 @@ export default {
       this.lineupChanged = true;
     },
     async fetchDrivers() {
-      const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/drivers`);
+      const res = await fetch(`http://localhost:3001/fantasy/drivers`);
       const data = await res.json();
       console.log(data)
       this.allDrivers = data.drivers;
     },
     async fetchConstructors() {
-      const res = await fetch(`https://pitlane-api.up.railway.app/fantasy/constructors`);
+      const res = await fetch(`http://localhost:3001/fantasy/constructors`);
       const data = await res.json();
       console.log(data)
       this.allConstructors = data.constructors;
     },
     async fetchUserTeams() {
       console.log('grabbing teams')
-      const res = await fetch('https://pitlane-api.up.railway.app/fantasy', {
+      const res = await fetch('http://localhost:3001/fantasy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -213,7 +213,7 @@ export default {
       this.teamSelected = true;
     },
     async fetchLeague(userid, leagueid) {
-      const res = await fetch('https://pitlane-api.up.railway.app/fantasy/league', {
+      const res = await fetch('http://localhost:3001/fantasy/league', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ export default {
       this.leagueid = leagueid;
     },
     async fetchTeamJSON(userid, leagueid) {
-      const res = await fetch('https://pitlane-api.up.railway.app/fantasy/team', {
+      const res = await fetch('http://localhost:3001/fantasy/team', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ export default {
     },
     async updateTeamName() {
       this.newNameDialog = false;
-      const res = await fetch('https://pitlane-api.up.railway.app/fantasy/team', {
+      const res = await fetch('http://localhost:3001/fantasy/team', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
