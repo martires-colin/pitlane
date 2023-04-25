@@ -171,7 +171,7 @@ class League(Base):
 
 class Team(Base):
     __tablename__ = 'teams'
-    teamid = column(Integer, primary_key= True)
+    teamid = Column(Integer, primary_key= True)
     userid = Column(String) 
     leagueid = Column(Integer, ForeignKey(League.leagueid))
     driver1id = Column(Integer, ForeignKey(Driver.driverid))
