@@ -9,7 +9,7 @@
           <div class="row g-0">
             <div class="h-[85vh] col-md-6 col-lg-5 d-md-block overflow-hidden" style="border-radius: 1rem 0 0 1rem; border: none;">
               <img :src="`${publicPath}forgot-password-pic.jpg`"
-                alt="login form" class="" style="border-radius: 1rem 0 0 1rem;" />
+                alt="login form" class="h-[85vh]" style="border-radius: 1rem 0 0 1rem;" />
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">

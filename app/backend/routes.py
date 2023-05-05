@@ -353,7 +353,13 @@ def fantasyCreateTeam():
                     dr4=roster[3], dr5=roster[4], c_id=tInfo['constructorid'], t_name=tInfo['teamname'], n_f=True) 
         print(worked)
         return jsonify({'status': '200', 'success': worked})
-    
+
+@main.route("/fantasy/validInvite", methods=['GET'])
+def validInviteCode():
+    if request.method == 'GET':
+        inviteCode = request.args.get('code', None)
+        return jsonify({'status': isValidInviteCode(inviteCode)}) 
+
 @main.route("/fantasy/leagues/<string:uid>", methods=['GET', 'DELETE'])
 def fantasyLeagues(uid):
     if request.method == 'GET':

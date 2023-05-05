@@ -41,10 +41,15 @@ export default {
             teamSuccess: false,
             paramCode: this.$route.params.inviteCode,
             showDriversError: false,
-            showCreateError: false
+            showCreateError: false,
+            showInvalidCode: false
         };
     },
     methods: {
+        triggerInvalidCode() {
+            this.showInvalidCode = true;
+            setTimeout(() => this.showInvalidCode = false, 2000)
+        },
         triggerDriversError() {
             this.showDriversError = true;
             setTimeout(() => this.showDriversError = false, 2000)
@@ -55,7 +60,7 @@ export default {
         },
         enterDraft() {
             if (this.teamInformation.inviteCode.length === 5 && this.teamInformation.teamname.length > 3) {
-                this.draftVisible = true;
+                this.isValidInviteCode(this.teamInformation.inviteCode);
             }
         },
         async submitTeam(event) {
@@ -71,6 +76,22 @@ export default {
             }
             if (this.selected.length !== 5) {
                 this.triggerDriversError()
+            }
+        },
+        async isValidInviteCode(inviteCode) {
+            const res = await fetch(`http://localhost:3001/fantasy/validInvite?code=${inviteCode}`, {
+                method: 'GET',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                mode: 'cors'
+            });
+            const data = await res.json();
+            if (data.status === '200') {
+                this.draftVisible = true;
+            }
+            else {
+                this.triggerInvalidCode();
             }
         },
         async sendTeamInformation(teamInformation) {
@@ -146,20 +167,17 @@ export default {
         <BFormInvalidFeedback class="mb-2">Team name must be at least 4 characters.</BFormInvalidFeedback>
         <BButton type="submit" class="bg-blue-500">Enter the draft</BButton>
     </BForm>
-    <BForm @submit="submitTeam" class="flex flex-col items-center text-center" v-if="draftVisible && teamSuccess === false">
+    <BForm @submit="submitTeam" class="flex flex-col items-center text-center bg-[#5b6068] p-4 rounded-2" v-if="draftVisible && teamSuccess === false">
         <div class="flex flex-row space-x-8">
             <BFormGroup
                 label="Drivers"
                 v-slot="{ ariaDescribedby }"
-                :invalid-feedback="invalidLineup"
-                valid-feedback="Drivers Complete."
                 :state="budget"
                 >
                 <BFormCheckboxGroup
                     v-model="selected"
                     :options="options"
                     :aria-describedby="ariaDescribedby"
-                    :state="budget"
                     stacked=""
                 >
                 </BFormCheckboxGroup>
@@ -167,21 +185,19 @@ export default {
             <BFormGroup
                 label="Constructors"
                 v-slot="{ ariaDescribedby }"
-                invalid-feedback="Select a constructor"
-                valid-feedback="Constructor Complete."
                 :state="constructorBudget"
                 >
                 <BFormRadioGroup
                     v-model="selectedConstructor"
                     :options="constructorOptions"
                     :aria-describedby="ariaDescribedby"
-                    :state="constructorBudget"
                     stacked=""
                 >
                 </BFormRadioGroup>
             </BFormGroup>
         </div>
-        <BButton type="submit" class="bg-blue-500">Create my team!</BButton>
+        <BButton v-if="constructorBudget && budget" type="submit" class="bg-green-500">Create my team!</BButton>
+        <BButton v-else type="submit" disabled="" class="bg-blue-500">Create my team!</BButton>
     </BForm>
     <div v-if="teamSuccess">
         <p class="text-xl text-green-500">Team created!</p>
@@ -202,6 +218,16 @@ export default {
         <transition name="fade">
           <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showCreateError">
             Error! Please try again.
+          </div>
+        </transition>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div class="d-flex justify-content-center w-100 fixed-top">
+        <transition name="fade">
+          <div class="position-absolute top-10 alert alert-danger text-center w-25" role="alert" v-if="showInvalidCode">
+            Invalid invite code.
           </div>
         </transition>
       </div>

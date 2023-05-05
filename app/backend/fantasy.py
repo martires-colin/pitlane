@@ -214,10 +214,10 @@ def deleteLeague(leagueid):
     else: 
         return '400'
 
-if __name__ == '__main__':
-    # giveScoreForUser(User=User)
-    # recent = get_recent_race()
-    # print(recent.raceid)
-    t1, t2 = getNextPrevRaces(datetime.strptime("2023-03-05 00:00:00", "%Y-%m-%d %H:%M:%S"))
-    print(t1,t2)
-    # score()
+def isValidInviteCode(inviteCode):
+    session = get_session()
+    isValidCode = session.query(League.name).filter(League.invitecode == inviteCode).first()
+    if isValidCode:
+        return '200'
+    else:
+        return '404'
