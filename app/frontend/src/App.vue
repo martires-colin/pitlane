@@ -230,6 +230,10 @@ const fantasyLinks = [
 </script>
 
 <style>
+::-webkit-scrollbar {
+    display: none;
+}
+
 #app {
   /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   font-family: "Roboto Mono";
