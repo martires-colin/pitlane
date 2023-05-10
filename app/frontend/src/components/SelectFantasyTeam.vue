@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <script>
 
 export default {

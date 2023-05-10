@@ -1,21 +1,7 @@
+<!-- By Anthony Ganci -->
 <script>
 import router from '@/router';
-
-
-// import { useStore} from "vuex";
 export default {
-    // setup() {
-    //     const showDriversError = ref(false)
-    //     const triggerDriversError= () => {
-    //     showDriversError.value = true;
-    //     setTimeout(() => showDriversError.value = false, 2000)
-
-    //     return {
-    //         showDriversError,
-    //         triggerDriversError
-    //     }
-    // }
-    // },
     data() {
         return {
             teamInformation: {

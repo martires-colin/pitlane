@@ -1,3 +1,5 @@
+# By Anthony Ganci 
+
 import requests
 import json
 from .database import *
@@ -26,7 +28,6 @@ def getFantasyDrivers():
     drivers = []
     for i in range(0, int(data['MRData']['total'])):
         drivers.append(data['MRData']['DriverTable']['Drivers'][i]['givenName'] + " " + data['MRData']['DriverTable']['Drivers'][i]['familyName'])
-    # print(drivers)
     return drivers
 
 def getFantasyConstructors():
@@ -35,7 +36,6 @@ def getFantasyConstructors():
     constructors = []
     for i in range(0, int(data['MRData']['total'])):
         constructors.append(data['MRData']['ConstructorTable']['Constructors'][i]['name'])
-    # print(drivers)
     return constructors
 
 def giveScoreForUser(User):
@@ -52,15 +52,6 @@ def getUserTeams(userid):
         print(teams[i].teamname)
     return(teams)
 
-# Replaced by function in db.py
-# def getUserTeamJSON(userid, leagueid):
-#     session = get_session()
-#     team = session.query(Team).filter(Team.userid == userid, Team.leagueid == leagueid).first()
-#     session.close()
-#     # make a json file with driverid -> driver name and constructorid -> constructor name
-#     teamJSON = {'driver1id': team.driver1id, 'driver2id': team.driver2id, 'constructorid': team.constructorid, 'points': team.points}
-#     return teamJSON
-
 def getLeague(leagueID, userid):
     session = get_session()
     leaderboard = []
@@ -72,17 +63,8 @@ def getLeague(leagueID, userid):
 
 def getNextPrevRaces(Date):
     session = get_session()
-    # nextRace = session.query(Race).filter(Race.date > Date).order_by(asc(Race.date)).first()
     nextRace = session.query(Race).filter(Race.raceid == Date+1).first()
     prevRace = session.query(Race).filter(Race.raceid == Date).first()
-    # print(nextRace.year, nextRace.round, nextRace.name)
-
-    # if nextRace.round == 1:
-    #     prevRace = session.query(Race).filter(Race.year == nextRace.year-1).order_by(desc(Race.round)).first()
-    #     # print(prevRace.year, prevRace.round, prevRace.name)
-    # else:
-    #     prevRace = session.query(Race).filter(Race.year == nextRace.year, Race.round == nextRace.round-1).first()
-        # print(prevRace.year, prevRace.round, prevRace.name)
     prevRaceCountry = session.query(Circuits).filter(Circuits.circuitid == prevRace.circuitid).first()
     nextRaceCountry = session.query(Circuits).filter(Circuits.circuitid == nextRace.circuitid).first()
     session.close()
@@ -106,7 +88,6 @@ def getResults(raceid):
     session = get_session()
     pointSheet = {"raceid": raceid, "constructors": {}, "drivers": {}}
     for q in session.query(Results.driverid, Results.constructorid, Results.points).filter(Results.raceid == raceid).all():
-        # print(q.driverid, q.constructorid, q.points)
         if q.constructorid in pointSheet['constructors'].keys():
             pointSheet['constructors'][q.constructorid] = int(pointSheet['constructors'].get(q.constructorid)) + int(q.points)
         else:
@@ -120,10 +101,8 @@ def score():
     pointSheet = json.load(open("fantasycache/raceResults.json",))    
     for q in session.query(Team.userid, Team.leagueid, Team.driver1id, Team.driver2id, Team.constructorid, Team.points).all():
         newPoints = pointSheet['drivers'].get(f'{q.driver1id}') + pointSheet['drivers'].get(f'{q.driver2id}') + pointSheet['constructors'].get(f'{q.constructorid}') + int(q.points)
-        # print(q.driver1id, q.driver2id, q.constructorid)
         session.execute(update(Team).where(Team.userid == q.userid, Team.leagueid == q.leagueid).values(points=newPoints))
         session.commit()
-        # print(q.userid, newPoints)
     session.close()
 
 def fetchLeagues(uid, page):
@@ -207,7 +186,6 @@ def deleteLeague(leagueid):
     l = session.query(League.members).filter(League.leagueid == leagueid).first()
     if l[0] == 0:
         session.execute(delete(League).where(League.leagueid == leagueid))
-        # session.execute(update(League).where(League.leagueid == leagueid).values(members = l.members - 1))
         session.commit()
         session.close()
         return '200'

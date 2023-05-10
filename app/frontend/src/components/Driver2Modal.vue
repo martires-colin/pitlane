@@ -1,6 +1,7 @@
+<!-- By Anthony Ganci -->
+
 <script>
 export default {
-    // props: ['allDrivers', 'buttonTitle', 'title'],
     props: {
       allDrivers: Array,
       buttonTitle: String,
@@ -46,7 +47,6 @@ export default {
           <div
             class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-slate-900 rounded-t-md">
             <h5 class="text-xl font-medium leading-normal" id="modal2Label">Select your second driver:</h5>
-            <!-- <h5 class="text-xl font-medium leading-normal" id="modal2Label">{{ forDriver }}</h5> -->
             <button type="button"
               class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
               data-bs-dismiss="modal" aria-label="Close"></button>
@@ -59,7 +59,6 @@ export default {
                   <label class="pl-2" :for="driver2.drivername + '2'">{{ driver2.drivername }}</label>
                 </div>
               </form>
-              <!-- <div v-for="(driver, index) in allDrivers" :key="index" @click="$emit('setDriver1', buttonTitle[1], s`driver`)"> {{ driver }}</div> -->
             </div>
           </div>
           <div

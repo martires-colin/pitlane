@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <template>
 <div class="flex flex-col justify-center items-center">
     <div class="w-[60%] transition-opacity duration-400 ease-in ease-out pb-2" :class="{'opacity-30': fetching}">
@@ -26,7 +28,6 @@
                 <td class="text-left">{{ team.points }}</td>
                 <td>
                     <v-btn color="blue" variant="tonal" class="mr-4" @click="$router.push(`${$route.path}/edit/${team.teamname}`)">Edit</v-btn>
-                    <!-- <FormLeague :teamInfo="team"></FormLeague> -->
                     <v-btn color="danger" variant="tonal" @click="deleteTeam(team.teamname)">Delete</v-btn>
                 </td>
             </tr>

@@ -48,8 +48,6 @@ def nextprev():
             lastResponse = requests.get('https://ergast.com/api/f1/current/last.json')
             prevRace = lastResponse.json()['MRData']['RaceTable']['Races'][0]['raceName']
             prevRaceDate = lastResponse.json()['MRData']['RaceTable']['Races'][0]['date']
-            # nextSeason = int(response.json()['MRData']['RaceTable']['season']) + 1
-            # nextSeasonTable = requests.get(f'https://ergast.com/api/f1/{nextSeason}/1.json')
             nextResponse = requests.get('https://ergast.com/api/f1/current/next.json')
             nextRace = nextResponse.json()['MRData']['RaceTable']['Races'][0]['raceName']
             nextRaceDate = nextResponse.json()['MRData']['RaceTable']['Races'][0]['date']
@@ -64,28 +62,13 @@ def nextprev():
 
             return(jsonify({'status': 200, 'prevRace': [prevRace, prevRaceDate, prevFlag, prevCountryName], 'nextRace': [nextRace, nextRaceDate, nextFlag, nextCountryName]}))
     if request.method == 'GET':
-        # Date = datetime.today()
-        # print(get_recent_race().raceid)
-        # Date = datetime.strptime("2023-03-21", '%Y-%m-%d')
-        # print(Date.today())
-        # print(Date.now())
-        # print(Date.today())
-        # print(datetime.strftime(Date.now(), "%c %z %Z"))
-        # t1, t2 = getNextPrevRaces(datetime.strptime("03/05/2023 00:00:00", "%m/%d/%Y %H:%M:%S"))
-        # print(t1, t2)
-
-        # troll = {"currentDate": Date.strftime('%Y-%m-%d')}
-        # json.dump(troll, open("fantasycache/NextPrevRaces.json", "w"), indent=4)
         with open("fantasycache/NextPrevRaces.json",'r') as file:
             fileData = json.load(file)
         newRecentID = get_recent_race().raceid
         if fileData['recentRaceID'] < newRecentID:
             prevRace, nextRace = getNextPrevRaces(newRecentID)
-            # prevRace, nextRace = getNextPrevRaces()
             prevRace.append(requests.get(f"https://restcountries.com/v3.1/name/{prevRace[2]}?fields=flags").json()[0]['flags']['png'])
             nextRace.append(requests.get(f"https://restcountries.com/v3.1/name/{nextRace[2]}?fields=flags").json()[0]['flags']['png'])
-            # print(prevRace, nextRace)
-            # print(prevFlag, nextFlag)
             with open("fantasycache/NextPrevRaces.json", "w") as file:
                 json.dump({"recentRaceID": newRecentID, "nextRace": nextRace, "prevRace": prevRace}, file, indent=4)
                 
@@ -408,26 +391,12 @@ def viewFantasyLeague(uid, leagueID):
         deleteTeam(leagueID, teamname)
         return(jsonify({'status': '200'}))
 
-# Ideally want to combine these two and check firebase to see if user is admin 
 @main.route("/admin/leagues/", methods=['GET'])
 def adminLeagues():
     if request.method == 'GET':
         Page = request.args.get('page', 1, type=int)
         leagues, pageCount = fetchLeaguesAdmin(Page)
         return(jsonify({'status': '200', 'leagues': leagues, 'pages': pageCount}))
-        # return(jsonify({'status': '200'}))
-# @main.route("/fantasy/constructors")
-# def fantasyConstructors():
-#     constructors = getFantasyConstructors()
-#     print(constructors)
-#     return jsonify({'constructors': constructors})
-# @main.route("/fantasy/team", methods=['GET', 'POST'])
-# @main.route("/fantasy/drivers")
-# def fantasyDrivers():
-#     drivers = getFantasyDrivers()
-#     print(drivers)
-#     return jsonify({'drivers': drivers})
-
 
 # Colin Martires - push notifications via Twilio
 @main.route("/send_SMS", methods=['POST'])

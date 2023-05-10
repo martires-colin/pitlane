@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <template>
     <p class="text-xl text-[#00d4ff] py-4">
         League: {{ leagueName }}

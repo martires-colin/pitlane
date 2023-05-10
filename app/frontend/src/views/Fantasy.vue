@@ -1,4 +1,4 @@
-<!-- Started by Anthony Ganci -->
+<!-- By Anthony Ganci -->
 
 <template>
   <div v-if="ready" class="fantasy flex flex-col h-full">

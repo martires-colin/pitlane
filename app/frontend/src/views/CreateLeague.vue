@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <script>
 export default {
     data() {
@@ -22,7 +24,6 @@ export default {
                 console.log(data)
                 this.inviteCode = data.inviteCode;
                 this.inviteLink = `/fantasy/join/${data.inviteCode}`
-                // this.inviteLink = `localhost:8080/fantasy/join/${data.inviteCode}`
             }
 
             // set isLeague owner user role ~Colin Martires

@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <script>
 import axios from "axios";
 export default {

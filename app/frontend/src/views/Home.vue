@@ -1,22 +1,16 @@
 <!-- By Anthony Ganci and Colin Martires -->
 <script>
-// import Schedule from "../components/ScheduleComp";
-// import Standings from "../components/StandingsComp";
-// import axios from 'axios';
 import { useStore} from "vuex";
 import { useRouter } from "vue-router";
 import {computed} from "vue";
 import { auth } from '../firebase'
 export default {
-  // components: {Schedule, Standings},
   name: "Home",
   setup() {
     const store = useStore()
     const router = useRouter()
 
     auth.onAuthStateChanged(user => {
-      // console.log("onAuthState")
-      // console.log(user)
       store.dispatch("fetchUser", user)
     })
     const user = computed(() => {
@@ -62,16 +56,6 @@ export default {
 
 };
 </script>
-
-<!-- <script setup>
-// import {ref, onMouted, computed} from 'vue
-import { onMounted } from 'vue';
-import { useStore } from 'vuex';
-const store = useStore();
-onMounted(() => {
-  store.dispatch("fetchUpcoming");
-})
-</script> -->
 
 <style scoped >
   @media(min-width: 2560px){

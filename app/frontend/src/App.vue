@@ -1,3 +1,5 @@
+<!-- By Anthony Ganci -->
+
 <template>
   <v-app full-height theme="dark">
     <v-app-bar flat >
@@ -113,13 +115,6 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-
-            <!-- <v-btn v-if="user.loggedIn" variant="text" @click="$router.push('/settings')">
-            Settings
-            </v-btn>
-            <v-btn v-if="user.loggedIn" variant="text" @click="logout_dialog = true">
-            Logout
-            </v-btn> -->
             <v-btn v-if="!user.loggedIn" variant="text" @click="$router.push('/login')">
               Login
             </v-btn> 
@@ -149,14 +144,6 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-
-            
-            <!-- <v-avatar
-              color="grey-darken-1"
-              size="40"
-              :image="user.photoURL"
-              v-if="user.loggedIn"
-            ></v-avatar> -->
           </div>
 
       </v-container>
@@ -200,7 +187,6 @@ onMounted(() => {
   window.onresize = () => {
     windowWidth.value = window.innerWidth
   }
-  // console.log('League Owner User:', store.state.user.roles.isLeagueOwner)
 })
 
 

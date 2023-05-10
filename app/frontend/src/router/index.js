@@ -22,15 +22,6 @@ import AdminConsole from "../views/AdminConsole.vue"
 
 import store from "../store/index";
 
-
-// try {
-//   console.log(store)
-//   console.log(store.getters.isAdmin)
-// }
-// catch(error) {
-//   console.log(error)
-// }
-
 const routes = [
   {
     path: "/pitlane",
@@ -157,9 +148,6 @@ router.beforeEach(async (to) => {
     console.log((store.state.user.roles.isAdmin))
     return {name: 'CreateLeague'}
   }
-  // if (to.meta.requiresLeagueOwner && !store.state.user.roles.isAdmin) {
-  //   return {name: 'CreateLeague'}
-  // }
   if (to.meta.requiresAuth && !store.state.user.roles.isAdmin) {
     return {name: 'Home'}
   }

@@ -5,7 +5,6 @@ export default {
   data() {
     return {
       season: 2023,
-      // standings: [ [ 1, "Max Verstappen", 454 ], [ 2, "Charles Leclerc", 308 ], [ 3, "Sergio Pérez", 305 ], [ 4, "George Russell", 275 ], [ 5, "Carlos Sainz", 246 ], [ 6, "Lewis Hamilton", 240 ], [ 7, "Lando Norris", 122 ], [ 8, "Esteban Ocon", 92 ], [ 9, "Fernando Alonso", 81 ], [ 10, "Valtteri Bottas", 49 ], [ 11, "Daniel Ricciardo", 37 ], [ 12, "Sebastian Vettel", 37 ], [ 13, "Kevin Magnussen", 25 ], [ 14, "Pierre Gasly", 23 ], [ 15, "Lance Stroll", 18 ], [ 16, "Mick Schumacher", 12 ], [ 17, "Yuki Tsunoda", 12 ], [ 18, "Guanyu Zhou", 6 ], [ 19, "Alexander Albon", 4 ], [ 20, "Nicholas Latifi", 2 ], [ 21, "Nyck de Vries", 2 ], [ 22, "Nico Hülkenberg", 0 ] ],
       standings: null,
       fetching: true,
     };
@@ -79,9 +78,6 @@ export default {
       <BFormSelect v-model="season" @change="onSubmitYear($event)">
         <BFormSelectOption v-for="n in 74" :value="2024 - n" :key="2024 - n"> {{ 2024-n }}</BFormSelectOption>
       </BFormSelect>
-      <!-- <select class="years px-2 py-1 rounded-md" @change="onSubmitYear($event)">
-        <option v-for="n in 73" :value="2023 - n" :key="2023 - n">{{ 2023 - n }}</option>
-      </select> -->
     </div>
     <table class="standings ml-4">
         <tr id="header">
